@@ -18,6 +18,7 @@ export enum LIGHT_MODE_COLORS {
   primary = "#5f31e0",
   background = "#ffffff",
   transparent = "transparent",
+  footerBackground = "#fafafa",
 }
 
 export enum DARK_MODE_COLORS {
@@ -26,6 +27,7 @@ export enum DARK_MODE_COLORS {
   primary = "#5f31e0",
   background = "#1C1C1C",
   transparent = "transparent",
+  footerBackground = "#191e2b",
 }
 
 // All app font sizes
