@@ -5,16 +5,16 @@ import { BREAK_POINTS } from "../providers/theme/style";
 
 export function useResponsiveScreen() {
   const isSmallMobile = useMediaQuery({
-    maxWidth: BREAK_POINTS.SMALL_MOBILE - 1,
+    maxWidth: BREAK_POINTS.small_mobile - 1,
   });
 
   const isMobileOrTablet = useMediaQuery({
-    minWidth: BREAK_POINTS.SMALL_MOBILE,
-    maxWidth: BREAK_POINTS.DESKTOP_VIEWPORT - 1,
+    minWidth: BREAK_POINTS.small_mobile,
+    maxWidth: BREAK_POINTS.desktop_viewport - 1,
   });
 
   const isDesktopOrLaptop = useMediaQuery({
-    minWidth: BREAK_POINTS.DESKTOP_VIEWPORT,
+    minWidth: BREAK_POINTS.desktop_viewport,
   });
 
   const Desktop: React.FC<PropsWithChildren> = useCallback(({ children }) => {

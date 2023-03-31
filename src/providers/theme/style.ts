@@ -6,21 +6,25 @@ import { EdgeInsets } from "react-native-safe-area-context";
 import { IColorMode } from "../store/reducers/settings/interfaces";
 
 export enum BREAK_POINTS {
-  SMALL_MOBILE = 425, // 425px
-  TABLET_VIEWPORT = 768, // 768px
-  DESKTOP_VIEWPORT = 1280, // 1280px
+  small_mobile = 425, // 425px
+  tablet_viewport = 768, // 768px
+  desktop_viewport = 1280, // 1280px
 }
 
 // All app colorss
 export enum LIGHT_MODE_COLORS {
   text = "#11181C",
   error = "#e5484d",
+  primary = "#5f31e0",
+  background = "#ffffff",
   transparent = "transparent",
 }
 
 export enum DARK_MODE_COLORS {
   text = "#EFEFF0",
   error = "#e5484d",
+  primary = "#5f31e0",
+  background = "#1C1C1C",
   transparent = "transparent",
 }
 
@@ -34,7 +38,11 @@ export enum FONTS {
 declare module "styled-components/native" {
   export interface DefaultTheme {
     // App dimension
-    dimension: ScaledSize;
+    layout: {
+      radius: number;
+      gutter: number;
+      screen: ScaledSize;
+    };
     // App insets
     insets: EdgeInsets;
     // All Global App Font typings

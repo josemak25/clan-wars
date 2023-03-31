@@ -52,11 +52,11 @@ export const ThemeProvider: React.FC<PropsWithChildren> = ({ children }) => {
     () => ({
       insets,
       hexToRGB,
-      dimension,
       isDarkMode,
       toggleTheme,
       breakpoints: BREAK_POINTS,
       fonts: { scale, variants: FONTS },
+      layout: { radius: 10, gutter: 16, screen: dimension },
       palette: isDarkMode ? DARK_MODE_COLORS : LIGHT_MODE_COLORS,
       colors: { light: LIGHT_MODE_COLORS, dark: DARK_MODE_COLORS },
     }),

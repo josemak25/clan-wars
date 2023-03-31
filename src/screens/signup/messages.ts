@@ -1,29 +1,29 @@
 import { defineMessages } from "react-intl";
 
 const messages = defineMessages({
-  get_started: {
-    id: "signup.get_started",
-    defaultMessage: "Get started",
+  meet_you: {
+    id: "signup.meet_you",
+    defaultMessage: "We can't wait to meet you.",
   },
-  sign_up: {
-    id: "signup.sign_up",
-    defaultMessage: "sign up",
+  fill_details: {
+    id: "signup.fill_details",
+    defaultMessage: `Please fill in the details below to be part of the tournament.`,
   },
-  sign_in_now: {
-    id: "signup.sign_in_now",
-    defaultMessage: "sign in now",
+  enter_your_name: {
+    id: "signup.enter_your_name",
+    defaultMessage: "Please enter your name",
   },
-  new_account: {
-    id: "signup.new_account",
-    defaultMessage: "Create a new account",
+  back: {
+    id: "signup.back",
+    defaultMessage: "back",
   },
-  have_an_account: {
-    id: "signup.have_an_account",
-    defaultMessage: `Have an account? `,
+  next_step: {
+    id: "signup.next_step",
+    defaultMessage: "next step",
   },
-  see_collection: {
-    id: "signin.see_collection",
-    defaultMessage: `Collection`,
+  complete_submission: {
+    id: "signup.complete_submission",
+    defaultMessage: "complete submission",
   },
 });
 
