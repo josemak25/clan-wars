@@ -29,6 +29,7 @@ import {
   BackgroundImage,
   ContentContainer,
   ButtonFooterContainer,
+  TimerHolder,
 } from "./card.styles";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { APP_NAME } from "../../constants";
@@ -50,8 +51,13 @@ export const Card: React.FC<CardProps> = (props) => {
         />
 
         <ContentContainer>
-          <Timer>{dayjs().format("dddd, DD MMMM")}.Starting at 6: 00 AM</Timer>
+          {/* <TimerHolder> */}
+          <Timer>
+            {dayjs().format(" dddd, DD MMMM")} • Starting at{" "}
+            {dayjs().format("hh : mm")}
+          </Timer>
           <Title>COD: Warzone Platinum Tournament</Title>
+          {/* </TimerHolder> */}
 
           <ButtonContainer>
             <FirstButton>
