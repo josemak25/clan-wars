@@ -30,6 +30,10 @@ export const ContentContainer = styled.View`
   padding-top: ${(p) => p.theme.layout.gutter}px;
 `;
 
+export const TimerHolder = styled.View`
+  flex-direction: column;
+`;
+
 export const Timer = styled.Text`
   margin-bottom: 10px;
   color: ${({ theme }) => theme.palette.text};
