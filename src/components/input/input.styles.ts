@@ -22,12 +22,12 @@ export const Container = styled.View<{ error?: boolean; isFocused: boolean }>`
     }};
 `;
 
-export const TextInput = styled.TextInput`
+export const TextInput = styled.TextInput<{ error?: boolean }>`
   flex: 1;
   letter-spacing: 0.9px;
-  color: ${(p) => p.theme.palette.text};
   font-size: ${(p) => p.theme.fonts.scale.value(18)}px;
   font-family: ${(p) => p.theme.fonts.variants.roboto_regular};
+  color: ${(p) => (p.error ? p.theme.palette.error : p.theme.palette.text)};
 `;
 
 export const Label = styled.Text<{ error?: boolean }>`

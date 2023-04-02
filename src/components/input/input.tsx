@@ -41,6 +41,7 @@ export const Input: React.FC<PropsWithChildren<InputProps>> = (props) => {
       <Container error={!!error} isFocused={isFocused}>
         <TextInput
           {...restProps}
+          error={!!error}
           onFocus={(e) => {
             restProps?.onFocus?.(e);
             setIsFocused(!isFocused);
