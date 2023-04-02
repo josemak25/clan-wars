@@ -1,4 +1,6 @@
 import Reactotron from "reactotron-react-native";
+import { Control, FieldErrors } from "react-hook-form";
+import { ITournamentClan } from "../src/providers/store/reducers/session/interfaces";
 
 declare global {
   interface Console {
@@ -8,12 +10,16 @@ declare global {
 
 console.tron = reactotron.log;
 
-export interface ICODMCp {
+export interface IFormStep {
   id: string;
-  cover: string;
-  image: number;
+  icon: string;
   title: string;
-  amount: number;
-  discount: number;
-  old_amount: number;
+  isViewable: boolean;
+  highlighted: boolean;
+  key: keyof ITournamentClan;
 }
+
+export type FormStepProps = {
+  errors: FieldErrors<ITournamentClan>;
+  control: Control<ITournamentClan, any>;
+};

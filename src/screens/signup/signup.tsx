@@ -1,187 +1,169 @@
-import React, { Fragment, useState } from "react";
-import { SubmitHandler } from "react-hook-form";
-import { useTheme } from "styled-components/native";
-import { FormattedMessage, useIntl } from "react-intl";
-import { Controller, useForm } from "react-hook-form";
+import React, { useState, useRef } from "react";
+import { FormattedMessage } from "react-intl";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { LayoutRectangle, ScrollView } from "react-native";
+import Animated, { FadeInLeft, FadeInRight } from "react-native-reanimated";
 
 import messages from "./messages";
+import { IFormStep } from "../../../types";
 import { generateId } from "../../helpers";
-import { Input } from "../../components/input";
 import { RootStackScreenProps } from "../../../types/navigation";
-import { ISignupUser } from "../../providers/store/reducers/session/interfaces";
+import { ITournamentClan } from "../../providers/store/reducers/session/interfaces";
+import {
+  FormStepOne,
+  FormStepTwo,
+  FormStepFive,
+  FormStepFour,
+  FormStepThree,
+  FormStepIndicator,
+} from "./form";
 
 import {
-  Title,
-  Spacer,
-  SubTitle,
   Container,
-  StepTitle,
-  IconButton,
   GoBackButton,
-  StepSubTitle,
   NextStepButton,
   ButtonContainer,
-  HeaderContainer,
   MaxWidthContainer,
-  IconButtonContents,
-  IconButtonContainer,
-  ItemSeparatorComponent,
+  FormStepScrollViewWrapper,
 } from "./signup.styles";
 
-const defaultForm = [
+const defaultFormSteps: IFormStep[] = [
   {
+    isViewable: true,
     icon: "android",
-    isActive: true,
     id: generateId(),
+    key: "clan_name",
     highlighted: true,
-    title: "type of service",
+    title: "Clan name",
   },
   {
-    isActive: false,
     id: generateId(),
-    icon: "basketball",
+    key: "team_name",
+    isViewable: false,
     highlighted: true,
-    title: "contact details",
+    icon: "basketball",
+    title: "Team name",
   },
   {
     icon: "ansible",
-    isActive: false,
+    key: "clan_logo",
     id: generateId(),
+    isViewable: false,
     highlighted: true,
-    title: "written content",
+    title: "Clan logo",
   },
   {
-    icon: "camera",
-    isActive: false,
+    key: "team",
     id: generateId(),
     highlighted: true,
-    title: "illustration",
-  },
-  {
-    isActive: false,
-    id: generateId(),
-    highlighted: true,
+    isViewable: false,
     icon: "alarm-bell",
-    title: "project bracket",
+    title: "Build your team",
   },
   {
-    isActive: false,
     id: generateId(),
+    isViewable: false,
+    highlighted: false,
     icon: "gauge-full",
     title: "confirmation",
+    key: "contact_email_address",
   },
+];
+
+const forms = [
+  FormStepOne,
+  FormStepTwo,
+  FormStepThree,
+  FormStepFour,
+  FormStepFive,
 ];
 
 export const SignUpScreen: React.FC<RootStackScreenProps<"SignUpScreen">> = ({
   navigation,
 }) => {
-  const { formatMessage } = useIntl();
-  const { palette, colors, hexToRGB } = useTheme();
-  const [formSteps, setFormSteps] = useState(defaultForm);
-
+  const [isNext, setIsNext] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [formSteps, setFormSteps] = useState(defaultFormSteps);
   const {
     control,
+    trigger,
     handleSubmit,
+    getFieldState,
     formState: { errors },
-  } = useForm<ISignupUser>();
+  } = useForm<ITournamentClan>();
 
-  const onSubmit: SubmitHandler<ISignupUser> = (data) => {};
+  const isFirstPageOfFormActive = currentIndex === 0;
+  const isLastPageOfFormActive = currentIndex === formSteps.length - 1;
 
-  const isLastPageOfFormActive = formSteps[formSteps.length - 1].isActive;
+  const handleFormStep = (stepId: IFormStep["id"]) => {
+    const index = formSteps.findIndex(({ id }) => id === stepId);
+    setIsNext(index > currentIndex);
+    setCurrentIndex(index);
+  };
 
-  const handleFormStep = (id: string) => {
-    const steps = formSteps.map((step) => ({
+  const onSubmit: SubmitHandler<ITournamentClan> = (data) => {};
+
+  const validateCurrentFormBeforeRoute = async () => {
+    const { key } = formSteps[currentIndex];
+    await trigger(key);
+    return getFieldState(key).error?.message;
+  };
+
+  const goBack = () => {
+    setIsNext(false);
+    const index = currentIndex - 1;
+    setCurrentIndex(index);
+  };
+
+  const goNext = async () => {
+    // return if error only route to next form if no errors
+    const error = await validateCurrentFormBeforeRoute();
+    if (error) return;
+
+    const nextIndex = currentIndex + 1;
+
+    const newFormSteps = formSteps.map((step, i) => ({
       ...step,
-      isActive: step.id === id ? true : false,
+      isViewable: step.isViewable || i === nextIndex,
     }));
 
-    setFormSteps(steps);
+    setFormSteps(newFormSteps);
+    setIsNext(true);
+    setCurrentIndex(nextIndex);
   };
 
   return (
     <Container>
       <MaxWidthContainer>
-        <HeaderContainer>
-          {formSteps.map(
-            ({ icon, id, title, isActive, highlighted }, index) => (
-              <Fragment key={id}>
-                <IconButtonContainer>
-                  <IconButton
-                    icon={icon}
-                    mode="contained"
-                    onPress={() => handleFormStep(id)}
-                    iconColor={
-                      isActive
-                        ? colors.dark.text
-                        : hexToRGB(palette.primary, 0.6)
-                    }
-                    containerColor={
-                      isActive
-                        ? palette.primary
-                        : hexToRGB(palette.primary, 0.06)
-                    }
-                  />
-                  {isActive && (
-                    <IconButtonContents>
-                      <StepSubTitle>
-                        Step {++index}/{formSteps.length}
-                      </StepSubTitle>
-                      <StepTitle>{title}</StepTitle>
-                    </IconButtonContents>
-                  )}
-                </IconButtonContainer>
-
-                {highlighted && <ItemSeparatorComponent />}
-              </Fragment>
-            )
-          )}
-        </HeaderContainer>
-
-        <Title>
-          <FormattedMessage {...messages.meet_you} />
-        </Title>
-        <SubTitle>
-          <FormattedMessage {...messages.fill_details} />
-        </SubTitle>
-
-        <Spacer size={40} />
-        <Controller
-          control={control}
-          name="email_address"
-          // rules={emailValidation}
-          render={({ field: { onChange, ref, ...rest } }) => (
-            <Input
-              {...rest}
-              onChangeText={onChange}
-              placeholder="Tom Bekker"
-              error={errors.email_address}
-              label={formatMessage(messages.enter_your_name)}
-            />
-          )}
+        <FormStepIndicator
+          steps={formSteps}
+          onChange={handleFormStep}
+          currentIndex={currentIndex}
         />
 
-        <Spacer size={30} />
-        <Controller
-          control={control}
-          name="email_address"
-          // rules={emailValidation}
-          render={({ field: { onChange, ref, ...rest } }) => (
-            <Input
-              {...rest}
-              onChangeText={onChange}
-              placeholder="Tom Bekker"
-              // error={errors.email_address}
-              label={formatMessage(messages.enter_your_name)}
-              error={{ type: "required", message: "Your name is required" }}
-            />
+        <FormStepScrollViewWrapper>
+          {forms.map((Form, index) =>
+            currentIndex === index ? (
+              <Animated.View
+                key={`${index}_form_step`}
+                entering={isNext ? FadeInRight : FadeInLeft}
+              >
+                <Form errors={errors} control={control} />
+              </Animated.View>
+            ) : null
           )}
-        />
+        </FormStepScrollViewWrapper>
 
         <ButtonContainer>
-          <GoBackButton onPress={() => {}}>
-            <FormattedMessage {...messages.back} />
-          </GoBackButton>
-          <NextStepButton onPress={() => {}}>
+          {!isFirstPageOfFormActive && (
+            <GoBackButton onPress={goBack}>
+              <FormattedMessage {...messages.back} />
+            </GoBackButton>
+          )}
+
+          <NextStepButton
+            onPress={isLastPageOfFormActive ? handleSubmit(onSubmit) : goNext}
+          >
             <FormattedMessage
               {...messages[
                 isLastPageOfFormActive ? "complete_submission" : "next_step"

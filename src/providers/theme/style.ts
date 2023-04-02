@@ -15,19 +15,23 @@ export enum BREAK_POINTS {
 export enum LIGHT_MODE_COLORS {
   text = "#11181C",
   error = "#e5484d",
+  success = "#4BB543",
   primary = "#5f31e0",
   background = "#ffffff",
   transparent = "transparent",
   footerBackground = "#fafafa",
+  light_background = "#f5f5f6",
 }
 
 export enum DARK_MODE_COLORS {
-  text = "#EFEFF0",
+  text = "#ffffff",
   error = "#e5484d",
+  success = "#4BB543",
   primary = "#5f31e0",
   background = "#1C1C1C",
   transparent = "transparent",
   footerBackground = "#191e2b",
+  light_background = "#333333",
 }
 
 // All app font sizes
