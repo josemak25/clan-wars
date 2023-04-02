@@ -11,14 +11,19 @@ const messages = defineMessages({
     defaultMessage: "Enter a valid email address",
   },
 
-  password_required: {
-    id: "form.validator.password_required",
-    defaultMessage: "Password is required",
+  clan_name_required: {
+    id: "form.validator.clan_name_required",
+    defaultMessage: "Clan is required",
   },
 
-  player_id_required: {
-    id: "form.validator.player_id_required",
-    defaultMessage: "PlayerID is required",
+  team_name_required: {
+    id: "form.validator.team_name_required",
+    defaultMessage: "Team name is required",
+  },
+
+  clan_log_required: {
+    id: "form.validator.clan_log_required",
+    defaultMessage: "Clan logo is required",
   },
 });
 
@@ -38,19 +43,31 @@ export const useFormValidation = () => {
     },
   };
 
-  const passwordValidation = {
+  const clanNameValidation = {
     required: {
       value: true,
-      message: intl.formatMessage(messages.password_required),
+      message: intl.formatMessage(messages.clan_name_required),
     },
   };
 
-  const playerIdValidation = {
+  const teamNameValidation = {
     required: {
       value: true,
-      message: intl.formatMessage(messages.player_id_required),
+      message: intl.formatMessage(messages.team_name_required),
     },
   };
 
-  return { emailValidation, passwordValidation, playerIdValidation };
+  const clanLogoValidation = {
+    required: {
+      value: true,
+      message: intl.formatMessage(messages.clan_log_required),
+    },
+  };
+
+  return {
+    emailValidation,
+    clanLogoValidation,
+    clanNameValidation,
+    teamNameValidation,
+  };
 };

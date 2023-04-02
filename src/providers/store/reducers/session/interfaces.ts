@@ -1,35 +1,27 @@
-export interface ISessionUser {
+export interface ITournamentTeam {
   id: string;
+  name: string;
   avatar: string;
-  password: string;
   created_at: Date;
   updated_at: Date;
   player_id: string;
-  email_address: string;
+  gender: "male" | "female";
 }
 
-export interface ISession {
-  issued_at: number;
-  expires_in: number;
-  expires_at: number;
-  access_token: string;
-  refresh_token: string;
-  user: ISessionUser | null;
+export interface ITournamentClan {
+  id: string;
+  clan_logo: string;
+  created_at: Date;
+  updated_at: Date;
+  clan_name: string;
+  team_name: string;
+  clan_leader_id: string;
+  team: ITournamentTeam[];
+  contact_email_address: string;
 }
-
-export type ISignupUser = Pick<
-  ISessionUser,
-  "email_address" | "password" | "player_id"
->;
-
-export type ISignOutUser = Pick<ISession, "refresh_token">;
-
-export type ISigninUser = Omit<ISignupUser, "player_id">;
-
-export type IForgotPassword = Pick<ISessionUser, "email_address">;
 
 export interface ISessionState {
   isLoading: boolean;
   error: Error | null;
-  data: ISession | null;
+  data: ITournamentClan | null;
 }
