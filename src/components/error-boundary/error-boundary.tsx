@@ -1,7 +1,7 @@
 import React from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Text, View, SafeAreaView, Pressable } from "react-native";
 import { FallbackComponentProps } from "react-native-error-boundary";
+import { Text, View, SafeAreaView, TouchableOpacity } from "react-native";
 
 import { makeUseStyles, reportError } from "../../helpers";
 
@@ -22,7 +22,7 @@ export const CrashScreen: React.FC<FallbackComponentProps> = ({
         <Text style={{ width: "100%" }}>
           <Ionicons
             size={60}
-            color={palette.CHAMOISEE}
+            color={palette.primary}
             name="ios-information-circle-outline"
           />
         </Text>
@@ -30,58 +30,57 @@ export const CrashScreen: React.FC<FallbackComponentProps> = ({
         <Text style={[styles.title, styles.subtitle]}>
           The app ran into a problem and could not continue. We apologize for
           any inconvenience this has caused! Press the button below to restart
-          the app and sign back in. Please contact us if this issue persists.
+          the app. Please contact us if this issue persists.
         </Text>
-        <Pressable onPress={handleClearError} style={styles.button}>
+        <TouchableOpacity onPress={handleClearError} style={styles.button}>
           <Text style={styles.text}>Back to Sign In Screen</Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
 };
 
 const useStyles = makeUseStyles(
-  ({ fonts, palette, colors, breakpoints, isDesktopOrLaptop }) => ({
+  ({ fonts, palette, colors, layout, breakpoints }) => ({
     safeView: {
       flex: 1,
       alignItems: "center",
-      backgroundColor: isDesktopOrLaptop
-        ? palette.GHOST_WHITE_COLOR
-        : palette.WHITE_COLOR,
+      backgroundColor: palette.background,
     },
     container: {
       flex: 1,
-      padding: 20,
+      padding: layout.gutter,
       justifyContent: "center",
-      maxWidth: breakpoints.SMALL_MOBILE * 1.2,
+      maxWidth: breakpoints.small_mobile * 1.2,
     },
     title: {
       fontSize: 32,
       textAlign: "center",
-      color: palette.CHAMOISEE,
-      fontFamily: fonts.CIRCULAR_BOLD,
+      color: palette.primary,
+      marginTop: layout.gutter,
+      fontFamily: fonts.variants.roboto_bold,
     },
     subtitle: {
       fontSize: 20,
       opacity: 0.7,
       textAlign: "left",
-      marginVertical: 16,
+      color: palette.text,
       paddingHorizontal: 10,
-      color: palette.TEXT_COLOR,
-      fontFamily: fonts.CIRCULAR_MEDIUM,
+      marginVertical: layout.gutter,
+      fontFamily: fonts.variants.roboto_regular,
     },
     button: {
       height: 50,
-      borderRadius: 5,
       marginVertical: 45,
       alignItems: "center",
       justifyContent: "center",
-      backgroundColor: palette.CHAMOISEE,
+      borderRadius: layout.radius / 2,
+      backgroundColor: palette.primary,
     },
     text: {
       fontSize: 15,
-      color: colors.dark.TEXT_COLOR,
-      fontFamily: fonts.CIRCULAR_SEMI_BOLD,
+      color: colors.dark.text,
+      fontFamily: fonts.variants.roboto_bold,
     },
   })
 );

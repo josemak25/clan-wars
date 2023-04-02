@@ -1,4 +1,6 @@
-const cardPrice = {
+import { defineMessages } from "react-intl";
+
+const messages = defineMessages({
   meet_you: {
     id: "Price Pool",
     defaultMessage: "$400",
@@ -23,6 +25,6 @@ const cardPrice = {
     id: "signup.complete_submission",
     defaultMessage: "complete submission",
   },
-};
+});
 
-export default cardPrice;
+export default messages;

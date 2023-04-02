@@ -27,7 +27,7 @@ export const Navigation = () => {
     ...DefaultTheme,
     colors: {
       ...(isDarkMode ? DarkTheme.colors : DefaultTheme.colors),
-      // background: isDarkMode ? palette.DARK_COLOR : palette.WHITE_COLOR,
+      background: palette.background,
     },
   };
 
@@ -40,7 +40,7 @@ export const Navigation = () => {
         <Stack.Screen
           name="SignUpScreen"
           component={SignUpScreen}
-          options={{ title: "Sign up" }}
+          options={{ title: "Sign up", headerShown: true }}
         />
         <Stack.Screen
           name="OnboardingScreen"

@@ -1,133 +1,193 @@
 import React from "react";
 import dayjs from "dayjs";
+import { Platform } from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { useTheme } from "styled-components/native";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
-import { ICODMCp } from "../../../types";
+import { APP_NAME } from "../../constants";
 import { formatCurrency } from "../../helpers";
+import { ITournament } from "../../providers/store/reducers/session/interfaces";
+
 import {
-  Name,
+  Tags,
   Timer,
   Title,
-  Footer,
-  Wrapper,
   Profile,
+  HostLogo,
   Container,
-  BorderLine,
-  ButtonText,
+  Organizer,
+  HeroImage,
+  HostDetail,
+  TopContents,
   CodSubtitle,
   Description,
-  FirstButton,
   PriceTrophy,
-  SecondButton,
-  ThirdButton,
   PriceWrapper,
-  FooterButton,
-  ProfileDetail,
-  ProfilePicture,
+  TitleWrapper,
   PriceSubtitle,
+  TimerContainer,
+  TournamentIcon,
+  BottomContents,
   PriceContainer,
   ButtonContainer,
-  BackgroundImage,
   ContentContainer,
-  ButtonFooterContainer,
-  TimerHolder,
+  EventDetailsButton,
+  TimerContentWrapper,
 } from "./card.styles";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { APP_NAME } from "../../constants";
 
-type CardProps = ICODMCp & {
-  onPress: VoidFunction;
-};
+type CardProps = {
+  onEventPress: (id: ITournament["id"]) => void;
+  joinTournament: (id: ITournament["id"]) => void;
+} & ITournament;
 
 export const Card: React.FC<CardProps> = (props) => {
-  // const { amount, image, cover, old_amount, title } = props;
+  const { palette, colors, hexToRGB } = useTheme();
+
+  const {
+    id,
+    title,
+    tags = [],
+    team_size,
+    host_clan,
+    room_size,
+    start_date,
+    price_pool,
+    created_at,
+    cover_image,
+    participates,
+    onEventPress,
+    winner_clan_id,
+    tournament_icon,
+    joinTournament,
+  } = props;
+
+  const isEventStarted = dayjs().unix() >= dayjs(start_date).unix();
+  const isEventFinished = isEventStarted && !!winner_clan_id;
+
+  const handleButtonPress = () => {
+    if (!isEventStarted && !isEventFinished) {
+      // join the tournament
+      return joinTournament(id);
+    }
+
+    // see the tournament details
+    onEventPress(id);
+  };
 
   return (
-    <Container>
-      <Wrapper>
-        <BackgroundImage
-          source={{
-            uri: "https://c4.wallpaperflare.com/wallpaper/448/153/260/cod-black-ops-2-wallpaper-preview.jpg",
-          }}
-        />
+    <Container
+      activeOpacity={0.5}
+      onPress={() => onEventPress(id)}
+      disabled={isEventFinished || isEventStarted}
+    >
+      <TopContents>
+        {cover_image ? <HeroImage source={{ uri: cover_image }} /> : null}
 
         <ContentContainer>
-          {/* <TimerHolder> */}
-          <Timer>
-            {dayjs().format(" dddd, DD MMMM")} • Starting at{" "}
-            {dayjs().format("hh : mm")}
-          </Timer>
-          <Title>COD: Warzone Platinum Tournament</Title>
-          {/* </TimerHolder> */}
+          <TimerContainer>
+            {tournament_icon && (
+              <TournamentIcon source={{ uri: tournament_icon }} />
+            )}
+            <TimerContentWrapper>
+              <Timer>
+                {dayjs(created_at).format("dddd DD MMMM")} • Starting at{" "}
+                {dayjs(created_at).format("hh : mm")}
+              </Timer>
 
-          <ButtonContainer>
-            <FirstButton>
-              <ButtonText>COZ Warzone</ButtonText>
-            </FirstButton>
+              <TitleWrapper>
+                <Title wrap numberOfLines={1}>
+                  {title}
+                </Title>
+              </TitleWrapper>
 
-            <SecondButton>
-              <ButtonText>pc</ButtonText>
-            </SecondButton>
-
-            <ThirdButton>
-              <ButtonText>Invitational</ButtonText>
-            </ThirdButton>
-          </ButtonContainer>
-
-          <BorderLine
-            style={{
-              borderBottomColor: "grey",
-              borderWidth: 0.5,
-              marginTop: 20,
-            }}
-          />
+              {tags.length ? (
+                <ButtonContainer>
+                  {tags.map((tag, index) => (
+                    <Tags key={`${tag}_${index}`}>{tag}</Tags>
+                  ))}
+                </ButtonContainer>
+              ) : null}
+            </TimerContentWrapper>
+          </TimerContainer>
 
           <PriceContainer>
             <PriceWrapper>
-              <CodSubtitle>Price Pool</CodSubtitle>
+              <CodSubtitle>price pool</CodSubtitle>
               <PriceTrophy>
-                <Ionicons size={16} name={"trophy"} color="grey" />
-                <PriceSubtitle>$400</PriceSubtitle>
+                <Ionicons
+                  size={20}
+                  name="trophy"
+                  color={hexToRGB(palette.text, 0.4)}
+                />
+                <PriceSubtitle>{formatCurrency(price_pool)}</PriceSubtitle>
               </PriceTrophy>
             </PriceWrapper>
 
             <PriceWrapper>
-              <CodSubtitle>Team Size</CodSubtitle>
+              <CodSubtitle>team size</CodSubtitle>
               <PriceTrophy>
-                <Ionicons size={16} name={"person-outline"} color="grey" />
-                <PriceSubtitle>3VS3</PriceSubtitle>
+                <Ionicons
+                  size={20}
+                  name="ios-person"
+                  color={hexToRGB(palette.text, 0.4)}
+                />
+                <PriceSubtitle>
+                  {team_size}VS{team_size}
+                </PriceSubtitle>
               </PriceTrophy>
             </PriceWrapper>
 
             <PriceWrapper>
-              <CodSubtitle>Paticipantices</CodSubtitle>
+              <CodSubtitle>participates</CodSubtitle>
               <PriceTrophy>
-                <Ionicons size={16} name={"time"} color="grey" />
-                <PriceSubtitle>13/256</PriceSubtitle>
+                <MaterialCommunityIcons
+                  size={20}
+                  name="timer"
+                  color={hexToRGB(palette.text, 0.4)}
+                />
+                <PriceSubtitle>
+                  {participates.length}/{room_size}
+                </PriceSubtitle>
               </PriceTrophy>
             </PriceWrapper>
           </PriceContainer>
         </ContentContainer>
+      </TopContents>
 
-        <Footer>
-          <Profile>
-            <ProfilePicture
-              source={{
-                uri: "https://leadership.ng/wp-content/uploads/2023/03/davido.png",
-              }}
-            />
+      <BottomContents>
+        <Profile>
+          <HostLogo source={{ uri: host_clan.clan_logo }} />
+          <HostDetail>
+            <Description>Organised by</Description>
+            <Organizer numberOfLines={1}>
+              {host_clan.clan_name || APP_NAME}
+            </Organizer>
+          </HostDetail>
+        </Profile>
 
-            <ProfileDetail>
-              <Description>Organised by</Description>
-              <Name>{APP_NAME}</Name>
-            </ProfileDetail>
-          </Profile>
-
-          <FooterButton>
-            <ButtonText>Event Details</ButtonText>
-            <Ionicons size={16} name="arrow-forward-circle" color="white" />
-          </FooterButton>
-        </Footer>
-      </Wrapper>
+        <EventDetailsButton
+          onPress={handleButtonPress}
+          isEventStarted={isEventStarted && !isEventFinished}
+          icon={() =>
+            isEventFinished || !isEventStarted ? (
+              <Ionicons
+                size={20}
+                color={colors.dark.text}
+                name="md-arrow-forward-circle-outline"
+                style={{ marginTop: Platform.select({ web: 4, default: 0 }) }}
+              />
+            ) : null
+          }
+        >
+          {isEventFinished
+            ? "Event Details"
+            : isEventStarted
+            ? "Started"
+            : "Join event"}
+          <Ionicons size={24} color="white" />
+        </EventDetailsButton>
+      </BottomContents>
     </Container>
   );
 };

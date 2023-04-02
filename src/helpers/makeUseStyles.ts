@@ -15,9 +15,11 @@ import {
 
 type GetStylesPayload = Omit<
   ReturnType<typeof useTheme>,
-  "font" | "toggleTheme" | "insets"
+  "fonts" | "toggleTheme" | "insets"
 > &
-  ReturnType<typeof useResponsiveScreen>;
+  ReturnType<typeof useResponsiveScreen> & {
+    fonts: { variants: typeof FONTS };
+  };
 
 export function makeUseStyles<
   T extends StyleSheet.NamedStyles<T> | StyleSheet.NamedStyles<any>
@@ -35,9 +37,10 @@ export function makeUseStyles<
       hexToRGB,
       dimension,
       isDarkMode,
-      fonts: FONTS,
       breakpoints: BREAK_POINTS,
+      fonts: { variants: FONTS },
       palette: isDarkMode ? DARK_MODE_COLORS : LIGHT_MODE_COLORS,
+      layout: { radius: 10, gutter: 16, screen: dimension },
       colors: { light: LIGHT_MODE_COLORS, dark: DARK_MODE_COLORS },
     };
 

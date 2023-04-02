@@ -1,139 +1,116 @@
-import { Button } from "react-native-paper";
-import styled from "styled-components/native";
+import { Platform } from "react-native";
+import { Chip } from "react-native-paper";
+import styled, { css } from "styled-components/native";
 
-export const Container = styled(Button)`
-  flex: 1;
-  height: 600px;
-  max-width: 500px;
-  flex-direction: column;
-  width: ${({ theme }) => theme.layout.gutter - 40}px;
-`;
+import { NextStepButton } from "../../screens/signup/signup.styles";
 
-export const Wrapper = styled.View`
-  flex: 1;
-  flex-direction: column;
-  border-radius: 10px;
-  /* border-top-left-radius: 10px;
-  border-top-right-radius: 10px; */
-  padding: ${(p) => p.theme.layout.gutter}px;
-  background-color: ${({ theme }) => theme.palette.background};
-`;
-
-export const BackgroundImage = styled.Image`
+export const Container = styled.TouchableOpacity`
   width: 100%;
-  height: 200px;
+  overflow: hidden;
+  min-height: 150px;
+  border-radius: ${(p) => p.theme.layout.radius}px;
+  max-width: ${Platform.select({ default: 400, web: 450 })}px;
+  background-color: ${(p) => p.theme.palette.card_background};
+`;
+
+export const TopContents = styled.View`
+  padding: ${(p) => p.theme.layout.gutter}px;
+`;
+
+export const HeroImage = styled.Image`
+  width: 100%;
+  height: 180px;
   border-radius: 10px;
 `;
 
 export const ContentContainer = styled.View`
-  flex-direction: column;
-  padding-top: ${(p) => p.theme.layout.gutter}px;
+  margin-top: ${(p) => p.theme.layout.gutter}px;
 `;
 
-export const TimerHolder = styled.View`
-  flex-direction: column;
+export const TimerContainer = styled.View`
+  flex-direction: row;
+  border-bottom-width: 1px;
+  padding-bottom: ${(p) => p.theme.layout.gutter * 1.2}px;
+  border-bottom-color: ${(p) => p.theme.palette.light_card_background};
 `;
+
+export const TimerContentWrapper = styled.View`
+  flex: 1;
+`;
+
+export const TitleWrapper = styled.View``;
 
 export const Timer = styled.Text`
   margin-bottom: 10px;
-  color: ${({ theme }) => theme.palette.text};
-  font-size: ${(p) => p.theme.fonts.scale.value(14)}px;
+  font-size: ${(p) => p.theme.fonts.scale.value(15)}px;
   font-family: ${(p) => p.theme.fonts.variants.roboto_regular};
+  color: ${(p) => p.theme.hexToRGB(p.theme.palette.text, 0.6)};
 `;
 
-export const Title = styled(Timer)`
-  font-size: ${(p) => p.theme.fonts.scale.value(20)}px;
+export const Title = styled(Timer)<{ wrap?: boolean }>`
+  color: ${(p) => p.theme.palette.text};
+  font-size: ${(p) => p.theme.fonts.scale.value(25)}px;
+  font-family: ${(p) => p.theme.fonts.variants.roboto_bold};
+
+  ${(p) =>
+    p.wrap &&
+    css`
+      width: 90%;
+    `}
 `;
 
 export const ButtonContainer = styled.View`
   flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
-  padding-top: ${(p) => p.theme.layout.gutter}px;
+  gap: ${(p) => p.theme.layout.gutter / 2}px;
+  margin-top: ${(p) => p.theme.layout.gutter / 2}px;
 `;
 
-export const FirstButton = styled(Button).attrs((p) => ({
-  textColor: p.theme.colors.dark.text,
-  buttonColor: p.theme.palette.transparent,
-  contentStyle: {
-    minWidth: 100,
-    borderRadius: 5,
-    paddingVertical: 2,
-    paddingHorizontal: p.theme.layout.gutter / 3,
-  },
-  labelStyle: {
-    textTransform: "capitalize",
-    fontSize: p.theme.fonts.scale.value(18),
+export const Tags = styled(Chip).attrs((p) => ({
+  textStyle: {
+    color: p.theme.palette.text,
+    fontSize: p.theme.fonts.scale.value(14),
     fontFamily: p.theme.fonts.variants.roboto_regular,
   },
 }))`
-  margin-left: 5px;
-  border-radius: ${(p) => p.theme.layout.radius}px;
-  border: 0.5px solid ${({ theme }) => theme.palette.text};
+  border-radius: ${(p) => p.theme.layout.radius / 2}px;
+  background-color: ${(p) => p.theme.palette.light_card_background};
+  border: 1px ${(p) => p.theme.hexToRGB(p.theme.palette.text, 0.05)} solid;
 `;
-
-export const ButtonText = styled(Timer)`
-  text-align: center;
-`;
-
-export const SecondButton = styled(FirstButton).attrs((p) => ({
-  contentStyle: {
-    paddingVertical: 2,
-    paddingHorizontal: p.theme.layout.gutter / 5,
-  },
-  labelStyle: {
-    textTransform: "capitalize",
-    fontFamily: p.theme.fonts.variants.roboto_regular,
-  },
-}))``;
-
-export const ThirdButton = styled(FirstButton).attrs((p) => ({
-  contentStyle: {
-    paddingVertical: 2,
-    paddingHorizontal: p.theme.layout.gutter / 3,
-  },
-  labelStyle: {
-    fontFamily: p.theme.fonts.variants.roboto_regular,
-  },
-}))``;
-
-export const BorderLine = styled.View``;
 
 export const PriceContainer = styled.View`
   flex-direction: row;
-  margin-top: 25px;
-  padding-top: ${(p) => p.theme.layout.gutter / 2}px;
+  gap: ${(p) => p.theme.layout.gutter * 2.5}px;
+  margin-top: ${(p) => p.theme.layout.gutter}px;
+  padding: ${(p) => p.theme.layout.gutter / 3}px 0px;
 `;
 
 export const PriceWrapper = styled.View`
-  margin-left: 15px;
   align-items: center;
-  flex-direction: column;
 `;
 
-export const CodSubtitle = styled(Timer)``;
+export const CodSubtitle = styled(Timer)`
+  margin-bottom: 6px;
+  text-transform: capitalize;
+`;
 
 export const PriceTrophy = styled.View`
+  gap: 5px;
   flex-direction: row;
-  align-self: center;
-  justify-content: center;
+  align-items: center;
 `;
 
 export const PriceSubtitle = styled(Title)`
-  margin-left: 3px;
-  font-weight: 700;
-  font-size: ${(p) => p.theme.fonts.scale.value(18)}px;
+  margin: 0px;
+  font-size: ${(p) => p.theme.fonts.scale.value(20)}px;
 `;
 
-export const Footer = styled.View`
-  /* border: 2px solid red; */
+export const BottomContents = styled.View`
   flex-direction: row;
-  border-top: 1px solid grey;
-  padding: 15px 0px;
-  padding: 15px 0px;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-  /* background-color: ${({ theme }) => theme.palette.footerBackground}; */
+  border-top-width: 1px;
+  padding: ${(p) => p.theme.layout.gutter}px;
+  border-top-color: ${(p) => p.theme.hexToRGB(p.theme.palette.text, 0.05)};
+  background-color: ${(p) =>
+    p.theme.isDarkMode ? p.theme.palette.light_card_background : "#e6e6e6"};
 `;
 
 export const Profile = styled.View`
@@ -141,26 +118,32 @@ export const Profile = styled.View`
   flex-direction: row;
 `;
 
-export const ProfilePicture = styled.Image`
-  width: 55px;
-  border-radius: ${(p) => p.theme.layout.radius * 5}px;
+export const HostLogo = styled.Image`
+  width: 45px;
+  height: 45px;
+  border-radius: 25px;
 `;
 
-export const ProfileDetail = styled.View`
-  margin-left: 8px;
-  align-self: center;
+export const TournamentIcon = styled.Image`
+  width: 80px;
+  height: 100%;
+  border-radius: 5px;
+  margin-right: ${(p) => p.theme.layout.gutter}px;
+`;
+
+export const HostDetail = styled.View`
+  flex: 1;
   justify-content: center;
-  flex-direction: column;
-  /* border: 1px solid green; */
+  margin-left: ${(p) => p.theme.layout.gutter / 1.5}px;
 `;
 
-export const Description = styled(Title)`
+export const Description = styled(CodSubtitle)`
   margin-bottom: 2px;
-  font-size: ${(p) => p.theme.fonts.scale.value(13)}px;
 `;
 
-export const Name = styled(Title)`
-  font-size: ${(p) => p.theme.fonts.scale.value(20)}px;
+export const Organizer = styled(PriceSubtitle)`
+  margin: 0px;
+  text-transform: capitalize;
 `;
 
 export const ButtonFooterContainer = styled(ButtonContainer)`
@@ -168,12 +151,23 @@ export const ButtonFooterContainer = styled(ButtonContainer)`
   justify-content: flex-end;
 `;
 
-export const FooterButton = styled(FirstButton).attrs((p) => ({
-  buttonColor: p.theme.palette.primary,
+export const EventDetailsButton = styled(NextStepButton).attrs<{
+  isEventStarted: boolean;
+}>((p) => ({
+  buttonColor: p.isEventStarted
+    ? p.theme.palette.success
+    : p.theme.palette.primary,
   contentStyle: {
-    paddingVertical: 3,
+    paddingVertical: 4,
+    flexDirection: "row-reverse",
     paddingHorizontal: p.theme.layout.gutter / 2,
   },
-}))`
-  border: 0px;
+  labelStyle: {
+    textTransform: "capitalize",
+    fontSize: p.theme.fonts.scale.value(16),
+    fontFamily: p.theme.fonts.variants.roboto_bold,
+  },
+}))<{ isEventStarted: boolean }>`
+  margin-left: ${(p) => p.theme.layout.gutter}px;
+  border-radius: ${(p) => p.theme.layout.radius / 2}px;
 `;

@@ -10,10 +10,11 @@ import { ErrorMessageContainer as __ErrorMessageContainer } from "../../componen
 
 export { ErrorMessage } from "../../components/input/input.styles";
 
-export const Container = styled(SafeAreaView)`
+export const Container = styled(SafeAreaView)<{ isDesktopOrLaptop: boolean }>`
   flex: 1;
   align-items: center;
-  padding-top: ${(p) => p.theme.layout.gutter * 2}px;
+  padding-top: ${(p) =>
+    p.theme.layout.gutter * (p.isDesktopOrLaptop ? 5 : 2)}px;
   background-color: ${(p) => p.theme.palette.background};
 `;
 
@@ -107,6 +108,7 @@ export const IconButton = styled(__IconButton)`
 export const IconButtonContainer = styled.View`
   flex-direction: row;
   align-items: center;
+  margin: ${(p) => p.theme.layout.gutter}px 0px;
 `;
 
 export const IconButtonContents = styled.View`
