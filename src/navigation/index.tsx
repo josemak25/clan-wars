@@ -27,20 +27,20 @@ export const Navigation = () => {
     ...DefaultTheme,
     colors: {
       ...(isDarkMode ? DarkTheme.colors : DefaultTheme.colors),
-      // background: isDarkMode ? palette.DARK_COLOR : palette.WHITE_COLOR,
+      background: palette.background,
     },
   };
 
   return (
     <NavigationContainer theme={theme} onReady={onAppIsReady}>
       <Stack.Navigator
-        initialRouteName="SignUpScreen"
+        initialRouteName="OnboardingScreen"
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen
           name="SignUpScreen"
           component={SignUpScreen}
-          options={{ title: "Sign up" }}
+          options={{ title: "Sign up", headerShown: true }}
         />
         <Stack.Screen
           name="OnboardingScreen"

@@ -26,6 +26,7 @@ import {
   MaxWidthContainer,
   FormStepScrollViewWrapper,
 } from "./signup.styles";
+import { useResponsiveScreen } from "../../hooks";
 
 const defaultFormSteps: IFormStep[] = [
   {
@@ -82,6 +83,7 @@ export const SignUpScreen: React.FC<RootStackScreenProps<"SignUpScreen">> = ({
   navigation,
 }) => {
   const [isNext, setIsNext] = useState(true);
+  const { isDesktopOrLaptop } = useResponsiveScreen();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [formSteps, setFormSteps] = useState(defaultFormSteps);
   const {
@@ -133,7 +135,7 @@ export const SignUpScreen: React.FC<RootStackScreenProps<"SignUpScreen">> = ({
   };
 
   return (
-    <Container>
+    <Container isDesktopOrLaptop={isDesktopOrLaptop}>
       <MaxWidthContainer>
         <FormStepIndicator
           steps={formSteps}

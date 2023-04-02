@@ -17,9 +17,11 @@ export enum LIGHT_MODE_COLORS {
   error = "#e5484d",
   success = "#4BB543",
   primary = "#5f31e0",
-  background = "#ffffff",
+  background = "#f2f2f2",
   transparent = "transparent",
+  card_background = "#ffffff",
   light_background = "#f5f5f6",
+  light_card_background = "#f2f2f2",
 }
 
 export enum DARK_MODE_COLORS {
@@ -27,9 +29,11 @@ export enum DARK_MODE_COLORS {
   error = "#e5484d",
   success = "#4BB543",
   primary = "#5f31e0",
-  background = "#1C1C1C",
+  background = "#212121",
   transparent = "transparent",
+  card_background = "#313131",
   light_background = "#333333",
+  light_card_background = "#454545",
 }
 
 // All app font sizes
