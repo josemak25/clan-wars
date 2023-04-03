@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import dayjs from "dayjs";
 import { Platform } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -7,6 +7,7 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 import { APP_NAME } from "../../constants";
 import { formatCurrency } from "../../helpers";
+import { getImagekitUrl } from "../../helpers/imagekit";
 import { ITournament } from "../../providers/store/reducers/session/interfaces";
 
 import {
@@ -75,6 +76,19 @@ export const Card: React.FC<CardProps> = (props) => {
     onEventPress(id);
   };
 
+  const tournamentImage = useMemo(
+    () =>
+      getImagekitUrl((cover_image || tournament_icon)!, {
+        directory: "tournament_cover",
+      }),
+    [cover_image, tournament_icon]
+  );
+
+  const clanLogoImage = useMemo(
+    () => getImagekitUrl(host_clan.clan_logo, { directory: "clan_logo" }),
+    [host_clan.clan_logo]
+  );
+
   return (
     <Container
       activeOpacity={0.5}
@@ -82,13 +96,16 @@ export const Card: React.FC<CardProps> = (props) => {
       disabled={isEventFinished || isEventStarted}
     >
       <TopContents>
-        {cover_image ? <HeroImage source={{ uri: cover_image }} /> : null}
+        {cover_image ? (
+          <HeroImage
+            uri={tournamentImage.url}
+            preview={{ uri: tournamentImage.preview }}
+          />
+        ) : null}
 
         <ContentContainer>
           <TimerContainer>
-            {tournament_icon && (
-              <TournamentIcon source={{ uri: tournament_icon }} />
-            )}
+            {tournament_icon && <TournamentIcon uri={tournament_icon} />}
             <TimerContentWrapper>
               <Timer>
                 {dayjs(created_at).format("dddd DD MMMM")} • Starting at{" "}
@@ -157,7 +174,10 @@ export const Card: React.FC<CardProps> = (props) => {
 
       <BottomContents>
         <Profile>
-          <HostLogo source={{ uri: host_clan.clan_logo }} />
+          <HostLogo
+            uri={clanLogoImage.url}
+            preview={{ uri: clanLogoImage.preview }}
+          />
           <HostDetail>
             <Description>Organised by</Description>
             <Organizer numberOfLines={1}>

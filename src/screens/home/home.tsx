@@ -5,11 +5,11 @@ import { APP_NAME } from "../../constants";
 import { Card } from "../../components/card";
 import { RootStackScreenProps } from "../../../types/navigation";
 
-import { Container, Title } from "./onboarding.styles";
+import { Container, Title } from "./home.styles";
 
-export const OnboardingScreen: React.FC<
-  RootStackScreenProps<"OnboardingScreen">
-> = ({ navigation }) => {
+export const HomeScreen: React.FC<RootStackScreenProps<"HomeScreen">> = ({
+  navigation,
+}) => {
   const onEventPress = () => {};
   const joinTournament = () => navigation.navigate("SignUpScreen");
 
@@ -31,11 +31,10 @@ export const OnboardingScreen: React.FC<
         title="CODM: Private Alcatraz Tournament"
         tags={["COD Warzone", "PC", "Invitational"]}
         // tournament_icon="https://www.freeiconspng.com/uploads/league-of-legends-icon-6.png"
-        cover_image="https://rare-gallery.com/mocahbig/1377861-codm-game-characters-call-of-duty-mobile-4k-pc.jpg"
+        cover_image="anonymous"
         host_clan={{
+          clan_logo: "anonymous",
           clan_name: "Anonymous clan tournament",
-          clan_logo:
-            "https://leadership.ng/wp-content/uploads/2023/03/davido.png",
         }}
       />
     </Container>

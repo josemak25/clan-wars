@@ -27,7 +27,7 @@ export const FormStepIndicator: React.FC<FormStepProps> = ({
   currentIndex,
 }) => {
   const scrollRef = useRef<ScrollView>(null);
-  const { palette, colors, hexToRGB } = useTheme();
+  const { palette, isDarkMode, colors, hexToRGB } = useTheme();
   const buttonsRef = useRef<Record<IFormStep["id"], LayoutRectangle>>({});
 
   const onStepPress = () => {
@@ -67,14 +67,12 @@ export const FormStepIndicator: React.FC<FormStepProps> = ({
                 iconColor={
                   currentIndex === index
                     ? colors.dark.text
-                    : hexToRGB(palette.primary, 0.6)
+                    : hexToRGB(palette.primary, isDarkMode ? 1 : 0.6)
                 }
                 containerColor={
-                  !isViewable
-                    ? "red"
-                    : currentIndex === index
+                  currentIndex === index
                     ? palette.primary
-                    : hexToRGB(palette.primary, 0.06)
+                    : hexToRGB(palette.primary, isDarkMode ? 0.2 : 0.08)
                 }
               />
               {currentIndex === index && (
