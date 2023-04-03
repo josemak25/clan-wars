@@ -57,6 +57,7 @@ export const store = configureStore({
 
 export const persistor = persistStore(store);
 
+// TODO: remove all this call it's only used here for testing
 persistor.purge();
 persistor.flush();
 

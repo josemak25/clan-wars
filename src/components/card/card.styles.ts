@@ -1,5 +1,6 @@
 import { Platform } from "react-native";
 import { Chip } from "react-native-paper";
+import { Image } from "react-native-expo-image-cache";
 import styled, { css } from "styled-components/native";
 
 import { NextStepButton } from "../../screens/signup/signup.styles";
@@ -17,10 +18,12 @@ export const TopContents = styled.View`
   padding: ${(p) => p.theme.layout.gutter}px;
 `;
 
-export const HeroImage = styled.Image`
+export const HeroImage = styled(Image)`
   width: 100%;
   height: 180px;
+  overflow: hidden;
   border-radius: 10px;
+  background-color: ${(p) => p.theme.hexToRGB(p.theme.palette.text, 0.06)};
 `;
 
 export const ContentContainer = styled.View`
@@ -118,13 +121,13 @@ export const Profile = styled.View`
   flex-direction: row;
 `;
 
-export const HostLogo = styled.Image`
+export const HostLogo = styled(HeroImage)`
   width: 45px;
   height: 45px;
   border-radius: 25px;
 `;
 
-export const TournamentIcon = styled.Image`
+export const TournamentIcon = styled(HeroImage)`
   width: 80px;
   height: 100%;
   border-radius: 5px;

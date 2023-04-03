@@ -1,20 +1,20 @@
 import styled, { css } from "styled-components/native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import {
   Text,
   Button as __Button,
   IconButton as __IconButton,
 } from "react-native-paper";
+import { Image as __Image } from "react-native-expo-image-cache";
 
 import { ErrorMessageContainer as __ErrorMessageContainer } from "../../components/input/input.styles";
 
 export { ErrorMessage } from "../../components/input/input.styles";
 
-export const Container = styled(SafeAreaView)<{ isDesktopOrLaptop: boolean }>`
+export const Container = styled.View<{ isDesktopOrLaptop: boolean }>`
   flex: 1;
   align-items: center;
   padding-top: ${(p) =>
-    p.theme.layout.gutter * (p.isDesktopOrLaptop ? 5 : 2)}px;
+    p.theme.layout.gutter * (p.isDesktopOrLaptop ? 3 : 2)}px;
   background-color: ${(p) => p.theme.palette.background};
 `;
 
@@ -147,7 +147,7 @@ export const GoBackButton = styled(NextStepButton).attrs<{
 export const LogoContainer = styled.View`
   padding: ${(p) => p.theme.layout.gutter}px;
   border-radius: ${(p) => p.theme.layout.radius * 2}px;
-  background-color: ${(p) => p.theme.palette.light_background};
+  background-color: ${(p) => p.theme.palette.card_background};
 `;
 
 export const LogoContents = styled.TouchableOpacity<{ error: boolean }>`
@@ -165,7 +165,7 @@ export const LogoContents = styled.TouchableOpacity<{ error: boolean }>`
     dashed;
 `;
 
-export const Image = styled.Image`
+export const Image = styled(__Image)`
   width: 50px;
   height: 50px;
   margin: ${(p) => p.theme.layout.gutter}px;

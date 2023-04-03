@@ -5,13 +5,15 @@ import {
   DefaultTheme,
   NavigationContainer,
 } from "@react-navigation/native";
+import { Platform } from "react-native";
 import { useTheme } from "styled-components/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
+import { BackButton } from "./styles";
 import { usePrepareApp } from "../hooks";
+import { HomeScreen } from "../screens/home";
 import { SignUpScreen } from "../screens/signup";
 import { StackParamList } from "../../types/navigation";
-import { OnboardingScreen } from "../screens/onboarding";
 
 const Stack = createNativeStackNavigator<StackParamList>();
 
@@ -34,18 +36,25 @@ export const Navigation = () => {
   return (
     <NavigationContainer theme={theme} onReady={onAppIsReady}>
       <Stack.Navigator
-        initialRouteName="OnboardingScreen"
-        screenOptions={{ headerShown: false }}
+        initialRouteName="HomeScreen"
+        screenOptions={{
+          headerShown: false,
+          headerShadowVisible: false,
+          headerTintColor: palette.text,
+          headerLeft: (props) => <BackButton {...props} />,
+          headerStyle: { backgroundColor: palette.background },
+        }}
       >
+        <Stack.Screen
+          name="HomeScreen"
+          component={HomeScreen}
+          options={{ title: Platform.select({ default: "", web: "home" }) }}
+        />
+
         <Stack.Screen
           name="SignUpScreen"
           component={SignUpScreen}
-          options={{ title: "Sign up", headerShown: true }}
-        />
-        <Stack.Screen
-          name="OnboardingScreen"
-          component={OnboardingScreen}
-          options={{ title: "Onboarding" }}
+          options={{ headerShown: true, title: "sign up" }}
         />
       </Stack.Navigator>
     </NavigationContainer>
