@@ -9,6 +9,7 @@ import { Platform } from "react-native";
 import { useTheme } from "styled-components/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
+import { TabNaviagtor } from "./tab";
 import { BackButton } from "./styles";
 import { usePrepareApp } from "../hooks";
 import { HomeScreen } from "../screens/home";
@@ -36,7 +37,7 @@ export const Navigation = () => {
   return (
     <NavigationContainer theme={theme} onReady={onAppIsReady}>
       <Stack.Navigator
-        initialRouteName="HomeScreen"
+        initialRouteName="DetailsScreen"
         screenOptions={{
           headerShown: false,
           headerShadowVisible: false,
@@ -63,6 +64,8 @@ export const Navigation = () => {
             headerLeft: (props) => <BackButton {...props} />,
           }}
         />
+
+        <Stack.Screen name="DetailsScreen" component={TabNaviagtor} />
       </Stack.Navigator>
     </NavigationContainer>
   );
