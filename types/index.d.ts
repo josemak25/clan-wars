@@ -23,3 +23,8 @@ export type FormStepProps = {
   errors: FieldErrors<ITournamentClan>;
   control: Control<ITournamentClan, any>;
 };
+
+export interface GroupInterface {
+  id: number;
+  name: string;
+}
