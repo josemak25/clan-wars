@@ -14,6 +14,7 @@ export type IconType = keyof typeof appIcons;
 type IconProps = SvgProps & {
   size?: number;
   name: IconType;
+  isOnlyIcon?: boolean;
 };
 
 export const Icon: React.FC<IconProps> = (props) => {

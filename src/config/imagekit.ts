@@ -1,4 +1,9 @@
+import { Platform } from "react-native";
 import ImageKit from "imagekit-javascript";
+
+if (Platform.OS !== "web") {
+  require("react-native-url-polyfill/auto");
+}
 
 import { IMAGE_KIT_PUBLIC_URL, IMAGE_KIT_ENDPOINT_URL } from "@env";
 

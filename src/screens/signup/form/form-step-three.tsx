@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 import { Linking } from "react-native";
 import { Controller } from "react-hook-form";
 import { FormattedMessage } from "react-intl";
@@ -8,7 +8,7 @@ import Animated, { FadeInUp, FadeOutUp } from "react-native-reanimated";
 
 import messages from "../messages";
 import { FormStepProps } from "../../../../types";
-import { useFormValidation, useOnLayout } from "../../../hooks";
+import { useLogoUpload, useFormValidation, useOnLayout } from "../../../hooks";
 
 import {
   Image,
@@ -32,11 +32,11 @@ export const FormStepThree: React.FC<FormStepProps> = ({ errors, control }) => {
   const { layout, palette, hexToRGB } = useTheme();
   const [progressLayout, onLayout] = useOnLayout();
   const { clanLogoValidation } = useFormValidation();
-  const [logo, setLogo] = useState<string | null>(null);
-  const [isUploadComplete, setIsUploadComplete] = useState(false);
   const [_, requestPermission] = ImagePicker.useMediaLibraryPermissions();
+  const { isComplete, isLoading, progress, uploadLogo, cancelUpload } =
+    useLogoUpload();
 
-  const progress = (progressLayout?.width || 0) - 3.5;
+  // const progress = (progressLayout?.width || 0) - 3.5;
 
   const pickLogo = async (): Promise<void> => {
     const status = await requestPermission();
@@ -59,7 +59,13 @@ export const FormStepThree: React.FC<FormStepProps> = ({ errors, control }) => {
     });
 
     if (!result.canceled) {
-      setLogo(result.assets[0].uri);
+      const uri = result.assets[0].base64 || result.assets[0].uri;
+      const fileSize = getLogoSize(uri);
+
+      console.log("====================================");
+      console.log(result.assets[0], { fileSize });
+      console.log("====================================");
+      uploadLogo({ ...result.assets[0], uri, fileSize });
     }
   };
 
@@ -87,7 +93,7 @@ export const FormStepThree: React.FC<FormStepProps> = ({ errors, control }) => {
 
             <LogoContainer>
               <LogoContents onPress={pickLogo} error={!!errors.clan_logo}>
-                <Image uri={require("../../../../assets/gallery.png")} />
+                <Image source={require("../../../../assets/gallery.png")} />
                 <Title size={16} error={!!errors.clan_logo}>
                   <FormattedMessage {...messages.click_to_add_image} />
                 </Title>
@@ -96,25 +102,23 @@ export const FormStepThree: React.FC<FormStepProps> = ({ errors, control }) => {
                 </SubTitle>
               </LogoContents>
 
-              {logo ? (
+              {isLoading ? (
                 <Animated.View entering={FadeInUp} exiting={FadeOutUp}>
                   <LogoUploadContainer onLayout={onLayout}>
                     <UploadProgress
                       progress={progress}
-                      isUploadComplete={isUploadComplete}
+                      isUploadComplete={isComplete}
                     />
 
                     <Title size={16}>
                       <FormattedMessage
                         {...messages[
-                          isUploadComplete
-                            ? "upload_completed"
-                            : "uploading_logo"
+                          isComplete ? "upload_completed" : "uploading_logo"
                         ]}
                       />
                     </Title>
 
-                    {!isUploadComplete && (
+                    {!isComplete && (
                       <Fragment>
                         <ProgressSubTitle size={12}>
                           50% • 5 seconds left
@@ -129,19 +133,19 @@ export const FormStepThree: React.FC<FormStepProps> = ({ errors, control }) => {
                       <UploadIcon
                         size={15}
                         mode="contained"
-                        onPress={() => setLogo(null)}
-                        isUploadComplete={isUploadComplete}
+                        onPress={cancelUpload}
+                        isUploadComplete={isComplete}
                         icon={
-                          isUploadComplete
+                          isComplete
                             ? "checkbox-marked-circle-outline"
                             : "window-close"
                         }
                         iconColor={hexToRGB(
-                          isUploadComplete ? palette.success : palette.error,
+                          isComplete ? palette.success : palette.error,
                           0.8
                         )}
                         containerColor={hexToRGB(
-                          isUploadComplete ? palette.success : palette.error,
+                          isComplete ? palette.success : palette.error,
                           0.04
                         )}
                       />
@@ -155,4 +159,16 @@ export const FormStepThree: React.FC<FormStepProps> = ({ errors, control }) => {
       />
     </FormStepWrapper>
   );
+};
+
+const getLogoSize = (image: string) => {
+  let y = 1;
+
+  if (image.endsWith("==")) {
+    y = 2;
+  }
+
+  const x_size = image.length * (3 / 4) - y;
+  const size = x_size / 1024;
+  return Number(size.toFixed(2));
 };

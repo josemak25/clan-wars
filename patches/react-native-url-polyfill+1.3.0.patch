@@ -1,0 +1,20 @@
+diff --git a/node_modules/react-native-url-polyfill/index.js b/node_modules/react-native-url-polyfill/index.js
+index 675947e..2965cc8 100644
+--- a/node_modules/react-native-url-polyfill/index.js
++++ b/node_modules/react-native-url-polyfill/index.js
+@@ -2,13 +2,13 @@ import './js/ios10Fix';
+ 
+ import {polyfillGlobal} from 'react-native/Libraries/Utilities/PolyfillFunctions';
+ 
+-import {name, version} from './package.json';
++import packageInfo from './package.json';
+ 
+ export * from './js/URL';
+ export * from './js/URLSearchParams';
+ 
+ export function setupURLPolyfill() {
+-  global.REACT_NATIVE_URL_POLYFILL = `${name}@${version}`;
++  global.REACT_NATIVE_URL_POLYFILL = `${packageInfo.name}@${packageInfo.version}`;
+ 
+   polyfillGlobal('URL', () => require('./js/URL').URL);
+   polyfillGlobal(

@@ -2,6 +2,7 @@ import { Platform } from "react-native";
 import { Chip } from "react-native-paper";
 import { Image } from "react-native-expo-image-cache";
 import styled, { css } from "styled-components/native";
+import { LinearGradient as __LinearGradient } from "expo-linear-gradient";
 
 import { NextStepButton } from "../../screens/signup/signup.styles";
 
@@ -9,6 +10,7 @@ export const Container = styled.TouchableOpacity`
   width: 100%;
   overflow: hidden;
   min-height: 150px;
+  align-self: center;
   border-radius: ${(p) => p.theme.layout.radius}px;
   max-width: ${Platform.select({ default: 400, web: 450 })}px;
   background-color: ${(p) => p.theme.palette.card_background};
@@ -24,6 +26,13 @@ export const HeroImage = styled(Image)`
   overflow: hidden;
   border-radius: 10px;
   background-color: ${(p) => p.theme.hexToRGB(p.theme.palette.text, 0.06)};
+`;
+
+export const LinearGradient = styled(__LinearGradient)`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  border-radius: 10px;
 `;
 
 export const ContentContainer = styled.View`
@@ -146,7 +155,6 @@ export const Description = styled(CodSubtitle)`
 
 export const Organizer = styled(PriceSubtitle)`
   margin: 0px;
-  text-transform: capitalize;
 `;
 
 export const ButtonFooterContainer = styled(ButtonContainer)`

@@ -1,6 +1,5 @@
 import "react-native-gesture-handler";
 import "@expo/match-media";
-import "react-native-url-polyfill/auto";
 
 import * as React from "react";
 import * as SplashScreen from "expo-splash-screen";

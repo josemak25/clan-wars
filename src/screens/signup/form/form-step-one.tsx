@@ -32,7 +32,7 @@ export const FormStepOne: React.FC<FormStepProps> = ({ errors, control }) => {
             {...rest}
             onChangeText={onChange}
             error={errors.clan_name}
-            placeholder="Anonymous clan"
+            placeholder="Anonymous eSport"
             label={formatMessage(messages.enter_the_clan_name)}
           />
         )}

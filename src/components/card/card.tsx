@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import dayjs from "dayjs";
-import { Platform } from "react-native";
+import { Platform, View } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useTheme } from "styled-components/native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
@@ -27,6 +27,7 @@ import {
   PriceWrapper,
   TitleWrapper,
   PriceSubtitle,
+  LinearGradient,
   TimerContainer,
   TournamentIcon,
   BottomContents,
@@ -97,10 +98,13 @@ export const Card: React.FC<CardProps> = (props) => {
     >
       <TopContents>
         {cover_image ? (
-          <HeroImage
-            uri={tournamentImage.url}
-            preview={{ uri: tournamentImage.preview }}
-          />
+          <View>
+            <HeroImage
+              uri={tournamentImage.url}
+              preview={{ uri: tournamentImage.preview }}
+            />
+            <LinearGradient colors={["rgba(0,0,0,0.1)", "rgba(0,0,0,0.3)"]} />
+          </View>
         ) : null}
 
         <ContentContainer>

@@ -1,12 +1,12 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { LayoutRectangle, ScrollView } from "react-native";
 import Animated, { FadeInLeft, FadeInRight } from "react-native-reanimated";
 
 import messages from "./messages";
 import { IFormStep } from "../../../types";
 import { generateId } from "../../helpers";
+import { useResponsiveScreen } from "../../hooks";
 import { RootStackScreenProps } from "../../../types/navigation";
 import { ITournamentClan } from "../../providers/store/reducers/session/interfaces";
 import {
@@ -26,7 +26,6 @@ import {
   MaxWidthContainer,
   FormStepScrollViewWrapper,
 } from "./signup.styles";
-import { useResponsiveScreen } from "../../hooks";
 
 const defaultFormSteps: IFormStep[] = [
   {

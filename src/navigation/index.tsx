@@ -41,20 +41,27 @@ export const Navigation = () => {
           headerShown: false,
           headerShadowVisible: false,
           headerTintColor: palette.text,
-          headerLeft: (props) => <BackButton {...props} />,
+          headerTitleStyle: { color: palette.transparent },
           headerStyle: { backgroundColor: palette.background },
         }}
       >
         <Stack.Screen
           name="HomeScreen"
           component={HomeScreen}
-          options={{ title: Platform.select({ default: "", web: "home" }) }}
+          options={{
+            headerTitleStyle: { color: palette.transparent },
+            title: Platform.select({ default: "", web: "tournaments" }),
+          }}
         />
 
         <Stack.Screen
           name="SignUpScreen"
           component={SignUpScreen}
-          options={{ headerShown: true, title: "sign up" }}
+          options={{
+            title: "sign up",
+            headerShown: true,
+            headerLeft: (props) => <BackButton {...props} />,
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>
