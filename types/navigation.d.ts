@@ -10,7 +10,7 @@ export type StackParamList = {
 };
 
 export type TabParamList = {
-  PaticipatesScreen: undefined;
+  ParticipatesScreen: undefined;
   StatisticsScreen: undefined;
 };
 

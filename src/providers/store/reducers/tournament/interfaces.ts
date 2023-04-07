@@ -2,16 +2,16 @@ export interface ITournament {
   id: string;
   title: string;
   tags: string[];
-  created_at: Date;
-  updated_at: Date;
-  start_date: Date;
-  room_size: number;
   team_size: number;
+  room_size: number;
   price_pool: number;
   cover_image?: string;
   winner_clan_id?: string;
   tournament_icon?: string;
   host_clan: ITournamentClan;
+  updated_at: string | number;
+  created_at: string | number;
+  start_date: string | number;
   participates: ITournamentClan[];
 }
 
@@ -19,26 +19,27 @@ export interface ITournamentTeam {
   id: string;
   name: string;
   avatar: string;
-  created_at: Date;
-  updated_at: Date;
   player_id: string;
-  gender: "male" | "female";
+  total_kills: number;
+  created_at: string | number;
+  updated_at: string | number;
 }
 
 export interface ITournamentClan {
   id: string;
-  created_at: Date;
-  updated_at: Date;
   clan_name: string;
   clan_logo: string;
   team_name: string;
   clan_leader_id: string;
   team: ITournamentTeam[];
+  updated_at: string | number;
+  created_at: string | number;
   contact_email_address: string;
 }
 
-export interface ISessionState {
+export interface ITournamentState {
   isLoading: boolean;
   error: Error | null;
-  data: ITournamentClan | null;
+  data: ITournament[];
+  selectedTournament: ITournament | null;
 }

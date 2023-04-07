@@ -1,3 +1,4 @@
+export * from "./store";
 export * from "./useClock";
 export * from "./useInterval";
 export * from "./useKeyboard";

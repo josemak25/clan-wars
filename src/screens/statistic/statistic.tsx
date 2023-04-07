@@ -1,16 +1,67 @@
 import React from "react";
+import dayjs from "dayjs";
+import { shallowEqual } from "react-redux";
 
-import { APP_NAME } from "../../constants";
+import { useSelector } from "../../hooks";
+import { RootState } from "../../providers/store/store";
 import { RootTabScreenProps } from "../../../types/navigation";
 
-import { Container, Title } from "./statistic.styles";
+import {
+  Tags,
+  Info,
+  Title,
+  Timer,
+  Spacer,
+  Container,
+  TimerContainer,
+  ButtonContainer,
+} from "./statistic.styles";
+
+const tags = ["COD Warzone", "PC", "Invitational"];
 
 export const StatisticsScreen: React.FC<
   RootTabScreenProps<"StatisticsScreen">
-> = ({ navigation }) => {
+> = () => {
+  const { selectedTournament } = useSelector(
+    ({ tournament }: RootState) => tournament,
+    shallowEqual
+  );
+
   return (
     <Container>
-      <Title>{APP_NAME}</Title>
+      <Info>match info</Info>
+
+      <Spacer size={20} />
+
+      <TimerContainer>
+        <Timer>
+          Starts at •{" "}
+          {dayjs(selectedTournament?.start_date).format(
+            "ddd DD MMM YYYY hh : mm A"
+          )}
+        </Timer>
+
+        <Timer>
+          <Timer>
+            Ends at •{" "}
+            {dayjs(selectedTournament?.updated_at).format(
+              "ddd DD MMM YYYY hh : mm A"
+            )}
+          </Timer>
+        </Timer>
+      </TimerContainer>
+
+      <Title wrap numberOfLines={1}>
+        {selectedTournament?.title}
+      </Title>
+
+      {selectedTournament?.tags?.length ? (
+        <ButtonContainer>
+          {selectedTournament.tags.map((tag, index) => (
+            <Tags key={`${tag}_${index}`}>{tag}</Tags>
+          ))}
+        </ButtonContainer>
+      ) : null}
     </Container>
   );
 };

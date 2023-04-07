@@ -8,7 +8,7 @@ import { IFormStep } from "../../../types";
 import { generateId } from "../../helpers";
 import { useResponsiveScreen } from "../../hooks";
 import { RootStackScreenProps } from "../../../types/navigation";
-import { ITournamentClan } from "../../providers/store/reducers/session/interfaces";
+import { ITournamentClan } from "../../providers/store/reducers/tournament/interfaces";
 import {
   FormStepOne,
   FormStepTwo,

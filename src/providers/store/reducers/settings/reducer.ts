@@ -6,11 +6,9 @@ export const SETTINGS_SLICE_NAME = "settings";
 
 const initialState: ISettingsState = {
   locale: Locale.ENGLISH,
-  isProfileInfoVisible: false,
   colorMode: IColorMode.LIGHT,
+  isDetailModalVisible: false,
   isReceiveNotifications: true,
-  isPlayerIdInfoVisible: false,
-  isWalletBalanceVisible: true,
   screen: SwitchScreen.UNAUTHENTICATED_SCREENS,
 };
 
@@ -27,20 +25,12 @@ export const { reducer: settingsReducer, actions: settingsActions } =
         state.locale = action.payload;
       },
 
-      togglePlayerIdInfoModal: (state) => {
-        state.isPlayerIdInfoVisible = !state.isPlayerIdInfoVisible;
-      },
-
-      toggleProfileInfoModal: (state) => {
-        state.isProfileInfoVisible = !state.isProfileInfoVisible;
-      },
-
       toggleReceiveNotifications: (state) => {
         state.isReceiveNotifications = !state.isReceiveNotifications;
       },
 
-      toggleWalletBalanceVisibility: (state) => {
-        state.isWalletBalanceVisible = !state.isWalletBalanceVisible;
+      toggleDetailModalVisibility: (state) => {
+        state.isDetailModalVisible = !state.isDetailModalVisible;
       },
 
       changeScreen: (state, action: PayloadAction<SwitchScreen>) => {

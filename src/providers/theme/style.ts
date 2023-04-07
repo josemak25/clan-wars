@@ -29,7 +29,7 @@ export enum DARK_MODE_COLORS {
   text = "#ffffff",
   error = "#e5484d",
   success = "#4BB543",
-  primary = "#212121",
+  primary = "#5f31e0",
   secondary = "#212230",
   background = "#212121",
   transparent = "transparent",

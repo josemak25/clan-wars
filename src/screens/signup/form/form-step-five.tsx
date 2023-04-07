@@ -7,7 +7,13 @@ import { FormStepProps } from "../../../../types";
 import { Input } from "../../../components/input";
 import { useFormValidation } from "../../../hooks";
 
-import { Title, Spacer, SubTitle, FormStepWrapper } from "../signup.styles";
+import {
+  Terms,
+  Title,
+  Spacer,
+  SubTitle,
+  FormStepWrapper,
+} from "../signup.styles";
 
 export const FormStepFive: React.FC<FormStepProps> = ({ errors, control }) => {
   const { formatMessage } = useIntl();
@@ -37,6 +43,20 @@ export const FormStepFive: React.FC<FormStepProps> = ({ errors, control }) => {
           />
         )}
       />
+
+      <Spacer size={6} />
+      <SubTitle size={16} opacity={1}>
+        <FormattedMessage {...messages.agreement} />{" "}
+        <Terms size={16}>
+          <FormattedMessage {...messages.terms} />
+        </Terms>{" "}
+        <SubTitle size={16} opacity={1}>
+          <FormattedMessage {...messages.and} />
+        </SubTitle>{" "}
+        <Terms size={16}>
+          <FormattedMessage {...messages.privacy_policy} />
+        </Terms>
+      </SubTitle>
     </FormStepWrapper>
   );
 };

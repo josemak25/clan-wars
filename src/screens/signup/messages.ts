@@ -49,6 +49,22 @@ const messages = defineMessages({
     id: "signup.confirm_submission_details",
     defaultMessage: "Thanks for taking the time to complete the form",
   },
+  agreement: {
+    id: "signup.agreement",
+    defaultMessage: "By, submitting, you are agreeing to our",
+  },
+  terms: {
+    id: "signup.terms",
+    defaultMessage: "Terms",
+  },
+  privacy_policy: {
+    id: "signup.privacy_policy",
+    defaultMessage: "privacy policy",
+  },
+  and: {
+    id: "signup.and",
+    defaultMessage: " and ",
+  },
   best_contact_clan: {
     id: "signup.best_contact_clan",
     defaultMessage: "What's your best contact email?",

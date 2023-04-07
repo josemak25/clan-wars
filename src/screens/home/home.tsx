@@ -1,23 +1,58 @@
 import React, { Fragment } from "react";
 import dayjs from "dayjs";
-import { ListRenderItem } from "react-native";
 import { useTheme } from "styled-components/native";
+import { ListRenderItem, Platform } from "react-native";
 
+import { useDispatch } from "../../hooks";
 import { generateId } from "../../helpers";
 import { Icon } from "../../components/icon";
-import { Card } from "../../components/card";
+import { Tournament } from "../../components/tournament";
 import { RootStackScreenProps } from "../../../types/navigation";
+import {
+  settingsActions,
+  tournamentActions,
+} from "../../providers/store/reducers";
+import { ITournament } from "../../providers/store/reducers/tournament/interfaces";
 
 import { Container, FlatList, Header, EmptyCell } from "./home.styles";
+
+const dummy_tournament = {
+  team_size: 4,
+  room_size: 40,
+  price_pool: 500000,
+  participates: [{}],
+  winner_clan_id: "hey",
+  created_at: Date.now(),
+  updated_at: Date.now(),
+  start_date: dayjs().add(1, "days").toString(),
+  title: "CODM: Private Alcatraz Tournament",
+  tags: ["COD Warzone", "PC", "Invitational"],
+  // tournament_icon="anonymous"
+  cover_image: "anonymous",
+  host_clan: {
+    clan_logo: "anonymous",
+    clan_name: "Anonymous eSports",
+  },
+} as ITournament;
 
 const dummy_data = [...Array(23)].map(generateId);
 
 export const HomeScreen: React.FC<RootStackScreenProps<"HomeScreen">> = ({
   navigation,
 }) => {
+  const dispatch = useDispatch();
+
   const { layout, breakpoints } = useTheme();
 
-  const onEventPress = () => {};
+  const onEventPress = (tournament: ITournament) => {
+    dispatch(tournamentActions.setSelectedTournament(tournament));
+
+    Platform.select({
+      default: () => navigation.navigate("DetailsScreen"),
+      web: () => dispatch(settingsActions.toggleDetailModalVisibility()),
+    })();
+  };
+
   const joinTournament = () => navigation.navigate("SignUpScreen");
 
   const numColumns = Math.min(
@@ -44,25 +79,10 @@ export const HomeScreen: React.FC<RootStackScreenProps<"HomeScreen">> = ({
   const renderItem: ListRenderItem<typeof dummy_data[number]> = ({ index }) => {
     return (
       <Fragment>
-        <Card
-          team_size={4}
-          room_size={40}
-          price_pool={500000}
-          participates={[{}]}
-          created_at={new Date()}
-          updated_at={new Date()}
-          winner_clan_id="hey"
-          onEventPress={onEventPress}
+        <Tournament
+          {...dummy_tournament}
           joinTournament={joinTournament}
-          start_date={dayjs().add(1, "days").toDate()}
-          title="CODM: Private Alcatraz Tournament"
-          tags={["COD Warzone", "PC", "Invitational"]}
-          // tournament_icon="anonymous"
-          cover_image="anonymous"
-          host_clan={{
-            clan_logo: "anonymous",
-            clan_name: "Anonymous eSports",
-          }}
+          onEventPress={() => onEventPress(dummy_tournament)}
         />
 
         {index === dummy_data.length - 1 && isFillEmptyCells && (

@@ -61,9 +61,9 @@ export const Title = styled(Text)<{ error?: boolean; size?: number }>`
   color: ${(p) => (p.error ? p.theme.palette.error : p.theme.palette.text)};
 `;
 
-export const SubTitle = styled(Title)`
-  opacity: 0.6;
+export const SubTitle = styled(Title)<{ opacity?: number }>`
   margin-top: 10px;
+  opacity: ${({ opacity }) => opacity || 0.6};
   font-family: ${(p) => p.theme.fonts.variants.roboto_regular};
   font-size: ${(p) => p.theme.fonts.scale.value(p.size || 20)}px;
 `;
@@ -231,4 +231,12 @@ export const ErrorMessageContainer = styled(__ErrorMessageContainer)`
   padding-right: 8px;
   align-items: flex-end;
   flex-direction: column;
+`;
+
+export const Terms = styled(SubTitle)`
+  opacity: 1;
+  text-transform: capitalize;
+  text-decoration: underline;
+  color: ${(p) => p.theme.palette.primary};
+  text-decoration-color: ${(p) => p.theme.palette.primary};
 `;
