@@ -8,7 +8,7 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { APP_NAME } from "../../constants";
 import { formatCurrency } from "../../helpers";
 import { getImagekitUrl } from "../../helpers/imagekit";
-import { ITournament } from "../../providers/store/reducers/session/interfaces";
+import { ITournament } from "../../providers/store/reducers/tournament/interfaces";
 
 import {
   Tags,
@@ -36,14 +36,14 @@ import {
   ContentContainer,
   EventDetailsButton,
   TimerContentWrapper,
-} from "./card.styles";
+} from "./tournament.styles";
 
-type CardProps = {
+type TournamentProps = {
   onEventPress: (id: ITournament["id"]) => void;
   joinTournament: (id: ITournament["id"]) => void;
 } & ITournament;
 
-export const Card: React.FC<CardProps> = (props) => {
+export const Tournament: React.FC<TournamentProps> = (props) => {
   const { palette, colors, hexToRGB } = useTheme();
 
   const {
@@ -183,7 +183,7 @@ export const Card: React.FC<CardProps> = (props) => {
             preview={{ uri: clanLogoImage.preview }}
           />
           <HostDetail>
-            <Description>Organised by</Description>
+            <Description>Organized by</Description>
             <Organizer numberOfLines={1}>
               {host_clan.clan_name || APP_NAME}
             </Organizer>

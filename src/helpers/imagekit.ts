@@ -3,7 +3,7 @@ import ImagePicker from "expo-image-picker";
 import { imagekit } from "../config/imagekit";
 import { UrlOptions, UploadOptions } from "imagekit-javascript/src/interfaces";
 
-type DirectoryType = "clan_logo" | "tournament_cover";
+type DirectoryType = "clan_logo" | "tournament_cover" | "player_avatar";
 
 export const getImagekitUrlFromPath = ({
   directory,

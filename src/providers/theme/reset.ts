@@ -65,12 +65,35 @@ table {
 `
 
 const GlobalStyle = createGlobalStyle`${reset}
+
+  @media (orientation: landscape) {
+      ::-webkit-scrollbar {
+        width: 8px;
+        transition: background 350ms ease 0s;
+        background-color: ${(p: any) => p.theme.palette.transparent};
+      }
+
+      ::-webkit-scrollbar-track {
+        transition: background 350ms ease 0s;
+        background-color: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        transition: background 350ms ease 0s;
+        border-radius: 5px;
+        background-color: ${(p: any) =>
+          p.theme.hexToRGB(p.theme.palette.text, 0.4)};
+      }
+  }
+
+
   html, 
   body, 
   #root{
     isolation: isolate;
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
+    background-color: ${(p: any) => p.theme.palette.background};
+
 
     input:focus,
     select:focus,

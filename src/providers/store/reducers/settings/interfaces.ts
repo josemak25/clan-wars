@@ -18,8 +18,6 @@ export interface ISettingsState {
   locale: Locale;
   screen: SwitchScreen;
   colorMode: IColorMode;
-  isProfileInfoVisible: boolean;
-  isPlayerIdInfoVisible: boolean;
+  isDetailModalVisible: boolean;
   isReceiveNotifications: boolean;
-  isWalletBalanceVisible: boolean;
 }

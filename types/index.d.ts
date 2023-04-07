@@ -1,6 +1,6 @@
 import Reactotron from "reactotron-react-native";
 import { Control, FieldErrors } from "react-hook-form";
-import { ITournamentClan } from "../src/providers/store/reducers/session/interfaces";
+import { ITournamentClan } from "../src/providers/store/reducers/tournament/interfaces";
 
 declare global {
   interface Console {

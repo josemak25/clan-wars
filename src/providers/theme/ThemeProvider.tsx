@@ -8,10 +8,10 @@ import {
   DefaultTheme,
   ThemeProvider as StyledThemeProvider,
 } from "styled-components/native";
+import { shallowEqual } from "react-redux";
 import { useWindowDimensions } from "react-native";
 import { Provider as PaperProvider } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { shallowEqual, useDispatch, useSelector } from "react-redux";
 
 import {
   FONTS,
@@ -24,7 +24,12 @@ import { hexToRGB } from "../../helpers";
 import { RootState } from "../store/store";
 import { settingsActions } from "../store/reducers";
 import { IColorMode } from "../store/reducers/settings/interfaces";
-import { useColorScheme, useResponsiveFontSize } from "../../hooks";
+import {
+  useDispatch,
+  useSelector,
+  useColorScheme,
+  useResponsiveFontSize,
+} from "../../hooks";
 
 export const ThemeProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const dispatch = useDispatch();
@@ -69,10 +74,8 @@ export const ThemeProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <StyledThemeProvider theme={theme}>
-      <PaperProvider>
-        <GlobalStyle />
-        {children}
-      </PaperProvider>
+      <GlobalStyle theme={theme} />
+      <PaperProvider>{children}</PaperProvider>
     </StyledThemeProvider>
   );
 };

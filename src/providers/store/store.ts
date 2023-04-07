@@ -12,10 +12,10 @@ import {
 } from "redux-persist";
 
 import {
-  sessionReducer,
   settingsReducer,
-  SESSION_SLICE_NAME,
+  tournamentReducer,
   SETTINGS_SLICE_NAME,
+  TOURNAMENT_SLICE_NAME,
 } from "./reducers";
 import { APP_VERSION, __ROOT_REDUX_STATE_KEY__ } from "../../constants";
 
@@ -37,8 +37,8 @@ const reactotronEnhancer = (): any => {
 };
 
 const rootReducer = combineReducers({
-  [SESSION_SLICE_NAME]: sessionReducer,
   [SETTINGS_SLICE_NAME]: settingsReducer,
+  [TOURNAMENT_SLICE_NAME]: tournamentReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
