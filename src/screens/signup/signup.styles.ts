@@ -240,3 +240,34 @@ export const Terms = styled(SubTitle)`
   color: ${(p) => p.theme.palette.primary};
   text-decoration-color: ${(p) => p.theme.palette.primary};
 `;
+
+export const TeamScrollView = styled.ScrollView.attrs((p) => ({
+  horizontal: true,
+  contentContainerStyle: {
+    gap: p.theme.layout.gutter,
+    paddingBottom: p.theme.layout.gutter,
+  },
+}))``;
+
+export const TeamButton = styled.TouchableOpacity<{ error?: boolean }>`
+  height: 100px;
+  align-items: center;
+  justify-content: center;
+  gap: ${(p) => p.theme.layout.radius * 1.3}px;
+  border-radius: ${(p) => p.theme.layout.radius}px;
+  padding: 0px ${(p) => p.theme.layout.gutter * 1.3}px;
+  background-color: ${(p) => p.theme.palette.card_background};
+  border: 1.5px
+    ${(p) =>
+      p.theme.hexToRGB(
+        p.error ? p.theme.palette.error : p.theme.palette.text,
+        p.error ? 0.7 : 0.2
+      )}
+    dashed;
+`;
+
+export const PlayerName = styled(SubTitle)`
+  margin: 0px;
+  color: ${(p) => p.theme.palette.text};
+  font-size: ${(p) => p.theme.fonts.scale.value(15)}px;
+`;

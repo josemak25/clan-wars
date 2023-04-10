@@ -83,7 +83,7 @@ export const SignUpScreen: React.FC<RootStackScreenProps<"SignUpScreen">> = ({
 }) => {
   const [isNext, setIsNext] = useState(true);
   const { isDesktopOrLaptop } = useResponsiveScreen();
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(3);
   const [formSteps, setFormSteps] = useState(defaultFormSteps);
   const {
     control,
@@ -118,8 +118,8 @@ export const SignUpScreen: React.FC<RootStackScreenProps<"SignUpScreen">> = ({
 
   const goNext = async () => {
     // return if error only route to next form if no errors
-    const error = await validateCurrentFormBeforeRoute();
-    if (error) return;
+    // const error = await validateCurrentFormBeforeRoute();
+    // if (error) return;
 
     const nextIndex = currentIndex + 1;
 
