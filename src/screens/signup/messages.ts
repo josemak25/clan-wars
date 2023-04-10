@@ -85,6 +85,22 @@ const messages = defineMessages({
     id: "signup.upload_completed",
     defaultMessage: "Completed",
   },
+  add_team_leader: {
+    id: "signup.add_team_leader",
+    defaultMessage: "Add team leader",
+  },
+  add_second_player: {
+    id: "signup.add_second_player",
+    defaultMessage: "Add second player",
+  },
+  add_third_player: {
+    id: "signup.add_third_player",
+    defaultMessage: "Add third player",
+  },
+  add_fourth_player: {
+    id: "signup.add_fourth_player",
+    defaultMessage: "Add fourth player",
+  },
 
   back: {
     id: "signup.back",

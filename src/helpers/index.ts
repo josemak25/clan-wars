@@ -1,3 +1,4 @@
+export * from "./chunk";
 export * from "./hexToRGB";
 export * from "./generateId";
 export * from "./reportError";

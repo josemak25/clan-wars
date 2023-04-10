@@ -11,7 +11,7 @@ export { Spacer } from "../signup/signup.styles";
 export const Container = styled.View`
   flex: 1;
   padding: ${(p) => p.theme.layout.gutter}px;
-  margin-top: ${(p) => p.theme.layout.gutter / 2}px;
+  padding-top: ${(p) => p.theme.layout.gutter / 2}px;
   background-color: ${(p) => p.theme.palette.background};
 `;
 

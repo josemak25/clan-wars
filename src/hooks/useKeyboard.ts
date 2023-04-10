@@ -1,61 +1,65 @@
-import { useState } from "react";
-import {
-  runOnJS,
-  KeyboardState,
-  useDerivedValue,
-  useAnimatedKeyboard,
-} from "react-native-reanimated";
+import { useEffect, useState } from "react";
+import { Keyboard, KeyboardEventListener, KeyboardMetrics } from "react-native";
+
+const emptyCoordinates = Object.freeze({
+  screenX: 0,
+  screenY: 0,
+  width: 0,
+  height: 0,
+});
+const initialValue = {
+  start: emptyCoordinates,
+  end: emptyCoordinates,
+};
 
 export const useKeyboard = () => {
-  const keyboard = useAnimatedKeyboard();
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
-  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+  const [shown, setShown] = useState(false);
+  const [keyboardHeight, setKeyboardHeight] = useState<number>(0);
+  const [coordinates, setCoordinates] = useState<{
+    start: undefined | KeyboardMetrics;
+    end: KeyboardMetrics;
+  }>(initialValue);
 
-  const handleKeyboardOpened = (height: number) => {
-    if (!keyboardHeight && isKeyboardVisible) {
-      setKeyboardHeight(height);
-    }
+  const handleKeyboardWillShow: KeyboardEventListener = (e) => {
+    setShown(true);
+    setCoordinates({ start: e.startCoordinates, end: e.endCoordinates });
   };
 
-  const handleKeyboardOpening = () => {
-    if (!isKeyboardVisible) {
-      setIsKeyboardVisible(true);
-    }
+  const handleKeyboardDidShow: KeyboardEventListener = (e) => {
+    setCoordinates({ start: e.startCoordinates, end: e.endCoordinates });
+    setKeyboardHeight(e.endCoordinates.height);
   };
 
-  const handleKeyboardClosed = () => {
-    if (!isKeyboardVisible) {
+  const handleKeyboardWillHide: KeyboardEventListener = (e) => {
+    setShown(false);
+    setCoordinates({ start: e.startCoordinates, end: e.endCoordinates });
+  };
+
+  const handleKeyboardDidHide: KeyboardEventListener = (e) => {
+    if (e) {
+      setCoordinates({ start: e.startCoordinates, end: e.endCoordinates });
+    } else {
+      setCoordinates(initialValue);
       setKeyboardHeight(0);
     }
   };
 
-  const handleKeyboardClosing = () => {
-    if (isKeyboardVisible) {
-      setIsKeyboardVisible(false);
-    }
-  };
+  useEffect(() => {
+    const subscriptions = [
+      Keyboard.addListener("keyboardWillShow", handleKeyboardWillShow),
+      Keyboard.addListener("keyboardDidShow", handleKeyboardDidShow),
+      Keyboard.addListener("keyboardWillHide", handleKeyboardWillHide),
+      Keyboard.addListener("keyboardDidHide", handleKeyboardDidHide),
+    ];
 
-  useDerivedValue(() => {
-    if (keyboard.state.value === KeyboardState.OPEN) {
-      runOnJS(handleKeyboardOpened)(keyboard.height.value);
-    }
-
-    if (keyboard.state.value === KeyboardState.OPENING) {
-      runOnJS(handleKeyboardOpening)();
-    }
-
-    if (keyboard.state.value === KeyboardState.CLOSED) {
-      runOnJS(handleKeyboardClosed)();
-    }
-
-    if (keyboard.state.value === KeyboardState.CLOSING) {
-      runOnJS(handleKeyboardClosing)();
-    }
-  });
+    return () => {
+      subscriptions.forEach((subscription) => subscription.remove());
+    };
+  }, []);
 
   return {
+    coordinates,
     keyboardHeight,
-    isKeyboardVisible,
-    animatedKeyboardHeight: keyboard.height,
+    keyboardShown: shown,
   };
 };

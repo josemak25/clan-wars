@@ -1,17 +1,34 @@
 import React from "react";
-import { Controller } from "react-hook-form";
-import { FormattedMessage, useIntl } from "react-intl";
+import { FormattedMessage } from "react-intl";
+import { Controller, useFieldArray } from "react-hook-form";
 
 import messages from "../messages";
+import { Icon } from "../../../components/icon";
 import { FormStepProps } from "../../../../types";
-import { Input } from "../../../components/input";
-import { useFormValidation } from "../../../hooks";
+import { useFormValidation, useDispatch } from "../../../hooks";
+import { settingsActions } from "../../../providers/store/reducers";
 
-import { Title, Spacer, SubTitle, FormStepWrapper } from "../signup.styles";
+import {
+  Title,
+  Spacer,
+  SubTitle,
+  TeamButton,
+  PlayerName,
+  TeamScrollView,
+  FormStepWrapper,
+} from "../signup.styles";
 
 export const FormStepFour: React.FC<FormStepProps> = ({ errors, control }) => {
-  const { formatMessage } = useIntl();
+  const dispatch = useDispatch();
   const { clanNameValidation } = useFormValidation();
+  const { fields, append, prepend } = useFieldArray({
+    control,
+    name: "team",
+  });
+
+  const onTeamClick = () => {
+    dispatch(settingsActions.toggleAddPlayerModalVisibility());
+  };
 
   return (
     <FormStepWrapper>
@@ -23,20 +40,63 @@ export const FormStepFour: React.FC<FormStepProps> = ({ errors, control }) => {
       </SubTitle>
 
       <Spacer size={40} />
-      <Controller
-        name="clan_logo"
-        control={control}
-        rules={clanNameValidation}
-        render={({ field: { onChange, ref, ...rest } }) => (
-          <Input
-            {...rest}
-            error={errors.clan_logo}
-            onChangeText={onChange}
-            placeholder="Peaky blinders"
-            label={formatMessage(messages.enter_the_clan_name)}
-          />
-        )}
-      />
+      <TeamScrollView>
+        <Controller
+          name="team"
+          control={control}
+          rules={clanNameValidation}
+          render={({ field: { onChange } }) => (
+            <TeamButton onPress={onTeamClick}>
+              <Icon name="user" />
+              <PlayerName>
+                <FormattedMessage {...messages.add_team_leader} />
+              </PlayerName>
+            </TeamButton>
+          )}
+        />
+
+        <Controller
+          name="team"
+          control={control}
+          rules={clanNameValidation}
+          render={({ field: { onChange } }) => (
+            <TeamButton onPress={onTeamClick}>
+              <Icon name="user" />
+              <PlayerName>
+                <FormattedMessage {...messages.add_second_player} />
+              </PlayerName>
+            </TeamButton>
+          )}
+        />
+
+        <Controller
+          name="team"
+          control={control}
+          rules={clanNameValidation}
+          render={({ field: { onChange } }) => (
+            <TeamButton onPress={onTeamClick}>
+              <Icon name="user" />
+              <PlayerName>
+                <FormattedMessage {...messages.add_third_player} />
+              </PlayerName>
+            </TeamButton>
+          )}
+        />
+
+        <Controller
+          name="team"
+          control={control}
+          rules={clanNameValidation}
+          render={({ field: { onChange } }) => (
+            <TeamButton onPress={onTeamClick}>
+              <Icon name="user" />
+              <PlayerName>
+                <FormattedMessage {...messages.add_fourth_player} />
+              </PlayerName>
+            </TeamButton>
+          )}
+        />
+      </TeamScrollView>
     </FormStepWrapper>
   );
 };

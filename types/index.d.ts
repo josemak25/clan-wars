@@ -1,6 +1,9 @@
 import Reactotron from "reactotron-react-native";
 import { Control, FieldErrors } from "react-hook-form";
-import { ITournamentClan } from "../src/providers/store/reducers/tournament/interfaces";
+import {
+  ITournamentClan,
+  ITournamentTeam,
+} from "../src/providers/store/reducers/tournament/interfaces";
 
 declare global {
   interface Console {
@@ -19,9 +22,14 @@ export interface IFormStep {
   key: keyof ITournamentClan;
 }
 
-export type FormStepProps = {
-  errors: FieldErrors<ITournamentClan>;
-  control: Control<ITournamentClan, any>;
+export interface IAddPlayerFormStep
+  extends Omit<IFormStep, "icon" | "highlighted"> {
+  key: keyof ITournamentTeam;
+}
+
+export type FormStepProps<T = ITournamentClan> = {
+  errors: FieldErrors<T>;
+  control: Control<T, any>;
 };
 
 export interface GroupInterface {

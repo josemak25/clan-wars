@@ -6,7 +6,6 @@ import Animated, { FadeInLeft, FadeInRight } from "react-native-reanimated";
 import messages from "./messages";
 import { IFormStep } from "../../../types";
 import { generateId } from "../../helpers";
-import { useResponsiveScreen } from "../../hooks";
 import { RootStackScreenProps } from "../../../types/navigation";
 import { ITournamentClan } from "../../providers/store/reducers/tournament/interfaces";
 import {
@@ -82,8 +81,7 @@ export const SignUpScreen: React.FC<RootStackScreenProps<"SignUpScreen">> = ({
   navigation,
 }) => {
   const [isNext, setIsNext] = useState(true);
-  const { isDesktopOrLaptop } = useResponsiveScreen();
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(3);
   const [formSteps, setFormSteps] = useState(defaultFormSteps);
   const {
     control,
@@ -122,7 +120,6 @@ export const SignUpScreen: React.FC<RootStackScreenProps<"SignUpScreen">> = ({
     if (error) return;
 
     const nextIndex = currentIndex + 1;
-
     const newFormSteps = formSteps.map((step, i) => ({
       ...step,
       isViewable: step.isViewable || i === nextIndex,
@@ -134,7 +131,7 @@ export const SignUpScreen: React.FC<RootStackScreenProps<"SignUpScreen">> = ({
   };
 
   return (
-    <Container isDesktopOrLaptop={isDesktopOrLaptop}>
+    <Container>
       <MaxWidthContainer>
         <FormStepIndicator
           steps={formSteps}

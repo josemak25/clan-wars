@@ -1,27 +1,25 @@
 import React from "react";
-import { SvgProps } from "react-native-svg";
 
-import { Logo } from "./logo";
-import { User } from "./user";
+import { Avatar } from "./avatar";
+import { appIcons, IconProps } from "./interface";
 
-const appIcons = {
-  user: User,
-  logo: Logo,
-};
-
-export type IconType = keyof typeof appIcons;
-
-type IconProps = SvgProps & {
-  size?: number;
-  name: IconType;
-  isOnlyIcon?: boolean;
-};
-
-export const Icon: React.FC<IconProps> = (props) => {
+export const Icon: React.FC<IconProps> = ({
+  isOnlyIcon = true,
+  backgroundColor = "#F2F2F2",
+  ...props
+}) => {
   const inferredProps = props.size
     ? { width: props.size, height: props.size }
     : {};
 
-  const Component = appIcons[props.name];
-  return <Component {...props} {...inferredProps} />;
+  const Component = props.name === "avatar" ? Avatar : appIcons[props.name];
+
+  return (
+    <Component
+      {...props}
+      isonlyicon={String(isOnlyIcon)}
+      backgroundColor={backgroundColor}
+      {...inferredProps}
+    />
+  );
 };

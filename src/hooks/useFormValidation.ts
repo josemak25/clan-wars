@@ -21,6 +21,16 @@ const messages = defineMessages({
     defaultMessage: "Team name is required",
   },
 
+  player_ign_required: {
+    id: "form.validator.player_ign_required",
+    defaultMessage: "Player ign is required",
+  },
+
+  avatar_required: {
+    id: "form.validator.avatar_required",
+    defaultMessage: "Player avatar is required",
+  },
+
   clan_log_required: {
     id: "form.validator.clan_log_required",
     defaultMessage: "Clan logo is required",
@@ -50,6 +60,20 @@ export const useFormValidation = () => {
     },
   };
 
+  const avatarValidation = {
+    required: {
+      value: true,
+      message: intl.formatMessage(messages.avatar_required),
+    },
+  };
+
+  const playerIgnValidation = {
+    required: {
+      value: true,
+      message: intl.formatMessage(messages.player_ign_required),
+    },
+  };
+
   const teamNameValidation = {
     required: {
       value: true,
@@ -66,8 +90,10 @@ export const useFormValidation = () => {
 
   return {
     emailValidation,
+    avatarValidation,
     clanLogoValidation,
     clanNameValidation,
     teamNameValidation,
+    playerIgnValidation,
   };
 };

@@ -17,8 +17,6 @@ import {
   ButtonContainer,
 } from "./statistic.styles";
 
-const tags = ["COD Warzone", "PC", "Invitational"];
-
 export const StatisticsScreen: React.FC<
   RootTabScreenProps<"StatisticsScreen">
 > = () => {

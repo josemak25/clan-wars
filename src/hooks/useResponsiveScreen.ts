@@ -17,6 +17,8 @@ export function useResponsiveScreen() {
     minWidth: BREAK_POINTS.desktop_viewport,
   });
 
+  const isMinScreenSize = (size: number) => useMediaQuery({ minWidth: size });
+
   const Desktop: React.FC<PropsWithChildren> = useCallback(({ children }) => {
     return isDesktopOrLaptop ? (children as React.ReactElement) : null;
   }, []);
@@ -34,6 +36,7 @@ export function useResponsiveScreen() {
     Desktop,
     isSmallMobile,
     MobileOrTablet,
+    isMinScreenSize,
     isMobileOrTablet,
     isDesktopOrLaptop,
   };

@@ -6,9 +6,9 @@ import { IconButton as __IconButton } from "react-native-paper";
 
 export const Logo = ({
   style,
-  isOnlyIcon = true,
+  isonlyicon,
   ...props
-}: SvgProps & { isOnlyIcon?: boolean }) => {
+}: SvgProps & { isonlyicon?: string }) => {
   const { colors, palette } = useTheme();
 
   return (
@@ -57,7 +57,7 @@ export const Logo = ({
         </View>
       </LogoContainer>
 
-      {!isOnlyIcon ? (
+      {isonlyicon !== "true" ? (
         <Fragment>
           <Svg
             fill="none"
