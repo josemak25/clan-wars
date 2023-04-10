@@ -17,9 +17,9 @@ export interface ITournament {
 
 export interface ITournamentTeam {
   id: string;
-  name: string;
   avatar: string;
   player_id: string;
+  player_ign: string;
   total_kills: number;
   created_at: string | number;
   updated_at: string | number;

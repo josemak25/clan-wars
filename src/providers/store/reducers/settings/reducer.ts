@@ -9,6 +9,7 @@ const initialState: ISettingsState = {
   colorMode: IColorMode.LIGHT,
   isDetailModalVisible: false,
   isReceiveNotifications: true,
+  isAddPlayerModalVisible: false,
   screen: SwitchScreen.UNAUTHENTICATED_SCREENS,
 };
 
@@ -27,6 +28,10 @@ export const { reducer: settingsReducer, actions: settingsActions } =
 
       toggleReceiveNotifications: (state) => {
         state.isReceiveNotifications = !state.isReceiveNotifications;
+      },
+
+      toggleAddPlayerModalVisibility: (state) => {
+        state.isAddPlayerModalVisible = !state.isAddPlayerModalVisible;
       },
 
       toggleDetailModalVisibility: (state) => {

@@ -20,4 +20,5 @@ export interface ISettingsState {
   colorMode: IColorMode;
   isDetailModalVisible: boolean;
   isReceiveNotifications: boolean;
+  isAddPlayerModalVisible: boolean;
 }

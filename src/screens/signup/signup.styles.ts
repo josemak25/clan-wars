@@ -4,17 +4,15 @@ import {
   Button as __Button,
   IconButton as __IconButton,
 } from "react-native-paper";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 import { ErrorMessageContainer as __ErrorMessageContainer } from "../../components/input/input.styles";
 
 export { ErrorMessage } from "../../components/input/input.styles";
 
-export const Container = styled(SafeAreaView)<{ isDesktopOrLaptop: boolean }>`
+export const Container = styled.View`
   flex: 1;
   align-items: center;
-  padding-top: ${(p) =>
-    p.theme.layout.gutter * (p.isDesktopOrLaptop ? 3 : 0)}px;
+  padding-top: ${(p) => p.theme.layout.gutter * 2.5}px;
   background-color: ${(p) => p.theme.palette.background};
 `;
 
