@@ -1,6 +1,6 @@
-const createExpoWebpackConfigAsync = require("@expo/webpack-config");
 const path = require("path");
 const WorkboxWebpackPlugin = require("workbox-webpack-plugin");
+const createExpoWebpackConfigAsync = require("@expo/webpack-config");
 
 module.exports = async function (env, argv) {
   // Set by expo-cli during `expo build:web`
@@ -16,19 +16,6 @@ module.exports = async function (env, argv) {
     },
     argv
   );
-
-  // Customize the config before returning it.
-  // config.module.rules.push({
-  //   test: /postMock.html$/,
-  //   use: {
-  //     loader: "file-loader",
-  //     options: {
-  //       name: "[name].[ext]",
-  //     },
-  //   },
-  // });
-
-  // config.resolve.alias["react-native-webview"] = "react-native-web-webview";
 
   if (isEnvProduction) {
     config.plugins.push(
