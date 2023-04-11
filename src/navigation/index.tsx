@@ -37,7 +37,7 @@ export const Navigation = () => {
   return (
     <NavigationContainer theme={theme} onReady={onAppIsReady}>
       <Stack.Navigator
-        initialRouteName="SignUpScreen"
+        initialRouteName="HomeScreen"
         screenOptions={{
           headerShown: false,
           headerShadowVisible: false,

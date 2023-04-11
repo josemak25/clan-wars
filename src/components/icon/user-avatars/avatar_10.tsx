@@ -1,9 +1,7 @@
 import React, { Fragment } from "react";
 import { Mask, G, Path } from "react-native-svg";
 
-export const Avatar_10: React.FC<{ backgroundColor: string }> = ({
-  backgroundColor,
-}) => (
+export const Avatar_10: React.FC<{ color: string }> = ({ color }) => (
   <Fragment>
     <Mask id="a" maskUnits="userSpaceOnUse">
       <Path
@@ -12,10 +10,7 @@ export const Avatar_10: React.FC<{ backgroundColor: string }> = ({
       />
     </Mask>
     <G mask="url(#a)">
-      <Path
-        fill={backgroundColor}
-        d="M-40.727 473.671h459.72v-486.76h-459.72v486.76Z"
-      />
+      <Path fill={color} d="M-40.727 473.671h459.72v-486.76h-459.72v486.76Z" />
       <Path
         fill="#38373D"
         d="m87.78 637.056 12.493-351.137 207.893-.04.013 351.177c-65.546 14.56-140.44 11.925-220.4 0Z"

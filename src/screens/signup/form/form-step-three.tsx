@@ -28,7 +28,11 @@ import {
   ErrorMessageContainer,
 } from "../signup.styles";
 
-export const FormStepThree: React.FC<FormStepProps> = ({ errors, control }) => {
+export const FormStepThree: React.FC<FormStepProps> = ({
+  errors,
+  control,
+  setValue,
+}) => {
   const { layout, palette, hexToRGB } = useTheme();
   const [progressLayout, onLayout] = useOnLayout();
   const { clanLogoValidation } = useFormValidation();
@@ -61,10 +65,7 @@ export const FormStepThree: React.FC<FormStepProps> = ({ errors, control }) => {
     if (!result.canceled) {
       const uri = result.assets[0].base64 || result.assets[0].uri;
       const fileSize = getLogoSize(uri);
-
-      console.log("====================================");
-      console.log(result.assets[0], { fileSize });
-      console.log("====================================");
+      setValue("clan_logo", uri);
       uploadLogo({ ...result.assets[0], uri, fileSize });
     }
   };

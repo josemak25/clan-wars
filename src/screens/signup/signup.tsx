@@ -1,11 +1,15 @@
 import React, { useState } from "react";
+import { shallowEqual } from "react-redux";
 import { FormattedMessage } from "react-intl";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Animated, { FadeInLeft, FadeInRight } from "react-native-reanimated";
 
 import messages from "./messages";
+import { useSelector } from "../../hooks";
 import { IFormStep } from "../../../types";
 import { generateId } from "../../helpers";
+import { PaymentModal } from "../../components/paystack";
+import { RootState } from "../../providers/store/store";
 import { RootStackScreenProps } from "../../../types/navigation";
 import { ITournamentClan } from "../../providers/store/reducers/tournament/interfaces";
 import {
@@ -81,11 +85,19 @@ export const SignUpScreen: React.FC<RootStackScreenProps<"SignUpScreen">> = ({
   navigation,
 }) => {
   const [isNext, setIsNext] = useState(true);
-  const [currentIndex, setCurrentIndex] = useState(3);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [formSteps, setFormSteps] = useState(defaultFormSteps);
+  const [clan, setClan] = useState<ITournamentClan | null>(null);
+
+  const { selectedTournament } = useSelector(
+    ({ tournament }: RootState) => tournament,
+    shallowEqual
+  );
+
   const {
     control,
     trigger,
+    setValue,
     handleSubmit,
     getFieldState,
     formState: { errors },
@@ -99,8 +111,6 @@ export const SignUpScreen: React.FC<RootStackScreenProps<"SignUpScreen">> = ({
     setIsNext(index > currentIndex);
     setCurrentIndex(index);
   };
-
-  const onSubmit: SubmitHandler<ITournamentClan> = (data) => {};
 
   const validateCurrentFormBeforeRoute = async () => {
     const { key } = formSteps[currentIndex];
@@ -130,6 +140,13 @@ export const SignUpScreen: React.FC<RootStackScreenProps<"SignUpScreen">> = ({
     setCurrentIndex(nextIndex);
   };
 
+  const onSubmit: SubmitHandler<ITournamentClan> = (data) => {
+    setClan(data);
+    console.log("====================================");
+    console.log(data, isLastPageOfFormActive);
+    console.log("====================================");
+  };
+
   return (
     <Container>
       <MaxWidthContainer>
@@ -146,7 +163,7 @@ export const SignUpScreen: React.FC<RootStackScreenProps<"SignUpScreen">> = ({
                 key={`${index}_form_step`}
                 entering={isNext ? FadeInRight : FadeInLeft}
               >
-                <Form errors={errors} control={control} />
+                <Form setValue={setValue} errors={errors} control={control} />
               </Animated.View>
             ) : null
           )}
@@ -170,6 +187,13 @@ export const SignUpScreen: React.FC<RootStackScreenProps<"SignUpScreen">> = ({
           </NextStepButton>
         </ButtonContainer>
       </MaxWidthContainer>
+
+      <PaymentModal
+        clan={clan}
+        onClose={() => {}}
+        onSuccess={() => {}}
+        selectedTournament={selectedTournament}
+      />
     </Container>
   );
 };

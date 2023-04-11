@@ -10,10 +10,25 @@ module.exports = async function (env, argv) {
   const config = await createExpoWebpackConfigAsync(
     {
       ...env,
-      babel: { dangerouslyAddModulePathsToTranspile: ["@gorhom"] },
+      babel: {
+        dangerouslyAddModulePathsToTranspile: ["@gorhom"],
+      },
     },
     argv
   );
+
+  // Customize the config before returning it.
+  // config.module.rules.push({
+  //   test: /postMock.html$/,
+  //   use: {
+  //     loader: "file-loader",
+  //     options: {
+  //       name: "[name].[ext]",
+  //     },
+  //   },
+  // });
+
+  // config.resolve.alias["react-native-webview"] = "react-native-web-webview";
 
   if (isEnvProduction) {
     config.plugins.push(

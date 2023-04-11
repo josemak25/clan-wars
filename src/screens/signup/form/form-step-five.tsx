@@ -30,15 +30,15 @@ export const FormStepFive: React.FC<FormStepProps> = ({ errors, control }) => {
 
       <Spacer size={40} />
       <Controller
-        name="team_name"
+        name="contact_email_address"
         control={control}
         rules={emailValidation}
         render={({ field: { onChange, ref, ...rest } }) => (
           <Input
             {...rest}
             onChangeText={onChange}
-            error={errors.team_name}
             placeholder="info@anonymous.com"
+            error={errors.contact_email_address}
             label={formatMessage(messages.best_contact_clan)}
           />
         )}

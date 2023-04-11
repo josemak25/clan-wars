@@ -1,5 +1,5 @@
 import Reactotron from "reactotron-react-native";
-import { Control, FieldErrors } from "react-hook-form";
+import { Control, UseFormSetValue, FieldErrors } from "react-hook-form";
 import {
   ITournamentClan,
   ITournamentTeam,
@@ -30,6 +30,7 @@ export interface IAddPlayerFormStep
 export type FormStepProps<T = ITournamentClan> = {
   errors: FieldErrors<T>;
   control: Control<T, any>;
+  setValue: UseFormSetValue<T>;
 };
 
 export interface GroupInterface {

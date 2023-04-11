@@ -24,6 +24,7 @@ const dummy_tournament = {
   winner_clan_id: "hey",
   created_at: Date.now(),
   updated_at: Date.now(),
+  registration_fee: "25000.00",
   start_date: dayjs().add(1, "days").toString(),
   title: "CODM: Private Alcatraz Tournament",
   tags: ["COD Warzone", "PC", "Invitational"],
@@ -53,7 +54,10 @@ export const HomeScreen: React.FC<RootStackScreenProps<"HomeScreen">> = ({
     })();
   };
 
-  const joinTournament = () => navigation.navigate("SignUpScreen");
+  const joinTournament = (tournament: ITournament) => {
+    dispatch(tournamentActions.setSelectedTournament(tournament));
+    navigation.navigate("SignUpScreen");
+  };
 
   const numColumns = Math.min(
     3,
@@ -81,7 +85,7 @@ export const HomeScreen: React.FC<RootStackScreenProps<"HomeScreen">> = ({
       <Fragment>
         <Tournament
           {...dummy_tournament}
-          joinTournament={joinTournament}
+          joinTournament={() => joinTournament(dummy_tournament)}
           onEventPress={() => onEventPress(dummy_tournament)}
         />
 

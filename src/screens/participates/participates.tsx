@@ -26,7 +26,7 @@ export const ParticipatesScreen: React.FC<
         team={[
           {
             id: generateId(),
-            name: "+ Drifter",
+            player_ign: "+ Drifter",
             avatar: "anonymous",
             created_at: Date.now(),
             updated_at: Date.now(),
@@ -35,7 +35,7 @@ export const ParticipatesScreen: React.FC<
           },
           {
             id: generateId(),
-            name: "+ Mistake",
+            player_ign: "+ Mistake",
             avatar: "anonymous",
             created_at: Date.now(),
             updated_at: Date.now(),
@@ -43,7 +43,7 @@ export const ParticipatesScreen: React.FC<
             total_kills: Math.floor(Math.random() * 40),
           },
           {
-            name: "+ Jose",
+            player_ign: "+ Jose",
             avatar: "anonymous",
             id: generateId(),
             created_at: Date.now(),
@@ -52,7 +52,7 @@ export const ParticipatesScreen: React.FC<
             total_kills: Math.floor(Math.random() * 40),
           },
           {
-            name: "+ Gold",
+            player_ign: "+ Gold",
             avatar: "anonymous",
             id: generateId(),
             created_at: Date.now(),

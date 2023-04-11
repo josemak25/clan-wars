@@ -66,7 +66,7 @@ export const avatarList = Object.keys(userAvatars) as AvatarType[];
 export type IconProps = SvgProps & {
   size?: number;
   name: IconType;
+  color?: string;
   isOnlyIcon?: boolean;
   avatarId?: AvatarType;
-  backgroundColor?: string;
 };

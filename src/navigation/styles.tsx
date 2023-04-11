@@ -17,6 +17,8 @@ export const BackButton: React.FC<HeaderBackButtonProps> = ({ canGoBack }) => {
     navigation.goBack();
   };
 
+  if (!canGoBack) return null;
+
   return (
     <IconButton
       onPress={handleBack}

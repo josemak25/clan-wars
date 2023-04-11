@@ -8,6 +8,7 @@ export interface ITournament {
   cover_image?: string;
   winner_clan_id?: string;
   tournament_icon?: string;
+  registration_fee: string;
   host_clan: ITournamentClan;
   updated_at: string | number;
   created_at: string | number;
