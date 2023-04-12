@@ -28,7 +28,6 @@ const dummy_tournament = {
   start_date: dayjs().add(1, "days").toString(),
   title: "CODM: Private Alcatraz Tournament",
   tags: ["COD Warzone", "PC", "Invitational"],
-  // tournament_icon="anonymous"
   cover_image: "anonymous",
   host_clan: {
     clan_logo: "anonymous",
