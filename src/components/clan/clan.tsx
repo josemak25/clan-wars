@@ -68,13 +68,13 @@ export const Clan: React.FC<ITournamentClan> = (props) => {
             </View>
             <PlayerDetail margin={8}>
               <PlayerRank>LEADER</PlayerRank>
-              <LeaderName>{clan_leader.name}</LeaderName>
+              <LeaderName>{clan_leader.player_ign}</LeaderName>
             </PlayerDetail>
           </Profile>
           <KillCount>{clan_leader.total_kills}</KillCount>
         </LeaderContainer>
 
-        {members.map(({ id, name, player_id, total_kills }) => (
+        {members.map(({ id, player_ign, player_id, total_kills }) => (
           <Team key={id}>
             <Profile>
               <Avatar
@@ -82,7 +82,7 @@ export const Clan: React.FC<ITournamentClan> = (props) => {
                 preview={{ uri: avaterMap[player_id].preview }}
               />
               <PlayerDetail>
-                <Name>{name}</Name>
+                <Name>{player_ign}</Name>
               </PlayerDetail>
             </Profile>
             <KillCount>{total_kills}</KillCount>

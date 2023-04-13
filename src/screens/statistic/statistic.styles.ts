@@ -29,3 +29,11 @@ export const TimerContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
 `;
+
+export const WinnerContainer = styled.View`
+  border: red;
+  height: 300px;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: center;
+`;

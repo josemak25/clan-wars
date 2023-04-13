@@ -15,6 +15,7 @@ import {
   Container,
   TimerContainer,
   ButtonContainer,
+  WinnerContainer,
 } from "./statistic.styles";
 
 export const StatisticsScreen: React.FC<
@@ -27,8 +28,10 @@ export const StatisticsScreen: React.FC<
 
   return (
     <Container>
-      <Info>match info</Info>
+      <WinnerContainer></WinnerContainer>
 
+      <Spacer size={40} />
+      <Info>match info</Info>
       <Spacer size={20} />
 
       <TimerContainer>
