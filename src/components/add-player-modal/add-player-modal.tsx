@@ -139,9 +139,7 @@ export const AddPlayerModal: React.FC = () => {
   };
 
   const onSubmit: SubmitHandler<Partial<ITournamentTeam>> = (data) => {
-    console.log("====================================");
-    console.log(data);
-    console.log("====================================");
+  
   };
 
   const MAX_WIDTH = breakpoints.tablet_viewport;
@@ -162,13 +160,11 @@ export const AddPlayerModal: React.FC = () => {
       detached
       onClose={onClose}
       ref={bottomSheetRef}
-      // snapPoints={snapPoints}
       handleComponent={() => null}
       snapPoints={animatedSnapPoints}
       handleHeight={animatedHandleHeight}
       contentHeight={animatedContentHeight}
       backdropComponent={BackdropComponent}
-      // containerHeight={layout.screen.height}
       bottomInset={bottomInset / (keyboardShown ? 1.5 : 2)}
       backgroundStyle={{ backgroundColor: palette.transparent }}
       containerStyle={[
