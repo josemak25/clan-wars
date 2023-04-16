@@ -1,12 +1,11 @@
 import React, { useMemo } from "react";
 import { View } from "react-native";
 
+import { Participant } from "../participant";
 import { getImagekitUrl } from "../../helpers/imagekit";
 import { ITournamentClan } from "../../providers/store/reducers/tournament/interfaces";
 
 import {
-  Name,
-  Team,
   Title,
   Avatar,
   Profile,
@@ -75,18 +74,13 @@ export const Clan: React.FC<ITournamentClan> = (props) => {
         </LeaderContainer>
 
         {members.map(({ id, player_ign, player_id, total_kills }) => (
-          <Team key={id}>
-            <Profile>
-              <Avatar
-                uri={avaterMap[player_id].url}
-                preview={{ uri: avaterMap[player_id].preview }}
-              />
-              <PlayerDetail>
-                <Name>{player_ign}</Name>
-              </PlayerDetail>
-            </Profile>
-            <KillCount>{total_kills}</KillCount>
-          </Team>
+          <Participant
+            key={id}
+            name={player_ign}
+            kill_count={total_kills}
+            image_uri={avaterMap[player_id].url}
+            image_preview={avaterMap[player_id].preview}
+          />
         ))}
       </Contents>
     </Container>

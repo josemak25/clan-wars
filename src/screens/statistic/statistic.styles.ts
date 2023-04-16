@@ -1,4 +1,7 @@
+import { Platform } from "react-native";
 import styled from "styled-components/native";
+import { Image } from "react-native-expo-image-cache";
+
 import { Timer as __Timer } from "../../components/tournament/tournament.styles";
 
 export {
@@ -8,28 +11,24 @@ export {
 } from "../../components/tournament/tournament.styles";
 export { Spacer } from "../signup/signup.styles";
 
-export const ScrollView = styled.ScrollView.attrs((p) => ({
+export const ScrollView = styled.ScrollView.attrs<{
+  isDesktopOrLaptop: boolean;
+}>((p) => ({
   contentContainerStyle: {
     flexGrow: 1,
-    paddingHorizontal: p.theme.layout.gutter,
+    paddingBottom: p.theme.insets.bottom + p.theme.layout.gutter,
+    paddingTop: Platform.select({ web: p.theme.layout.gutter * 1.5 }),
+    paddingHorizontal: p.theme.layout.gutter * (p.isDesktopOrLaptop ? 3 : 1),
   },
-}))`
+}))<{ isDesktopOrLaptop: boolean }>`
   background-color: ${(p) => p.theme.palette.background};
 `;
 
 export const WinnerContainer = styled.View`
-  min-height: 300px;
-
-  border: red;
-`;
-
-export const WinnerWrapper = styled.View`
-  flex: 1;
-  align-items: center;
   flex-direction: row;
+  align-items: flex-end;
   justify-content: center;
-
-  border: green;
+  margin-top: ${Platform.select({ web: 30, default: 50 })}px;
 `;
 
 export const ClanImageContainer = styled.View`
@@ -58,60 +57,46 @@ export const Info = styled(Timer)`
   font-family: ${(p) => p.theme.fonts.variants.roboto_bold};
 `;
 
-export const ClanImage = styled.Image`
+export const ClanImage = styled(Image)<{
+  size?: number;
+  isDesktopOrLaptop: boolean;
+}>`
   width: 100%;
   height: 100%;
-`;
-
-export const ClanImageWrapper = styled.View<{ size?: number }>`
-  margin-top: 5px;
   overflow: hidden;
-  width: ${(p) => p.size || 100}px;
-  height: ${(p) => p.size || 100}px;
-  border: 2px ${(p) => p.theme.palette.success};
-  border-radius: ${(p) => (p.size || 100) / 2}px;
+  border-radius: ${(p) =>
+    p.size ? p.size : p.isDesktopOrLaptop ? 180 : 140}px;
 `;
 
-export const ClanName = styled(Info)`
-  margin-top: 10px;
-  font-size: ${(p) => p.theme.fonts.scale.value(14)}px;
+export const ClanImageWrapper = styled.View<{
+  size?: number;
+  isDesktopOrLaptop: boolean;
+}>`
+  margin-top: 5px;
+  border: 2px ${(p) => p.theme.palette.primary} solid;
+  width: ${(p) => (p.size ? p.size : p.isDesktopOrLaptop ? 180 : 140)}px;
+  height: ${(p) => (p.size ? p.size : p.isDesktopOrLaptop ? 180 : 140)}px;
+  border-radius: ${(p) =>
+    (p.size ? p.size : p.isDesktopOrLaptop ? 180 : 140) / 2}px;
+`;
+
+export const ClanName = styled(Info)<{ size?: number }>`
+  margin-top: 15px;
+  text-align: center;
+  width: ${(p) => p.size || 115}px;
+  font-size: ${(p) => p.theme.fonts.scale.value(20)}px;
   font-family: ${(p) => p.theme.fonts.variants.roboto_regular};
 `;
 
-export const Scores = styled(Info)`
-  font-size: ${(p) => p.theme.fonts.scale.value(18)}px;
-  font-family: ${(p) => p.theme.fonts.variants.roboto_regular};
-`;
-
-export const RightClanImage = styled(ClanImage)`
-  left: 0px;
+export const Scores = styled(ClanName)`
+  top: -5px;
+  margin: 0px;
+  color: ${(p) => p.theme.palette.primary};
+  font-size: ${(p) => p.theme.fonts.scale.value(30)}px;
+  font-family: ${(p) => p.theme.fonts.variants.roboto_bold};
 `;
 
 export const ClanScoresContainer = styled.View`
-  border: red;
-  flex-direction: column;
-  justify-content: center;
-`;
-
-export const Team = styled.View`
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: 15px;
-`;
-
-export const Profile = styled.View`
-  flex: 1;
-  flex-direction: row;
-`;
-
-export const PlayerDetail = styled.View<{ margin?: number }>`
-  flex: 1;
-  justify-content: center;
-  margin-left: ${(p) => p.theme.layout.gutter + (p.margin || 0)}px;
-`;
-
-export const KillCount = styled(Info)`
-  margin: 0px;
-  font-family: ${(p) => p.theme.fonts.variants.roboto_regular};
-  font-size: ${(p) => p.theme.fonts.scale.value(18)}px;
+  gap: ${(p) => p.theme.layout.gutter}px;
+  margin-top: ${(p) => p.theme.layout.gutter * 3}px;
 `;

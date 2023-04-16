@@ -1,6 +1,13 @@
 import { Platform } from "react-native";
 import styled from "styled-components/native";
-import { Image } from "react-native-expo-image-cache";
+
+import { Name, Avatar as __Avatar } from "../participant/participant.styles";
+
+export {
+  Profile,
+  KillCount,
+  PlayerDetail,
+} from "../participant/participant.styles";
 
 export const Container = styled.View`
   width: 100%;
@@ -31,30 +38,12 @@ export const LeaderContainer = styled.View`
   align-items: center;
 `;
 
-export const Team = styled(LeaderContainer)``;
-
-export const Profile = styled.View`
-  flex: 1;
-  flex-direction: row;
-`;
-
-export const Avatar = styled(Image)<{ size?: number }>`
-  overflow: hidden;
-  width: ${(p) => p.size || 40}px;
-  height: ${(p) => p.size || 40}px;
-  border-radius: ${(p) => (p.size || 40) / 2}px;
-`;
+export const Avatar = styled(__Avatar)``;
 
 export const ClanLogo = styled(Avatar)`
   right: -5px;
   bottom: -8px;
   position: absolute;
-`;
-
-export const PlayerDetail = styled.View<{ margin?: number }>`
-  flex: 1;
-  justify-content: center;
-  margin-left: ${(p) => p.theme.layout.gutter + (p.margin || 0)}px;
 `;
 
 export const PlayerRank = styled(Title)`
@@ -65,17 +54,8 @@ export const PlayerRank = styled(Title)`
   color: ${(p) => p.theme.hexToRGB(p.theme.palette.text, 0.4)};
 `;
 
-export const KillCount = styled(PlayerRank)`
-  margin: 0px;
-  font-size: ${(p) => p.theme.fonts.scale.value(20)}px;
-`;
-
-export const Name = styled(Title)`
-  color: ${(p) => p.theme.palette.text};
-  font-size: ${(p) => p.theme.fonts.scale.value(18)}px;
-  font-family: ${(p) => p.theme.fonts.variants.roboto_regular};
-`;
-
 export const LeaderName = styled(Name)`
+  font-size: ${(p) => p.theme.fonts.scale.value(18)}px;
   font-family: ${(p) => p.theme.fonts.variants.roboto_bold};
+  color: ${(p) => p.theme.hexToRGB(p.theme.palette.text, 0.6)};
 `;

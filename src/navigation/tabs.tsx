@@ -12,6 +12,7 @@ export const TabNavigator = () => {
 
   return (
     <Tab.Navigator
+      initialRouteName="StatisticsScreen"
       screenOptions={{
         tabBarActiveTintColor: palette.text,
         tabBarInactiveTintColor: hexToRGB(palette.text, 0.4),

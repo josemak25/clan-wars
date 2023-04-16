@@ -1,32 +1,33 @@
-import React, { useMemo } from "react";
+import React from "react";
 import dayjs from "dayjs";
+import { Platform } from "react-native";
 import { shallowEqual } from "react-redux";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { useTheme } from "styled-components/native";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
-import { useSelector } from "../../hooks";
-// import { Icon } from "../../components/icon/user";
 import { RootState } from "../../providers/store/store";
+import { Participant } from "../../components/participant";
 import { RootTabScreenProps } from "../../../types/navigation";
+import { useResponsiveScreen, useSelector } from "../../hooks";
+import {
+  getTopWinners,
+  getTeamTotalKills,
+  rankWinnersByKills,
+  getWinnersTrophies,
+} from "../../helpers";
 
 import {
   Tags,
-  Team,
   Info,
   Title,
   Timer,
   Scores,
   Spacer,
-  Profile,
   ClanName,
-  KillCount,
   ClanImage,
   ScrollView,
   WinnerBadge,
-  PlayerDetail,
-  WinnerWrapper,
   TimerContainer,
-  RightClanImage,
   ClanImageWrapper,
   ButtonContainer,
   WinnerContainer,
@@ -34,95 +35,85 @@ import {
   ClanScoresContainer,
 } from "./statistic.styles";
 
-const clans = [
-  {
-    id: "1",
-    kill: 456298,
-    clanName: "Mistake",
-    url: "https://expertphotography.b-cdn.net/wp-content/uploads/2020/08/social-media-profile-photos-3.jpg",
-  },
-  {
-    id: "2",
-    kill: 10023,
-    clanName: "Drift",
-    url: "https://expertphotography.b-cdn.net/wp-content/uploads/2020/08/social-media-profile-photos-3.jpg",
-  },
-  {
-    id: "3",
-    kill: 290,
-    clanName: "Goldporp",
-    url: "https://expertphotography.b-cdn.net/wp-content/uploads/2020/08/social-media-profile-photos-3.jpg",
-  },
-];
-
 export const StatisticsScreen: React.FC<
   RootTabScreenProps<"StatisticsScreen">
 > = (props) => {
   const { palette } = useTheme();
-
-  // const { clan_logo, clan_leader_id, clan_name, team } = props;
-
-  // const [clan_leader, ...members] = team.sort((a, b) =>
-  //   a.player_id > clan_leader_id ? 1 : b.player_id > clan_leader_id ? -1 : 0
-  // );
-
-  // const avaterMap = useMemo(
-  //   () =>
-  //     team.reduce<AvatarMap>((acc, user) => {
-  //       acc[user.player_id] = getImagekitUrl(user.avatar, {
-  //         directory: "clan_logo",
-  //       });
-  //       return acc;
-  //     }, {}),
-  //   [team]
-  // );
-
-  // const clanLogoImage = useMemo(
-  //   () => getImagekitUrl(clan_logo, { directory: "clan_logo" }),
-  //   [clan_logo]
-  // );
+  const { isDesktopOrLaptop } = useResponsiveScreen();
 
   const { selectedTournament } = useSelector(
     ({ tournament }: RootState) => tournament,
     shallowEqual
   );
 
+  const winners = rankWinnersByKills(selectedTournament?.participates);
+  const topWinners = getTopWinners(winners);
+  const trophies = getWinnersTrophies(winners);
+
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      isDesktopOrLaptop={isDesktopOrLaptop}
+    >
       <WinnerContainer>
-        <WinnerWrapper>
-          <ClanImageContainer>
-            <WinnerBadge>1</WinnerBadge>
-            <WinnerBadge size={45}>👑</WinnerBadge>
-            <ClanImageWrapper>
+        {topWinners.map(({ data, position }) => (
+          <ClanImageContainer
+            key={data.id}
+            style={[
+              position === 2 && { left: 25 },
+              position === 3 && { right: 25 },
+              position === 1 && { top: -20, zIndex: 1 },
+            ]}
+          >
+            <WinnerBadge
+              style={[
+                position !== 1 && {
+                  position: "absolute",
+                  top: -Platform.select({ web: 15, default: 10 }),
+                },
+              ]}
+            >
+              {position}
+            </WinnerBadge>
+            {position === 1 ? (
+              <WinnerBadge size={45}>👑</WinnerBadge>
+            ) : (
+              <MaterialIcons
+                size={40}
+                color={position === 2 ? palette.primary : palette.text}
+                name={position === 2 ? "arrow-drop-up" : "arrow-drop-down"}
+              />
+            )}
+            <ClanImageWrapper
+              isDesktopOrLaptop={isDesktopOrLaptop}
+              size={position !== 1 ? (isDesktopOrLaptop ? 130 : 95) : undefined}
+              style={[
+                position === 1 && {
+                  elevation: 24,
+                  borderWidth: 4,
+                  shadowRadius: 16,
+                  shadowOpacity: 0.58,
+                  shadowColor: palette.primary,
+                  shadowOffset: { width: 2, height: 12 },
+                },
+              ]}
+            >
               <ClanImage
-                source={{
-                  uri: "https://expertphotography.b-cdn.net/wp-content/uploads/2020/08/social-media-profile-photos-3.jpg",
-                }}
+                isDesktopOrLaptop={isDesktopOrLaptop}
+                size={
+                  position !== 1 ? (isDesktopOrLaptop ? 130 : 95) : undefined
+                }
+                uri={data.clan_logo}
+                preview={{ uri: data.clan_logo }}
               />
             </ClanImageWrapper>
-            <ClanName>striker</ClanName>
-            <Scores>1670082</Scores>
+            <ClanName numberOfLines={1}>{data.clan_name}</ClanName>
+            <Scores numberOfLines={1}>{getTeamTotalKills(data.team)}</Scores>
           </ClanImageContainer>
-        </WinnerWrapper>
+        ))}
       </WinnerContainer>
 
-      {/* <ClanScoresContainer>
-        {clans.map((clan, id) => (
-          <Team key={id}>
-            <Profile>
-              <ClanLogo source={{ uri: clan.url }} />
-
-              <PlayerDetail>
-                <ClanName>{clan.clanName}</ClanName>
-              </PlayerDetail>
-            </Profile>
-            <KillCount>{clan.kill}</KillCount>
-          </Team>
-        ))}
-      </ClanScoresContainer> */}
-
-      <Spacer size={40} />
+      <Spacer size={50} />
       <Info>match info</Info>
       <Spacer size={20} />
 
@@ -155,6 +146,19 @@ export const StatisticsScreen: React.FC<
           ))}
         </ButtonContainer>
       ) : null}
+
+      <ClanScoresContainer>
+        {winners.map((clan) => (
+          <Participant
+            name={clan.clan_name}
+            image_uri={clan.clan_logo}
+            icon={trophies[clan.id].icon}
+            image_preview={clan.clan_logo}
+            kill_count={getTeamTotalKills(clan.team)}
+            iconBackground={trophies[clan.id].iconBackground}
+          />
+        ))}
+      </ClanScoresContainer>
     </ScrollView>
   );
 };

@@ -7,7 +7,7 @@ export const SETTINGS_SLICE_NAME = "settings";
 const initialState: ISettingsState = {
   locale: Locale.ENGLISH,
   colorMode: IColorMode.LIGHT,
-  isDetailModalVisible: true,
+  isDetailModalVisible: false,
   isReceiveNotifications: true,
   isAddPlayerModalVisible: false,
   screen: SwitchScreen.UNAUTHENTICATED_SCREENS,
