@@ -1,9 +1,8 @@
-import React,{ useMemo } from "react";
+import React, { useMemo } from "react";
 import dayjs from "dayjs";
 import { shallowEqual } from "react-redux";
-import Ionicons from '@expo/vector-icons/Ionicons'
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5'
-
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { useTheme } from "styled-components/native";
 
 import { useSelector } from "../../hooks";
 // import { Icon } from "../../components/icon/user";
@@ -18,9 +17,8 @@ import {
   Timer,
   Scores,
   Spacer,
-  ClanLogo,
-  ClanName,
   Profile,
+  ClanName,
   KillCount,
   ClanImage,
   ScrollView,
@@ -29,39 +27,31 @@ import {
   WinnerWrapper,
   TimerContainer,
   RightClanImage,
-  MiddleClanImage,
+  ClanImageWrapper,
   ButtonContainer,
   WinnerContainer,
   ClanImageContainer,
   ClanScoresContainer,
-  RightClanImageContainer,
-  MiddleClanImageContainer,
 } from "./statistic.styles";
-import { useTheme } from "styled-components/native";
-import { getImagekitUrl } from "../../helpers/imagekit";
-
-
 
 const clans = [
   {
-    id: '1',
-    url: 'https://expertphotography.b-cdn.net/wp-content/uploads/2020/08/social-media-profile-photos-3.jpg',
-    clanName: 'Mistake',
+    id: "1",
     kill: 456298,
+    clanName: "Mistake",
+    url: "https://expertphotography.b-cdn.net/wp-content/uploads/2020/08/social-media-profile-photos-3.jpg",
   },
-
   {
-    id: '2',
-    url: 'https://expertphotography.b-cdn.net/wp-content/uploads/2020/08/social-media-profile-photos-3.jpg',
-    clanName: 'Drift',
+    id: "2",
     kill: 10023,
+    clanName: "Drift",
+    url: "https://expertphotography.b-cdn.net/wp-content/uploads/2020/08/social-media-profile-photos-3.jpg",
   },
-
   {
-    id: '3',
-    url: 'https://expertphotography.b-cdn.net/wp-content/uploads/2020/08/social-media-profile-photos-3.jpg',
-    clanName: 'Goldporp',
+    id: "3",
     kill: 290,
+    clanName: "Goldporp",
+    url: "https://expertphotography.b-cdn.net/wp-content/uploads/2020/08/social-media-profile-photos-3.jpg",
   },
 ];
 
@@ -91,67 +81,46 @@ export const StatisticsScreen: React.FC<
   //   () => getImagekitUrl(clan_logo, { directory: "clan_logo" }),
   //   [clan_logo]
   // );
+
   const { selectedTournament } = useSelector(
     ({ tournament }: RootState) => tournament,
     shallowEqual
   );
 
   return (
-    <ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false}>
       <WinnerContainer>
-      <WinnerWrapper>
-        <ClanImageContainer>
-          <WinnerBadge>2</WinnerBadge>
-          <Ionicons
-           size={20}
-           name="caret-up" 
-           color={palette.success}
-           style={{top: -10}}
-           />
-          <ClanImage source={{uri: 'https://expertphotography.b-cdn.net/wp-content/uploads/2020/08/social-media-profile-photos-3.jpg'}}/>
-           <ClanName>Mistake</ClanName>
-          <Scores>80082</Scores>
-        </ClanImageContainer>
-
-
-        < MiddleClanImageContainer>
-          <WinnerBadge>1</WinnerBadge>
-          <WinnerBadge>👑</WinnerBadge>
-            <MiddleClanImage source={{uri: 'https://expertphotography.b-cdn.net/wp-content/uploads/2020/08/social-media-profile-photos-3.jpg'}}/>
+        <WinnerWrapper>
+          <ClanImageContainer>
+            <WinnerBadge>1</WinnerBadge>
+            <WinnerBadge size={45}>👑</WinnerBadge>
+            <ClanImageWrapper>
+              <ClanImage
+                source={{
+                  uri: "https://expertphotography.b-cdn.net/wp-content/uploads/2020/08/social-media-profile-photos-3.jpg",
+                }}
+              />
+            </ClanImageWrapper>
             <ClanName>striker</ClanName>
             <Scores>1670082</Scores>
-        </MiddleClanImageContainer>
-
-        <RightClanImageContainer>
-        <WinnerBadge>3</WinnerBadge>
-          <Ionicons
-           size={20}
-           name="caret-down" 
-           color={palette.text}
-           style={{top: -5}}
-           />
-          <RightClanImage source={{uri: 'https://expertphotography.b-cdn.net/wp-content/uploads/2020/08/social-media-profile-photos-3.jpg'}}/>
-           <ClanName>Mistake</ClanName>
-          <Scores>80082</Scores>
-        </RightClanImageContainer>
+          </ClanImageContainer>
         </WinnerWrapper>
       </WinnerContainer>
 
-    <ClanScoresContainer>
-      {clans.map((clan ,id)=>(
+      {/* <ClanScoresContainer>
+        {clans.map((clan, id) => (
           <Team key={id}>
-          <Profile>
-          <ClanLogo source= {{uri:clan.url}}/>
+            <Profile>
+              <ClanLogo source={{ uri: clan.url }} />
 
-            <PlayerDetail>
-              <ClanName>{clan.clanName}</ClanName>
-            </PlayerDetail>
-          </Profile>
-          <KillCount>{clan.kill}</KillCount>
-        </Team>
-      ))}
-  
-    </ClanScoresContainer>
+              <PlayerDetail>
+                <ClanName>{clan.clanName}</ClanName>
+              </PlayerDetail>
+            </Profile>
+            <KillCount>{clan.kill}</KillCount>
+          </Team>
+        ))}
+      </ClanScoresContainer> */}
 
       <Spacer size={40} />
       <Info>match info</Info>

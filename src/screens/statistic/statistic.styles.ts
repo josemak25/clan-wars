@@ -8,11 +8,45 @@ export {
 } from "../../components/tournament/tournament.styles";
 export { Spacer } from "../signup/signup.styles";
 
-export const ScrollView = styled.ScrollView`
-  flex: 1;
-  padding: ${(p) => p.theme.layout.gutter}px;
-  padding-top: ${(p) => p.theme.layout.gutter / 2}px;
+export const ScrollView = styled.ScrollView.attrs((p) => ({
+  contentContainerStyle: {
+    flexGrow: 1,
+    paddingHorizontal: p.theme.layout.gutter,
+  },
+}))`
   background-color: ${(p) => p.theme.palette.background};
+`;
+
+export const WinnerContainer = styled.View`
+  min-height: 300px;
+
+  border: red;
+`;
+
+export const WinnerWrapper = styled.View`
+  flex: 1;
+  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+
+  border: green;
+`;
+
+export const ClanImageContainer = styled.View`
+  align-items: center;
+`;
+
+export const WinnerBadge = styled(__Timer)<{ size?: number }>`
+  color: ${(p) => p.theme.palette.text};
+  margin-bottom: ${(p) => (p.size ? 10 : 0)}px;
+  font-family: ${(p) => p.theme.fonts.variants.roboto_bold};
+  font-size: ${(p) => p.theme.fonts.scale.value(p.size || 20)}px;
+`;
+
+export const TimerContainer = styled.View`
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
 export const Timer = styled(__Timer)``;
@@ -24,59 +58,24 @@ export const Info = styled(Timer)`
   font-family: ${(p) => p.theme.fonts.variants.roboto_bold};
 `;
 
-export const TimerContainer = styled.View`
-  flex-wrap: wrap;
-  flex-direction: row;
-  justify-content: space-between;
+export const ClanImage = styled.Image`
+  width: 100%;
+  height: 100%;
 `;
 
-export const WinnerContainer = styled.View`
-  border: red;
-  height: 300px;
-  flex-direction: column;
-  justify-content: center;
-
-`;
-
-export const WinnerWrapper = styled.View`
-  border: green;
-  align-items: center;
-  flex-direction: row;
-  justify-content: center;
-  padding: ${(p) => p.theme.layout.gutter * 2}px;
-
-`;
-
-
-export const ClanImageContainer = styled.View`
-  /* border: green; */
-  align-items: center;
-  flex-direction: column;
-  position: relative;
-
-`;
-
-export const ClanImage = styled.Image<{ size?: number }>`
- width: ${(p) => p.size || 60}px;
- height: ${(p) => p.size || 60}px;
- border: 2px ${(p) => p.theme.palette.success};
- border-radius:  ${(p) => (p.size || 60) / 2}px;
-
-`;
-
-export const WinnerBadge = styled.Text`
-margin-bottom: 5px;
-  color: ${(p) => p.theme.palette.text};
-  font-size: ${(p) => p.theme.fonts.scale.value(16)}px;
-  font-family: ${(p) => p.theme.fonts.variants.roboto_regular};
-
+export const ClanImageWrapper = styled.View<{ size?: number }>`
+  margin-top: 5px;
+  overflow: hidden;
+  width: ${(p) => p.size || 100}px;
+  height: ${(p) => p.size || 100}px;
+  border: 2px ${(p) => p.theme.palette.success};
+  border-radius: ${(p) => (p.size || 100) / 2}px;
 `;
 
 export const ClanName = styled(Info)`
-margin-top: 10;
-font-size: ${(p) => p.theme.fonts.scale.value(14)}px;
-font-family: ${(p) => p.theme.fonts.variants.roboto_regular};
-
+  margin-top: 10px;
+  font-size: ${(p) => p.theme.fonts.scale.value(14)}px;
+  font-family: ${(p) => p.theme.fonts.variants.roboto_regular};
 `;
 
 export const Scores = styled(Info)`
@@ -84,34 +83,14 @@ export const Scores = styled(Info)`
   font-family: ${(p) => p.theme.fonts.variants.roboto_regular};
 `;
 
-export const  MiddleClanImage = styled(ClanImage)`
- left: -15px;
- width: ${(p) => p.size || 70}px;
- height: ${(p) => p.size || 70}px;
- border: 2px ${(p) => p.theme.palette.success};
- border-radius:  ${(p) => (p.size || 70) / 2}px;
-  /* position: absolute; */
-`;
-
-export const  MiddleClanImageContainer = styled(ClanImageContainer)`
- top: -30px;
- /* position: absolute; */
-`;
-
-export const RightClanImageContainer = styled(ClanImageContainer)`
- /* left: -30px;
-position: relative; */
-`;
-
-export const  RightClanImage = styled(ClanImage)`
- left: 0px;
+export const RightClanImage = styled(ClanImage)`
+  left: 0px;
 `;
 
 export const ClanScoresContainer = styled.View`
   border: red;
   flex-direction: column;
   justify-content: center;
-
 `;
 
 export const Team = styled.View`
@@ -123,13 +102,6 @@ export const Team = styled.View`
 export const Profile = styled.View`
   flex: 1;
   flex-direction: row;
-`;
-
-export const ClanLogo = styled(ClanImage)`
-   border: 0;
-   width: ${(p) => p.size || 40}px;
- height: ${(p) => p.size || 40}px;
- border-radius:  ${(p) => (p.size || 40) / 2}px;
 `;
 
 export const PlayerDetail = styled.View<{ margin?: number }>`
