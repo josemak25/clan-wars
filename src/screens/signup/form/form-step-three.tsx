@@ -40,7 +40,7 @@ export const FormStepThree: React.FC<FormStepProps> = ({
   const { isComplete, isLoading, progress, uploadLogo, cancelUpload } =
     useLogoUpload();
 
-  // const progress = (progressLayout?.width || 0) - 3.5;
+
 
   const pickLogo = async (): Promise<void> => {
     const status = await requestPermission();

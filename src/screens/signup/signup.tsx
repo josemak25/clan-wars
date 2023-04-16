@@ -142,9 +142,6 @@ export const SignUpScreen: React.FC<RootStackScreenProps<"SignUpScreen">> = ({
 
   const onSubmit: SubmitHandler<ITournamentClan> = (data) => {
     setClan(data);
-    console.log("====================================");
-    console.log(data, isLastPageOfFormActive);
-    console.log("====================================");
   };
 
   return (
