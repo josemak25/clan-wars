@@ -138,9 +138,7 @@ export const AddPlayerModal: React.FC = () => {
     dispatch(settingsActions.toggleAddPlayerModalVisibility());
   };
 
-  const onSubmit: SubmitHandler<Partial<ITournamentTeam>> = (data) => {
-  
-  };
+  const onSubmit: SubmitHandler<Partial<ITournamentTeam>> = (data) => {};
 
   const MAX_WIDTH = breakpoints.tablet_viewport;
   const isScreenLessThanMaxWidth = isMinScreenSize(MAX_WIDTH);
