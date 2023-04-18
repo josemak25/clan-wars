@@ -1,7 +1,9 @@
-import { Platform } from "react-native";
 import { Text } from "react-native-paper";
 import styled from "styled-components/native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Platform, FlatList as __FlatList } from "react-native";
+
+import { ITournament } from "../../providers/store/reducers/tournament/interfaces";
 
 export const Container = styled(SafeAreaView)`
   flex: 1;
@@ -29,20 +31,20 @@ export const Title = styled(Text)`
   font-family: ${(p) => p.theme.fonts.variants.roboto_bold};
 `;
 
-export const FlatList = styled.FlatList.attrs<{ isMultipleRows: boolean }>(
-  (p) => ({
-    contentContainerStyle: {
+export const FlatList = styled(
+  __FlatList as new () => __FlatList<ITournament>
+).attrs<{ isMultipleRows: boolean }>((p) => ({
+  contentContainerStyle: {
+    gap: 30,
+    flexGrow: 1,
+    paddingTop: p.theme.layout.gutter,
+    paddingBottom: p.theme.layout.gutter,
+  },
+  ...(p.isMultipleRows && {
+    columnWrapperStyle: {
       gap: 30,
-      flexGrow: 1,
-      paddingTop: p.theme.layout.gutter,
-      paddingBottom: p.theme.layout.gutter,
+      alignItems: "center",
+      justifyContent: "center",
     },
-    ...(p.isMultipleRows && {
-      columnWrapperStyle: {
-        gap: 30,
-        alignItems: "center",
-        justifyContent: "center",
-      },
-    }),
-  })
-)<{ isMultipleRows: boolean }>``;
+  }),
+}))<{ isMultipleRows: boolean }>``;
