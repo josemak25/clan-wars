@@ -1,6 +1,7 @@
 export * from "./chunk";
 export * from "./hexToRGB";
 export * from "./generateId";
+export * from "./getUniqueId";
 export * from "./reportError";
 export * from "./getTopWinners";
 export * from "./makeUseStyles";

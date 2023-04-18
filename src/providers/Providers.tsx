@@ -1,6 +1,7 @@
 import React from "react";
 import { PropsWithChildren } from "react";
 
+import { AuthProvider } from "./auth";
 import { StoreProvider } from "./store";
 import { ThemeProvider } from "./theme";
 import { SafeAreaProvider } from "./safearea";
@@ -11,9 +12,11 @@ export const Providers: React.FC<PropsWithChildren> = ({ children }) => (
   <StoreProvider>
     <SafeAreaProvider>
       <ThemeProvider>
-        <StatusBarProvider>
-          <IntlProvider>{children}</IntlProvider>
-        </StatusBarProvider>
+        <AuthProvider>
+          <StatusBarProvider>
+            <IntlProvider>{children}</IntlProvider>
+          </StatusBarProvider>
+        </AuthProvider>
       </ThemeProvider>
     </SafeAreaProvider>
   </StoreProvider>

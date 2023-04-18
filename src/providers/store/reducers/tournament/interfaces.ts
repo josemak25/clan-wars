@@ -1,3 +1,5 @@
+import { SerializedError } from "@reduxjs/toolkit";
+
 export interface ITournament {
   id: string;
   title: string;
@@ -40,7 +42,7 @@ export interface ITournamentClan {
 
 export interface ITournamentState {
   isLoading: boolean;
-  error: Error | null;
   data: ITournament[];
+  error: SerializedError | null;
   selectedTournament: ITournament | null;
 }

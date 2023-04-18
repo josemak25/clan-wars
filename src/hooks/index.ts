@@ -5,6 +5,7 @@ export * from "./useKeyboard";
 export * from "./useOnLayout";
 export * from "./usePrepareApp";
 export * from "./useLogoUpload";
+export * from "./useTournaments";
 export * from "./useColorScheme";
 export * from "./useFormValidation";
 export * from "./useResponsiveScreen";

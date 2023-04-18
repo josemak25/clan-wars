@@ -2,9 +2,9 @@ import React, { Fragment } from "react";
 import { useTheme } from "styled-components/native";
 import { ListRenderItem, Platform } from "react-native";
 
-import { useDispatch } from "../../hooks";
 import { Icon } from "../../components/icon";
 import { Tournament } from "../../components/tournament";
+import { useDispatch, useTournaments } from "../../hooks";
 import { RootStackScreenProps } from "../../../types/navigation";
 import {
   settingsActions,
@@ -20,6 +20,7 @@ export const HomeScreen: React.FC<RootStackScreenProps<"HomeScreen">> = ({
   navigation,
 }) => {
   const dispatch = useDispatch();
+  const tournament_data = useTournaments();
   const { layout, breakpoints } = useTheme();
 
   const onEventPress = (tournament: ITournament) => {
