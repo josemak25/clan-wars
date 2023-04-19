@@ -26,10 +26,6 @@ export const { reducer: tournamentReducer, actions: tournamentActions } =
     initialState,
     name: TOURNAMENT_SLICE_NAME,
     reducers: {
-      fetchTournaments: (state, action: PayloadAction<ITournament[]>) => {
-        state.data = action.payload;
-      },
-
       setSelectedTournament: (state, action: PayloadAction<ITournament>) => {
         state.selectedTournament = action.payload;
       },
@@ -47,7 +43,8 @@ export const { reducer: tournamentReducer, actions: tournamentActions } =
         .addCase(fetchAllTournament.fulfilled, (state, action) => {
           // Add tournament to the state tournament array
           state.isLoading = false;
-          // state.data = state.data.concat(action.payload.data);
+          const tournaments = action.payload.data?.map(({}) => ({}));
+          state.data = state.data.concat(action.payload.data || []);
         });
     },
   });

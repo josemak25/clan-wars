@@ -1,8 +1,7 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { View } from "react-native";
 
 import { Participant } from "../participant";
-import { getImagekitUrl } from "../../helpers/imagekit";
 import { ITournamentClan } from "../../providers/store/reducers/tournament/interfaces";
 
 import {
@@ -19,32 +18,11 @@ import {
   LeaderContainer,
 } from "./clan.styles";
 
-type AvatarMap = Record<
-  ITournamentClan["team"][number]["player_id"],
-  ReturnType<typeof getImagekitUrl>
->;
-
 export const Clan: React.FC<ITournamentClan> = (props) => {
   const { clan_logo, clan_leader_id, clan_name, team } = props;
 
   const [clan_leader, ...members] = team.sort((a, b) =>
     a.player_id > clan_leader_id ? 1 : b.player_id > clan_leader_id ? -1 : 0
-  );
-
-  const avaterMap = useMemo(
-    () =>
-      team.reduce<AvatarMap>((acc, user) => {
-        acc[user.player_id] = getImagekitUrl(user.avatar, {
-          directory: "clan_logo",
-        });
-        return acc;
-      }, {}),
-    [team]
-  );
-
-  const clanLogoImage = useMemo(
-    () => getImagekitUrl(clan_logo, { directory: "clan_logo" }),
-    [clan_logo]
   );
 
   return (
@@ -54,15 +32,11 @@ export const Clan: React.FC<ITournamentClan> = (props) => {
         <LeaderContainer>
           <Profile>
             <View>
-              <Avatar
-                size={60}
-                uri={avaterMap[clan_leader.player_id].url}
-                preview={{ uri: avaterMap[clan_leader.player_id].preview }}
-              />
+              <Avatar size={60} uri={clan_logo} preview={{ uri: clan_logo }} />
               <ClanLogo
                 size={32}
-                uri={clanLogoImage.url}
-                preview={{ uri: clanLogoImage.preview }}
+                uri={clan_logo}
+                preview={{ uri: clan_logo }}
               />
             </View>
             <PlayerDetail margin={8}>
@@ -73,13 +47,13 @@ export const Clan: React.FC<ITournamentClan> = (props) => {
           <KillCount>{clan_leader.total_kills}</KillCount>
         </LeaderContainer>
 
-        {members.map(({ id, player_ign, player_id, total_kills }) => (
+        {members.map(({ id, player_ign, avatar, total_kills }) => (
           <Participant
             key={id}
             name={player_ign}
+            image_uri={avatar}
             kill_count={total_kills}
-            image_uri={avaterMap[player_id].url}
-            image_preview={avaterMap[player_id].preview}
+            image_preview={avatar}
           />
         ))}
       </Contents>

@@ -15,10 +15,11 @@ export const getUniqueId = (): Promise<string> => {
         const application = require("expo-application");
         return resolve(application.androidId);
       },
-      web: () => {
-        const { DeviceUUID } = require("device-uuid");
-        const uniqueId = new DeviceUUID().get();
-        return resolve(uniqueId);
+      web: async () => {
+        const FingerprintJS = require("@fingerprintjs/fingerprintjs");
+        const fp = await FingerprintJS.load();
+        const { visitorId } = await fp.get();
+        return resolve(visitorId);
       },
       default: async () => {
         const SecureStore = require("expo-secure-store");

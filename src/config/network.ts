@@ -46,7 +46,10 @@ export const signInGuest = async (
 export const fetchTournaments = async (): Promise<
   PostgrestSingleResponse<ITournament[]>
 > => {
-  return supabase
-    .from<"tournament_host", ITournament>("tournament_host")
-    .select("*");
+  return supabase.from<"tournament", ITournament>("tournament").select(`
+        *,
+        tournament_host (
+          *
+        )
+    `);
 };

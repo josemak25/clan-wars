@@ -14,14 +14,12 @@ import { ITournament } from "../../providers/store/reducers/tournament/interface
 
 import { Container, FlatList, Header, EmptyCell } from "./home.styles";
 
-import { dummy_data } from "./data";
-
 export const HomeScreen: React.FC<RootStackScreenProps<"HomeScreen">> = ({
   navigation,
 }) => {
   const dispatch = useDispatch();
-  const tournament_data = useTournaments();
   const { layout, breakpoints } = useTheme();
+  const { data, isLoading } = useTournaments();
 
   const onEventPress = (tournament: ITournament) => {
     dispatch(tournamentActions.setSelectedTournament(tournament));
@@ -42,7 +40,7 @@ export const HomeScreen: React.FC<RootStackScreenProps<"HomeScreen">> = ({
     Math.floor(layout.screen.width / (breakpoints.small_mobile + layout.gutter))
   );
 
-  const lastCells = dummy_data.length % numColumns || 0;
+  const lastCells = data.length % numColumns || 0;
   const isFillEmptyCells = lastCells !== 0;
   const numberOfEmptyCells = isFillEmptyCells ? numColumns - lastCells : 0;
 
@@ -54,10 +52,7 @@ export const HomeScreen: React.FC<RootStackScreenProps<"HomeScreen">> = ({
     </Fragment>
   );
 
-  const renderItem: ListRenderItem<typeof dummy_data[number]> = ({
-    item,
-    index,
-  }) => (
+  const renderItem: ListRenderItem<ITournament> = ({ item, index }) => (
     <Fragment>
       <Tournament
         {...item}
@@ -65,20 +60,19 @@ export const HomeScreen: React.FC<RootStackScreenProps<"HomeScreen">> = ({
         joinTournament={() => joinTournament(item)}
       />
 
-      {index === dummy_data.length - 1 && isFillEmptyCells && (
-        <RenderEmptyCell />
-      )}
+      {index === data.length - 1 && isFillEmptyCells && <RenderEmptyCell />}
     </Fragment>
   );
 
   return (
     <Container>
       <FlatList
-        data={dummy_data}
+        data={data}
         numColumns={numColumns}
         renderItem={renderItem}
         stickyHeaderIndices={[0]}
         stickyHeaderHiddenOnScroll
+        //@ts-ignore
         isMultipleRows={numColumns > 1}
         ListHeaderComponent={
           <Header>

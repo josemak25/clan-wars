@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import _omit from "lodash.omit";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 
 import { AppDispatch, RootState } from "../providers/store/store";
@@ -9,7 +10,7 @@ export function useTournaments() {
   const [isFetchingMore, setIsFetchingMore] = useState(false);
 
   const state = useSelector(
-    (state: RootState) => state.tournament,
+    (state: RootState) => _omit(state.tournament, "selectedTournament"),
     shallowEqual
   );
 

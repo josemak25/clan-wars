@@ -31,20 +31,20 @@ export const Title = styled(Text)`
   font-family: ${(p) => p.theme.fonts.variants.roboto_bold};
 `;
 
-export const FlatList = styled(
-  __FlatList as new () => __FlatList<ITournament>
-).attrs<{ isMultipleRows: boolean }>((p) => ({
-  contentContainerStyle: {
-    gap: 30,
-    flexGrow: 1,
-    paddingTop: p.theme.layout.gutter,
-    paddingBottom: p.theme.layout.gutter,
-  },
-  ...(p.isMultipleRows && {
-    columnWrapperStyle: {
+export const FlatList = styled(__FlatList).attrs<{ isMultipleRows: boolean }>(
+  (p) => ({
+    contentContainerStyle: {
       gap: 30,
-      alignItems: "center",
-      justifyContent: "center",
+      flexGrow: 1,
+      paddingTop: p.theme.layout.gutter,
+      paddingBottom: p.theme.layout.gutter,
     },
-  }),
-}))<{ isMultipleRows: boolean }>``;
+    ...(p.isMultipleRows && {
+      columnWrapperStyle: {
+        gap: 30,
+        alignItems: "center",
+        justifyContent: "center",
+      },
+    }),
+  })
+)<{ isMultipleRows: boolean }>`` as unknown as typeof __FlatList<ITournament>;
