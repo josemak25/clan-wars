@@ -10,7 +10,7 @@ import appInfo from "../../package.json";
  * extending app global constants for app name
  * @constant APP_NAME default value
  */
-export const APP_NAME: string = appInfo.name;
+export const APP_NAME: string = appInfo.name.toUpperCase();
 
 /**
  * extending app global constants for app version
@@ -22,7 +22,7 @@ export const APP_VERSION = Number(appInfo.version);
  * extending app local storage
  * @constant USER_FIRST_LAUNCH default value
  */
-export const USER_FIRST_LAUNCH: string = "@FIRST_TIME_LAUNCH";
+export const USER_FIRST_LAUNCH: string = `@${APP_NAME}_FIRST_TIME_LAUNCH`;
 
 /**
  * extending app global constants for app language
@@ -52,10 +52,10 @@ export const CACHE_VERSION: number = 1; // version 1
  * extending app global constants
  * @constant __ROOT_REDUX_STATE_KEY__ default value
  */
-export const __ROOT_REDUX_STATE_KEY__: string = `@SUPACP_REDUX_LOCAL_STATE_PERSIST_KEY`;
+export const __ROOT_REDUX_STATE_KEY__: string = `@${APP_NAME}_REDUX_LOCAL_STATE_PERSIST_KEY`;
 
 /**
  * extending app global constants
  * @constant __AUTHENTICATION_REDUX_STATE_KEY__ default value
  */
-export const __AUTHENTICATION_REDUX_STATE_KEY__: string = `@SUPACP_REDUX_LOCAL_AUTHENTICATION_KEY`;
+export const __AUTHENTICATION_REDUX_STATE_KEY__: string = `@${APP_NAME}_REDUX_LOCAL_AUTHENTICATION_KEY`;

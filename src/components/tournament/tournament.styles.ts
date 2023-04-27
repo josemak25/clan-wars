@@ -164,10 +164,16 @@ export const ButtonFooterContainer = styled(ButtonContainer)`
 
 export const EventDetailsButton = styled(NextStepButton).attrs<{
   isEventStarted: boolean;
+  isEventFinished: boolean;
 }>((p) => ({
   buttonColor: p.isEventStarted
     ? p.theme.palette.success
+    : p.isEventFinished
+    ? p.theme.palette.card_background
     : p.theme.palette.primary,
+  textColor: p.isEventFinished
+    ? p.theme.palette.text
+    : p.theme.colors.dark.text,
   contentStyle: {
     paddingVertical: 4,
     flexDirection: "row-reverse",
@@ -175,10 +181,10 @@ export const EventDetailsButton = styled(NextStepButton).attrs<{
   },
   labelStyle: {
     textTransform: "capitalize",
-    fontSize: p.theme.fonts.scale.value(16),
+    fontSize: p.theme.fonts.scale.value(15),
     fontFamily: p.theme.fonts.variants.roboto_bold,
   },
-}))<{ isEventStarted: boolean }>`
+}))<{ isEventStarted: boolean; isEventFinished: boolean }>`
   margin-left: ${(p) => p.theme.layout.gutter}px;
   border-radius: ${(p) => p.theme.layout.radius / 2}px;
 `;

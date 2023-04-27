@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+import __uniqby from "lodash/uniqBy";
 
 import { ITournamentState, ITournament } from "./interfaces";
 import { fetchTournaments } from "../../../../config/network";
@@ -17,6 +18,11 @@ export const fetchAllTournament = createAsyncThunk(
   `${TOURNAMENT_SLICE_NAME}/fetchAllTournament`,
   async () => {
     const response = await fetchTournaments();
+
+    if (response.error) {
+      throw Error(response.error.message);
+    }
+
     return response;
   }
 );
@@ -38,13 +44,15 @@ export const { reducer: tournamentReducer, actions: tournamentActions } =
         })
         .addCase(fetchAllTournament.rejected, (state, action) => {
           state.isLoading = false;
-          state.error = action.error;
+          state.error = action.error as Error;
         })
         .addCase(fetchAllTournament.fulfilled, (state, action) => {
           // Add tournament to the state tournament array
           state.isLoading = false;
-          const tournaments = action.payload.data?.map(({}) => ({}));
-          state.data = state.data.concat(action.payload.data || []);
+          state.data = __uniqby(
+            state.data.concat(action.payload.data || []),
+            "id"
+          );
         });
     },
   });

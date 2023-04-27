@@ -1,15 +1,15 @@
 import React from "react";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { FallbackComponentProps } from "react-native-error-boundary";
 import { Text, View, SafeAreaView, TouchableOpacity } from "react-native";
 
+import { Icon } from "../icon";
 import { makeUseStyles, reportError } from "../../helpers";
 
 export const CrashScreen: React.FC<FallbackComponentProps> = ({
   error,
   resetError,
 }) => {
-  const { styles, palette } = useStyles();
+  const { styles } = useStyles();
 
   const handleClearError = () => {
     reportError(error);
@@ -19,13 +19,7 @@ export const CrashScreen: React.FC<FallbackComponentProps> = ({
   return (
     <SafeAreaView style={styles.safeView}>
       <View style={styles.container}>
-        <Text style={{ width: "100%" }}>
-          <Ionicons
-            size={60}
-            color={palette.primary}
-            name="ios-information-circle-outline"
-          />
-        </Text>
+        <Icon size={100} name="error" />
         <Text style={styles.title}>Oops, Something Went Wrong</Text>
         <Text style={[styles.title, styles.subtitle]}>
           The app ran into a problem and could not continue. We apologize for
@@ -33,7 +27,7 @@ export const CrashScreen: React.FC<FallbackComponentProps> = ({
           the app. Please contact us if this issue persists.
         </Text>
         <TouchableOpacity onPress={handleClearError} style={styles.button}>
-          <Text style={styles.text}>Back to Sign In Screen</Text>
+          <Text style={styles.text}>Try again</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -41,7 +35,7 @@ export const CrashScreen: React.FC<FallbackComponentProps> = ({
 };
 
 const useStyles = makeUseStyles(
-  ({ fonts, palette, colors, layout, breakpoints }) => ({
+  ({ fonts, palette, layout, hexToRGB, breakpoints }) => ({
     safeView: {
       flex: 1,
       alignItems: "center",
@@ -49,37 +43,39 @@ const useStyles = makeUseStyles(
     },
     container: {
       flex: 1,
+      alignItems: "center",
       padding: layout.gutter,
       justifyContent: "center",
-      maxWidth: breakpoints.small_mobile * 1.2,
+      maxWidth: breakpoints.small_mobile,
     },
     title: {
       fontSize: 32,
       textAlign: "center",
-      color: palette.primary,
-      marginTop: layout.gutter,
+      color: palette.text,
+      marginTop: layout.gutter * 2,
       fontFamily: fonts.variants.roboto_bold,
     },
     subtitle: {
       fontSize: 20,
       opacity: 0.7,
-      textAlign: "left",
-      color: palette.text,
       paddingHorizontal: 10,
+      marginTop: layout.gutter,
       marginVertical: layout.gutter,
       fontFamily: fonts.variants.roboto_regular,
     },
     button: {
       height: 50,
+      borderWidth: 1,
       marginVertical: 45,
       alignItems: "center",
       justifyContent: "center",
       borderRadius: layout.radius / 2,
-      backgroundColor: palette.primary,
+      minWidth: breakpoints.small_mobile / 1.2,
+      borderColor: hexToRGB(palette.text, 0.2),
     },
     text: {
       fontSize: 15,
-      color: colors.dark.text,
+      color: palette.text,
       fontFamily: fonts.variants.roboto_bold,
     },
   })

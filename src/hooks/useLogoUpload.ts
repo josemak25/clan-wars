@@ -1,64 +1,39 @@
-import { useState } from "react";
-import ImagePicker from "expo-image-picker";
+import { useMemo, useRef, useState } from "react";
+import { ImagePickerAsset } from "expo-image-picker";
 
-import { generateId } from "../helpers";
+import { uploadFile } from "../config/network";
 
 export const useLogoUpload = () => {
+  const isComplete = useRef(false);
   const [progress, setProgress] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [isComplete, setIsComplete] = useState(false);
 
   const cancelUpload = () => setIsLoading(false);
 
-  const httpRequest = (fileSize: number) => {
-    const xhr = new XMLHttpRequest();
-
-    xhr.upload.addEventListener("progress", (e) => {
-      if (e.loaded <= fileSize) {
-        const percent = Math.round((e.loaded / fileSize) * 100);
-        setProgress(percent);
-      }
-
-      if (e.loaded == e.total) {
-        setIsComplete(!isComplete);
-      }
-    });
-
-    return xhr;
+  const onProgress: XMLHttpRequestEventTarget["onprogress"] = (progress) => {
+    const percentage = Math.floor((progress.loaded / progress.total) * 100);
+    setProgress(Number(percentage));
   };
 
-  const uploadLogo = async (file: ImagePicker.ImagePickerAsset) => {
-    try {
-      if (!file.uri || !file.fileSize) {
-        return;
-      }
-
-      setIsLoading(true);
-      const xhr = httpRequest(file.fileSize);
-
-      // const image = await uploadFile(
-      //   { ...file, fileName: `${generateId()}` },
-      //   { xhr }
-      // );
-
-      console.log("======SUCCESSFUL=========");
-      // console.log({ image });
-      console.log("======SUCCESSFUL=========");
-    } catch (error) {
-      setIsLoading(false);
-      console.log("======ERROR=========");
-      console.log(error);
-      console.log("======ERROR=========");
-    } finally {
-      setIsLoading(true);
-    }
+  const uploadLogo = async (
+    file: ImagePickerAsset & { extension: string }
+  ): Promise<string> => {
+    isComplete.current = false;
+    setIsLoading(true);
+    const image_url = await uploadFile(file, onProgress);
+    isComplete.current = true;
+    setIsLoading(false);
+    return image_url;
   };
 
-  return {
-    progress,
-    isLoading,
-    isComplete,
-    uploadLogo,
-    cancelUpload,
-  };
+  return useMemo(
+    () => ({
+      progress,
+      isLoading,
+      uploadLogo,
+      cancelUpload,
+      isComplete: isComplete.current,
+    }),
+    [progress, isLoading, isComplete, uploadLogo, cancelUpload]
+  );
 };

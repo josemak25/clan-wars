@@ -18,7 +18,11 @@ import {
   FormStepWrapper,
 } from "../signup.styles";
 
-export const FormStepFour: React.FC<FormStepProps> = ({ errors, control }) => {
+export const FormStepFour: React.FC<FormStepProps> = ({
+  errors,
+  control,
+  clearErrors,
+}) => {
   const dispatch = useDispatch();
   const { clanNameValidation } = useFormValidation();
   const { fields, append, prepend } = useFieldArray({

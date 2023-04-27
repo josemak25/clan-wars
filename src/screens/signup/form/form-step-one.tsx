@@ -9,7 +9,11 @@ import { useFormValidation } from "../../../hooks";
 
 import { Title, Spacer, SubTitle, FormStepWrapper } from "../signup.styles";
 
-export const FormStepOne: React.FC<FormStepProps> = ({ errors, control }) => {
+export const FormStepOne: React.FC<FormStepProps> = ({
+  errors,
+  control,
+  clearErrors,
+}) => {
   const { formatMessage } = useIntl();
   const { clanNameValidation } = useFormValidation();
 
@@ -24,16 +28,21 @@ export const FormStepOne: React.FC<FormStepProps> = ({ errors, control }) => {
 
       <Spacer size={40} />
       <Controller
-        control={control}
         name="clan_name"
+        control={control}
         rules={clanNameValidation}
         render={({ field: { onChange, ref, ...rest } }) => (
           <Input
             {...rest}
-            onChangeText={onChange}
             error={errors.clan_name}
             placeholder="Anonymous eSport"
             label={formatMessage(messages.enter_the_clan_name)}
+            onChangeText={(text) => {
+              onChange(text);
+              if (errors.clan_name) {
+                clearErrors("clan_name");
+              }
+            }}
           />
         )}
       />

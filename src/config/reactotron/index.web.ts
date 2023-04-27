@@ -6,3 +6,5 @@ import { APP_NAME } from "../../constants";
 export const reactotron = Reactotron.configure({ name: APP_NAME })
   .use(reactotronRedux())
   .connect();
+
+console.tron = reactotron.log;

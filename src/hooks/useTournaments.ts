@@ -1,27 +1,28 @@
 import { useEffect, useState } from "react";
-import _omit from "lodash.omit";
-import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import _omit from "lodash/omit";
+import { shallowEqual } from "react-redux";
 
-import { AppDispatch, RootState } from "../providers/store/store";
+import { useDispatch, useSelector } from "./store";
 import { fetchAllTournament } from "../providers/store/reducers";
 
 export function useTournaments() {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch();
   const [isFetchingMore, setIsFetchingMore] = useState(false);
 
   const state = useSelector(
-    (state: RootState) => _omit(state.tournament, "selectedTournament"),
+    ({ tournament }) => _omit(tournament, "selectedTournament"),
     shallowEqual
   );
 
   const onRetry = () => dispatch(fetchAllTournament());
 
-  // const hasMore = state.total > state.posts.length;
+  // TODO: change to subabase pagination counter
+  const hasMore = state.data.length > state.data.length;
 
   const fetchMore = () => {
     if (isFetchingMore) return;
 
-    // if (!hasMore || isFetchingMore) return;
+    if (!hasMore || isFetchingMore) return;
 
     setIsFetchingMore(true);
     dispatch(fetchAllTournament()).finally(() => setIsFetchingMore(false));
@@ -33,9 +34,9 @@ export function useTournaments() {
 
   return {
     ...state,
+    hasMore,
     onRetry,
     fetchMore,
-    hasMore: false,
     isFetchingMore,
   };
 }

@@ -2,6 +2,7 @@ import { SvgProps } from "react-native-svg";
 
 import { Logo } from "./logo";
 import { User } from "./user";
+import { Error } from "./error";
 import { Avatar_1 } from "./user-avatars/avatar_1";
 import { Avatar_2 } from "./user-avatars/avatar_2";
 import { Avatar_3 } from "./user-avatars/avatar_3";
@@ -29,6 +30,7 @@ import { Avatar_23 } from "./user-avatars/avatar_23";
 export const appIcons = {
   logo: Logo,
   user: User,
+  error: Error,
 };
 
 export const userAvatars = {

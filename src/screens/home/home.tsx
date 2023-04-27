@@ -4,22 +4,33 @@ import { ListRenderItem, Platform } from "react-native";
 
 import { Icon } from "../../components/icon";
 import { Tournament } from "../../components/tournament";
-import { useDispatch, useTournaments } from "../../hooks";
 import { RootStackScreenProps } from "../../../types/navigation";
+import { useDispatch, useResponsiveScreen, useTournaments } from "../../hooks";
 import {
   settingsActions,
   tournamentActions,
 } from "../../providers/store/reducers";
 import { ITournament } from "../../providers/store/reducers/tournament/interfaces";
 
-import { Container, FlatList, Header, EmptyCell } from "./home.styles";
+import {
+  Title,
+  Header,
+  FlatList,
+  SubTitle,
+  Container,
+  EmptyCell,
+  RetryButton,
+  ActivityIndicator,
+  ListEmptyContainer,
+} from "./home.styles";
 
 export const HomeScreen: React.FC<RootStackScreenProps<"HomeScreen">> = ({
   navigation,
 }) => {
   const dispatch = useDispatch();
   const { layout, breakpoints } = useTheme();
-  const { data, isLoading } = useTournaments();
+  const { isDesktopOrLaptop } = useResponsiveScreen();
+  const { data, isLoading, error, onRetry } = useTournaments();
 
   const onEventPress = (tournament: ITournament) => {
     dispatch(tournamentActions.setSelectedTournament(tournament));
@@ -64,6 +75,21 @@ export const HomeScreen: React.FC<RootStackScreenProps<"HomeScreen">> = ({
     </Fragment>
   );
 
+  const ListEmptyComponent = () => (
+    <ListEmptyContainer>
+      {isLoading && <ActivityIndicator isDesktopOrLaptop={isDesktopOrLaptop} />}
+
+      {error && (
+        <Fragment>
+          <Icon size={90} name="error" />
+          <Title>Oops, Something Went Wrong</Title>
+          <SubTitle>Sorry about that! Please try again later</SubTitle>
+          <RetryButton onPress={onRetry}>Try again</RetryButton>
+        </Fragment>
+      )}
+    </ListEmptyContainer>
+  );
+
   return (
     <Container>
       <FlatList
@@ -74,6 +100,7 @@ export const HomeScreen: React.FC<RootStackScreenProps<"HomeScreen">> = ({
         stickyHeaderHiddenOnScroll
         //@ts-ignore
         isMultipleRows={numColumns > 1}
+        ListEmptyComponent={ListEmptyComponent}
         ListHeaderComponent={
           <Header>
             <Icon name="logo" isOnlyIcon={false} />

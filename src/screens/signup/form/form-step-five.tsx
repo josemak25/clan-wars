@@ -15,7 +15,11 @@ import {
   FormStepWrapper,
 } from "../signup.styles";
 
-export const FormStepFive: React.FC<FormStepProps> = ({ errors, control }) => {
+export const FormStepFive: React.FC<FormStepProps> = ({
+  errors,
+  control,
+  clearErrors,
+}) => {
   const { formatMessage } = useIntl();
   const { emailValidation } = useFormValidation();
 
@@ -36,10 +40,15 @@ export const FormStepFive: React.FC<FormStepProps> = ({ errors, control }) => {
         render={({ field: { onChange, ref, ...rest } }) => (
           <Input
             {...rest}
-            onChangeText={onChange}
             placeholder="info@anonymous.com"
             error={errors.contact_email_address}
             label={formatMessage(messages.best_contact_clan)}
+            onChangeText={(text) => {
+              onChange(text);
+              if (errors.contact_email_address) {
+                clearErrors("contact_email_address");
+              }
+            }}
           />
         )}
       />

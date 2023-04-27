@@ -9,7 +9,6 @@ import { useSelector } from "../../hooks";
 import { IFormStep } from "../../../types";
 import { generateId } from "../../helpers";
 import { PaymentModal } from "../../components/paystack";
-import { RootState } from "../../providers/store/store";
 import { RootStackScreenProps } from "../../../types/navigation";
 import { ITournamentClan } from "../../providers/store/reducers/tournament/interfaces";
 import {
@@ -90,14 +89,17 @@ export const SignUpScreen: React.FC<RootStackScreenProps<"SignUpScreen">> = ({
   const [clan, setClan] = useState<ITournamentClan | null>(null);
 
   const { selectedTournament } = useSelector(
-    ({ tournament }: RootState) => tournament,
+    ({ tournament }) => tournament,
     shallowEqual
   );
 
   const {
     control,
     trigger,
+    setError,
     setValue,
+    getValues,
+    clearErrors,
     handleSubmit,
     getFieldState,
     formState: { errors },
@@ -160,7 +162,14 @@ export const SignUpScreen: React.FC<RootStackScreenProps<"SignUpScreen">> = ({
                 key={`${index}_form_step`}
                 entering={isNext ? FadeInRight : FadeInLeft}
               >
-                <Form setValue={setValue} errors={errors} control={control} />
+                <Form
+                  errors={errors}
+                  control={control}
+                  setError={setError}
+                  setValue={setValue}
+                  getValues={getValues}
+                  clearErrors={clearErrors}
+                />
               </Animated.View>
             ) : null
           )}

@@ -71,7 +71,7 @@ const messages = defineMessages({
   },
   image_support: {
     id: "signup.image_support",
-    defaultMessage: "Supports: JPG, PNG",
+    defaultMessage: "Supports: JPG, PNG or GIF - Max file size 500KB",
   },
   click_to_add_image: {
     id: "signup.click_to_add_image",

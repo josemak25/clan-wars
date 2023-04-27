@@ -9,7 +9,11 @@ import { useFormValidation } from "../../../hooks";
 
 import { Title, Spacer, SubTitle, FormStepWrapper } from "../signup.styles";
 
-export const FormStepTwo: React.FC<FormStepProps> = ({ errors, control }) => {
+export const FormStepTwo: React.FC<FormStepProps> = ({
+  errors,
+  control,
+  clearErrors,
+}) => {
   const { formatMessage } = useIntl();
   const { teamNameValidation } = useFormValidation();
 
@@ -30,10 +34,15 @@ export const FormStepTwo: React.FC<FormStepProps> = ({ errors, control }) => {
         render={({ field: { onChange, ref, ...rest } }) => (
           <Input
             {...rest}
-            onChangeText={onChange}
             error={errors.team_name}
             placeholder="Peaky blinders"
             label={formatMessage(messages.enter_the_team_name)}
+            onChangeText={(text) => {
+              onChange(text);
+              if (errors.team_name) {
+                clearErrors("team_name");
+              }
+            }}
           />
         )}
       />

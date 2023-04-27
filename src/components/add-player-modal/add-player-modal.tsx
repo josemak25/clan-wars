@@ -79,7 +79,7 @@ export const AddPlayerModal: React.FC = () => {
   } = useForm<Partial<ITournamentTeam>>();
 
   const { isAddPlayerModalVisible } = useSelector(
-    ({ settings }: RootState) => settings,
+    ({ settings }) => settings,
     shallowEqual
   );
 

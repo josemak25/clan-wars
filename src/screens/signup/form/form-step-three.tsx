@@ -1,12 +1,13 @@
 import React, { Fragment } from "react";
 import { Linking } from "react-native";
-import { Controller } from "react-hook-form";
 import { FormattedMessage } from "react-intl";
 import * as ImagePicker from "expo-image-picker";
 import { useTheme } from "styled-components/native";
+import { Controller, useForm } from "react-hook-form";
 import Animated, { FadeInUp, FadeOutUp } from "react-native-reanimated";
 
 import messages from "../messages";
+import { getLogoSize } from "../../../helpers";
 import { FormStepProps } from "../../../../types";
 import { useLogoUpload, useFormValidation, useOnLayout } from "../../../hooks";
 
@@ -32,15 +33,36 @@ export const FormStepThree: React.FC<FormStepProps> = ({
   errors,
   control,
   setValue,
+  setError,
+  getValues,
+  clearErrors,
 }) => {
   const { layout, palette, hexToRGB } = useTheme();
   const [progressLayout, onLayout] = useOnLayout();
   const { clanLogoValidation } = useFormValidation();
   const [_, requestPermission] = ImagePicker.useMediaLibraryPermissions();
-  const { isComplete, isLoading, progress, uploadLogo, cancelUpload } =
-    useLogoUpload();
+  const {
+    isLoading,
+    isComplete,
+    uploadLogo,
+    cancelUpload,
+    progress: uploadedProgress,
+  } = useLogoUpload();
 
+  const progress =
+    (Number(progressLayout?.width || 0) / 100) * uploadedProgress;
 
+  const clan_logo = getValues("clan_logo");
+  const clan_name = getValues("clan_name");
+
+  console.log({ clan_logo, clan_name });
+  console.log({
+    progress,
+    isLoading,
+    isComplete,
+    progressLayout,
+    uploadedProgress,
+  });
 
   const pickLogo = async (): Promise<void> => {
     const status = await requestPermission();
@@ -57,17 +79,44 @@ export const FormStepThree: React.FC<FormStepProps> = ({
 
     const result = await ImagePicker.launchImageLibraryAsync({
       quality: 1,
+      base64: true,
       aspect: [4, 3],
       allowsEditing: true,
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
     });
 
-    if (!result.canceled) {
-      const uri = result.assets[0].base64 || result.assets[0].uri;
-      const fileSize = getLogoSize(uri);
-      setValue("clan_logo", uri);
-      uploadLogo({ ...result.assets[0], uri, fileSize });
+    if (result.canceled) return;
+
+    const file = result.assets[0];
+    const EXTENSIONS = ["png", "jpeg", "jpg", "gif"];
+    const extension = file.uri?.split(";")[0].split("/")[1];
+
+    if (!EXTENSIONS.includes(extension)) {
+      return setError("clan_logo", { message: "Image format not supported" });
     }
+
+    const fileSize = getLogoSize(file.uri!, file.fileSize);
+
+    if (fileSize > 600) {
+      return setError("clan_logo", { message: "Max file size is 500kb" });
+    }
+
+    if (errors.clan_logo) {
+      clearErrors("clan_logo");
+    }
+
+    const fileName = `${clan_name.trim().split(" ").join("-")}-${
+      file.fileName || Date.now()
+    }`.toLowerCase();
+
+    uploadLogo({ ...file, extension, fileName })
+      .then((url) => setValue("clan_logo", url))
+      .catch((error) => setError("clan_logo", { message: error.message }));
+  };
+
+  const handleCancelUpload = () => {
+    setValue("clan_logo", "");
+    cancelUpload();
   };
 
   return (
@@ -103,7 +152,7 @@ export const FormStepThree: React.FC<FormStepProps> = ({
                 </SubTitle>
               </LogoContents>
 
-              {isLoading ? (
+              {isLoading || clan_logo ? (
                 <Animated.View entering={FadeInUp} exiting={FadeOutUp}>
                   <LogoUploadContainer onLayout={onLayout}>
                     <UploadProgress
@@ -122,10 +171,10 @@ export const FormStepThree: React.FC<FormStepProps> = ({
                     {!isComplete && (
                       <Fragment>
                         <ProgressSubTitle size={12}>
-                          50% • 5 seconds left
+                          {uploadedProgress}%{/* • {timeLeft} seconds left */}
                         </ProgressSubTitle>
                         <UploadProgressBar
-                          progress={progress - layout.gutter * 2}
+                          progress={progress ? progress - layout.gutter * 2 : 0}
                         />
                       </Fragment>
                     )}
@@ -134,7 +183,7 @@ export const FormStepThree: React.FC<FormStepProps> = ({
                       <UploadIcon
                         size={15}
                         mode="contained"
-                        onPress={cancelUpload}
+                        onPress={handleCancelUpload}
                         isUploadComplete={isComplete}
                         icon={
                           isComplete
@@ -160,16 +209,4 @@ export const FormStepThree: React.FC<FormStepProps> = ({
       />
     </FormStepWrapper>
   );
-};
-
-const getLogoSize = (image: string) => {
-  let y = 1;
-
-  if (image.endsWith("==")) {
-    y = 2;
-  }
-
-  const x_size = image.length * (3 / 4) - y;
-  const size = x_size / 1024;
-  return Number(size.toFixed(2));
 };

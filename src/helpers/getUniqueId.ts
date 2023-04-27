@@ -6,28 +6,38 @@
  */
 
 import { Platform } from "react-native";
+import * as Application from "expo-application";
+import * as SecureStore from "expo-secure-store";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import { APP_NAME } from "../constants";
 import { generateId } from "./generateId";
 
 export const getUniqueId = (): Promise<string> => {
+  const uniqueIdStorageKey = `${APP_NAME}-visitorId`;
+
   return new Promise((resolve) => {
     Platform.select({
-      android: () => {
-        const application = require("expo-application");
-        return resolve(application.androidId);
-      },
+      android: () => resolve(Application.androidId!),
       web: async () => {
-        const FingerprintJS = require("@fingerprintjs/fingerprintjs");
-        const fp = await FingerprintJS.load();
-        const { visitorId } = await fp.get();
-        return resolve(visitorId);
+        let uniqueId = await AsyncStorage.getItem(uniqueIdStorageKey);
+
+        if (!uniqueId) {
+          const FingerprintJS = require("@fingerprintjs/fingerprintjs");
+          const fp = await FingerprintJS.load();
+          const visitor = await fp.get();
+          uniqueId = visitor.visitorId;
+          await AsyncStorage.setItem(uniqueIdStorageKey, uniqueId!);
+        }
+
+        return resolve(uniqueId!);
       },
       default: async () => {
-        const SecureStore = require("expo-secure-store");
-        let uniqueId = await SecureStore.getItemAsync("uniqueId");
+        let uniqueId = await SecureStore.getItemAsync(uniqueIdStorageKey);
 
         if (!uniqueId) {
           uniqueId = generateId();
-          await SecureStore.setItemAsync("uniqueId", uniqueId);
+          await SecureStore.setItemAsync(uniqueIdStorageKey, uniqueId);
         }
 
         return resolve(uniqueId);

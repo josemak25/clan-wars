@@ -119,7 +119,6 @@ export const NextStepButton = styled(__Button).attrs((p) => ({
   buttonColor: p.theme.palette.primary,
   contentStyle: {
     minWidth: 120,
-    borderRadius: 5,
     paddingVertical: 8,
     paddingHorizontal: p.theme.layout.gutter,
   },
@@ -129,7 +128,7 @@ export const NextStepButton = styled(__Button).attrs((p) => ({
     fontFamily: p.theme.fonts.variants.roboto_regular,
   },
 }))`
-  border-radius: ${(p) => p.theme.layout.radius}px;
+  border-radius: ${(p) => p.theme.layout.radius / 2}px;
 `;
 
 export const GoBackButton = styled(NextStepButton).attrs<{
@@ -202,7 +201,6 @@ export const ProgressSubTitle = styled(SubTitle)`
 `;
 
 export const UploadProgressBar = styled.View<{ progress: number }>`
-  width: 100%;
   height: 2px;
   margin-top: 10px;
   width: ${(p) => p.progress}px;

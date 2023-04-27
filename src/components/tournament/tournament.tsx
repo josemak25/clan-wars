@@ -76,11 +76,7 @@ export const Tournament: React.FC<TournamentProps> = (props) => {
   };
 
   return (
-    <Container
-      activeOpacity={0.5}
-      onPress={() => onEventPress(id)}
-      disabled={isEventFinished || isEventStarted}
-    >
+    <Container activeOpacity={0.5} onPress={() => onEventPress(id)}>
       <TopContents>
         {cover_image ? (
           <View>
@@ -94,8 +90,8 @@ export const Tournament: React.FC<TournamentProps> = (props) => {
             {tournament_icon && <TournamentIcon uri={tournament_icon} />}
             <TimerContentWrapper>
               <Timer>
-                {dayjs(start_date).format("dddd DD MMMM")} • Starting at{" "}
-                {dayjs(start_date).format("hh : mm A")}
+                {dayjs(start_date).format("dddd DD MMMM")} • Starting at
+                {dayjs(start_date).format(" hh:mm A")}
               </Timer>
 
               <TitleWrapper>
@@ -174,9 +170,10 @@ export const Tournament: React.FC<TournamentProps> = (props) => {
 
         <EventDetailsButton
           onPress={handleButtonPress}
+          isEventFinished={isEventFinished}
           isEventStarted={isEventStarted && !isEventFinished}
           icon={() =>
-            isEventFinished || !isEventStarted ? (
+            !isEventFinished || !isEventStarted ? (
               <Ionicons
                 size={20}
                 color={colors.dark.text}
@@ -187,9 +184,9 @@ export const Tournament: React.FC<TournamentProps> = (props) => {
           }
         >
           {isEventFinished
-            ? "Event Details"
+            ? "Event details"
             : isEventStarted
-            ? "Started"
+            ? "Event started"
             : "Join event"}
           <Ionicons size={24} color="white" />
         </EventDetailsButton>

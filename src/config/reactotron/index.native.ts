@@ -11,3 +11,5 @@ export const reactotron = Reactotron.configure({ name: APP_NAME, host })
   .useReactNative({ asyncStorage: false, networking: true })
   .use(reactotronRedux())
   .connect();
+
+console.tron = reactotron.log;

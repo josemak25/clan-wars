@@ -21,7 +21,6 @@ import {
 } from "../theme/style";
 import GlobalStyle from "./reset";
 import { hexToRGB } from "../../helpers";
-import { RootState } from "../store/store";
 import { settingsActions } from "../store/reducers";
 import { IColorMode } from "../store/reducers/settings/interfaces";
 import {
@@ -37,10 +36,7 @@ export const ThemeProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const scale = useResponsiveFontSize();
   const systemTheme = useColorScheme();
   const dimension = useWindowDimensions();
-  const { colorMode } = useSelector(
-    (state: RootState) => state.settings,
-    shallowEqual
-  );
+  const { colorMode } = useSelector(({ settings }) => settings, shallowEqual);
 
   const isDarkMode = colorMode === IColorMode.DARK;
 
