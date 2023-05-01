@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { shallowEqual } from "react-redux";
-import { Modal } from "react-native";
 import { ScrollView } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useTheme } from "styled-components/native";
@@ -12,7 +11,6 @@ import Animated, {
   useAnimatedStyle,
 } from "react-native-reanimated";
 import {
-  BottomSheetView,
   BottomSheetModal,
   BottomSheetBackdropProps,
 } from "@gorhom/bottom-sheet";

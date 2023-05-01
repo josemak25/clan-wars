@@ -88,7 +88,7 @@ export const SignUpScreen: React.FC<
 > = () => {
   const [isNext, setIsNext] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(4);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [isConfirmed, setIsConfirmed] = useState(false);
   const bottomSheetRef = useRef<BottomSheetModal>(null);
   const [formSteps, setFormSteps] = useState(defaultFormSteps);
@@ -225,12 +225,7 @@ export const SignUpScreen: React.FC<
       </MaxWidthContainer>
 
       <ConfirmPaymentModal
-        team={[
-          { id: "avatar_1", avatar: "avatar_1", player_ign: "十・Goldpurlp" },
-          { id: "avatar_10", avatar: "avatar_10", player_ign: "十・Mistake" },
-          { id: "avatar_11", avatar: "avatar_11" },
-          { id: "avatar_20", avatar: "avatar_20" },
-        ]}
+        team={team}
         bottomSheetRef={bottomSheetRef}
         selectedTournament={selectedTournament}
         confirmPayment={() => setIsConfirmed(true)}

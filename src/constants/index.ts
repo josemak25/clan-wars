@@ -10,7 +10,7 @@ import appInfo from "../../package.json";
  * extending app global constants for app name
  * @constant APP_NAME default value
  */
-export const APP_NAME: string = appInfo.name.toUpperCase();
+export const APP_NAME: string = appInfo.name.replaceAll("-", "").toUpperCase();
 
 /**
  * extending app global constants for app version

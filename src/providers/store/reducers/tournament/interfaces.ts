@@ -13,6 +13,7 @@ export interface ITournament {
   winner_clan_id?: string;
   tournament_icon?: string;
   registration_fee: string;
+  end_date: string | number;
   updated_at: string | number;
   created_at: string | number;
   start_date: string | number;

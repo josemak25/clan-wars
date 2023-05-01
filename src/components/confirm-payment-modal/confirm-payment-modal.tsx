@@ -1,7 +1,9 @@
 import React, { Fragment, useMemo, useState } from "react";
 import dayjs from "dayjs";
+import { Platform } from "react-native";
 import { FormattedMessage } from "react-intl";
 import { useTheme } from "styled-components/native";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 import {
   BottomSheetModal,
@@ -13,7 +15,9 @@ import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/typ
 
 import { Icon } from "../icon";
 import messages from "./messages";
+import { APP_NAME } from "../../constants";
 import { Providers } from "../../providers";
+import { formatCurrency } from "../../helpers";
 import { useResponsiveScreen } from "../../hooks";
 import { BottomSheetBackdrop } from "../modal-backdrop";
 import {
@@ -23,6 +27,7 @@ import {
 
 import {
   Title,
+  Button,
   Spacer,
   SubTitle,
   Container,
@@ -30,15 +35,17 @@ import {
   RefNumber,
   PlayerName,
   TimeInfoText,
-  SubmitButton,
+  ButtonWrapper,
   PlayerNameRow,
+  AmountDivider,
+  ButtonContainer,
+  AmountContainer,
   PlayerAvatarRow,
   PlayersContainer,
   GameInfoContainer,
   TimerInfoContainer,
+  PaymentInfoContainer,
 } from "./confirm-payment-modal.styles";
-import { Platform } from "react-native";
-import { formatCurrency } from "../../helpers";
 
 type ConfirmPaymentModalProps = {
   team: ITournamentTeam[];
@@ -82,7 +89,7 @@ export const ConfirmPaymentModal: React.FC<ConfirmPaymentModalProps> = ({
       setIsLoading(false);
       onClose();
       confirmPayment();
-    }, 1000);
+    }, 500);
   };
 
   return (
@@ -104,16 +111,13 @@ export const ConfirmPaymentModal: React.FC<ConfirmPaymentModalProps> = ({
     >
       <Providers>
         <Container
+          onLayout={handleContentLayout}
           isDesktopOrLaptop={isDesktopOrLaptop}
-          onLayout={(event) => {
-            console.log(event);
-            handleContentLayout(event);
-          }}
         >
           <Title>
             <FormattedMessage {...messages.title} />
           </Title>
-          <Spacer size={20} />
+          <Spacer size={10} />
           <SubTitle>
             <FormattedMessage
               {...messages.subtitle}
@@ -125,7 +129,7 @@ export const ConfirmPaymentModal: React.FC<ConfirmPaymentModalProps> = ({
             />
           </SubTitle>
 
-          <Spacer size={30} />
+          <Spacer size={20} />
           <GameInfoContainer>
             <TimerIcon>
               <MaterialCommunityIcons
@@ -136,22 +140,35 @@ export const ConfirmPaymentModal: React.FC<ConfirmPaymentModalProps> = ({
             </TimerIcon>
             <TimerInfoContainer>
               <TimeInfoText>
-                {dayjs(selectedTournament?.start_date).format(
-                  "MMM D, hh:mm a - hh:mm a"
+                {dayjs(selectedTournament?.start_date).format("MMM D, hh:mm a")}
+                {dayjs(selectedTournament?.end_date).format(
+                  "  •  MMM D, hh:mm a"
                 )}
               </TimeInfoText>
               <Spacer size={3} />
               <RefNumber>
-                clanwars.com/
+                {APP_NAME}.com/
                 {selectedTournament?.id.substring(0, 8)}...
                 {selectedTournament?.id.substring(10, 18)}
               </RefNumber>
             </TimerInfoContainer>
           </GameInfoContainer>
 
-          <Spacer size={20} />
+          <Spacer size={15} />
+          <PaymentInfoContainer>
+            <Ionicons
+              size={24}
+              name="information-circle-outline"
+              color={hexToRGB(palette.text, 0.3)}
+            />
+            <Title size={18}>
+              <FormattedMessage {...messages.info} />
+            </Title>
+          </PaymentInfoContainer>
+
+          <Spacer size={30} />
           <PlayersContainer>
-            <PlayerAvatarRow minWidth={40 * team.length}>
+            <PlayerAvatarRow minWidth={38 * team.length}>
               {team.map(({ avatar, id }, index) => (
                 <Icon
                   key={id}
@@ -198,10 +215,37 @@ export const ConfirmPaymentModal: React.FC<ConfirmPaymentModalProps> = ({
             </PlayerNameRow>
           </PlayersContainer>
 
+          <Spacer size={10} />
+          <AmountDivider />
+
+          <AmountContainer>
+            <Title>
+              <FormattedMessage {...messages.total_amount} />
+            </Title>
+
+            <SubTitle size={35}>
+              {formatCurrency(Number(selectedTournament?.registration_fee))}
+            </SubTitle>
+          </AmountContainer>
+
           <Spacer size={30} />
-          <SubmitButton loading={isLoading} onPress={handleConfirm}>
-            Confirm and Submit
-          </SubmitButton>
+          <ButtonContainer isScreenLessThanMaxWidth={isScreenLessThanMaxWidth}>
+            <ButtonWrapper size={0.6}>
+              <Button
+                isCancel
+                onPress={onClose}
+                mode="outlined"
+                style={{ borderColor: hexToRGB(palette.text, 0.2) }}
+              >
+                Cancel
+              </Button>
+            </ButtonWrapper>
+            <ButtonWrapper>
+              <Button loading={isLoading} onPress={handleConfirm}>
+                Confirm and Submit
+              </Button>
+            </ButtonWrapper>
+          </ButtonContainer>
         </Container>
       </Providers>
     </BottomSheetModal>

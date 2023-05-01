@@ -1,0 +1,52 @@
+diff --git a/node_modules/@gorhom/bottom-sheet/lib/module/hooks/useBottomSheetDynamicSnapPoints.js b/node_modules/@gorhom/bottom-sheet/lib/module/hooks/useBottomSheetDynamicSnapPoints.js
+index 9bb70fb..9ccd575 100644
+--- a/node_modules/@gorhom/bottom-sheet/lib/module/hooks/useBottomSheetDynamicSnapPoints.js
++++ b/node_modules/@gorhom/bottom-sheet/lib/module/hooks/useBottomSheetDynamicSnapPoints.js
+@@ -1,4 +1,5 @@
+ import { useCallback } from 'react';
++import { Platform } from 'react-native';
+ import { useDerivedValue, useSharedValue } from 'react-native-reanimated';
+ import { INITIAL_HANDLE_HEIGHT, INITIAL_SNAP_POINT } from '../components/bottomSheet/constants';
+ /**
+@@ -28,15 +29,32 @@ export const useBottomSheetDynamicSnapPoints = initialSnapPoints => {
+     return initialSnapPoints.map(snapPoint => snapPoint === 'CONTENT_HEIGHT' ? contentWithHandleHeight : snapPoint);
+   }, []); // callbacks
+ 
+-  const handleContentLayout = useCallback(({
+-    nativeEvent: {
+-      layout: {
+-        height
+-      }
+-    }
+-  }) => {
+-    animatedContentHeight.value = height;
+-  }, [animatedContentHeight]);
++  // callbacks
++  const handleContentLayout = useCallback(
++    ({ nativeEvent }) => {
++      animatedContentHeight.value = Platform.select({
++        default: () => nativeEvent.layout.height,
++
++        web: () => {
++          // add both parent and children node elements to calculate their clientHeight
++          const nodes = [
++            nativeEvent.target,
++            ...nativeEvent.target.children,
++          ];
++
++          // add all node clientHeight
++          const totalHeight = nodes.reduce(
++            (acc, { clientHeight }) => (acc += clientHeight),
++            0
++          );
++
++          return totalHeight
++        },
++      })()
++    },
++    [animatedContentHeight]
++  );
++
+   return {
+     animatedSnapPoints,
+     animatedHandleHeight,
