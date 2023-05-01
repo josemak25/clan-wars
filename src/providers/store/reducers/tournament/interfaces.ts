@@ -1,3 +1,5 @@
+import { AvatarType } from "../../../../components/icon/interface";
+
 export interface ITournament {
   id: string;
   title: string;
@@ -27,10 +29,10 @@ export interface ITournamentHost {
 
 export interface ITournamentTeam {
   id: string;
-  avatar: string;
   player_id: string;
-  player_ign: string;
+  avatar: AvatarType;
   total_kills: number;
+  player_ign: string | null;
   created_at: string | number;
   updated_at: string | number;
 }

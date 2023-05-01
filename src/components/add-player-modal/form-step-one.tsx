@@ -1,11 +1,12 @@
 import React, { useRef } from "react";
+import { Controller } from "react-hook-form";
 import { FormattedMessage } from "react-intl";
-import { Controller, useForm } from "react-hook-form";
 
 import { Icon } from "../icon";
 import { Input } from "../input";
 import messages from "./messages";
 import { generateId } from "../../helpers";
+import { FormStepProps } from "../../../types";
 import { useFormValidation } from "../../hooks";
 import { ITournamentTeam } from "../../providers/store/reducers/tournament/interfaces";
 
@@ -18,29 +19,30 @@ import {
   UserContainer,
   NextStepButton,
 } from "./add-player-modal.styles";
-import { FormStepProps } from "../../../types";
 
 type FormStepOneProps = {
+  player?: ITournamentTeam;
   onButtonPress: VoidFunction;
   isScreenLessThanMaxWidth: boolean;
-} & FormStepProps<Partial<ITournamentTeam>>;
+} & Partial<FormStepProps<Partial<ITournamentTeam>>>;
 
 export const FormStepOne: React.FC<FormStepOneProps> = ({
+  watch,
+  player,
   errors,
   control,
+  clearErrors,
   onButtonPress,
   isScreenLessThanMaxWidth,
 }) => {
-  const user_id = useRef(generateId()).current;
   const { playerIgnValidation } = useFormValidation();
-  const { watch } = useForm<Partial<ITournamentTeam>>();
-
-  const player_ign = watch("player_ign");
+  const player_ign = watch?.("player_ign") || player?.player_ign;
+  const user_id = useRef(player?.player_id || generateId()).current;
 
   return (
     <InputContents isScreenLessThanMaxWidth={isScreenLessThanMaxWidth}>
       <UserContainer>
-        <Icon name="avatar" />
+        <Icon name="avatar" avatarId={player?.avatar} />
         <UserContents>
           {player_ign && <UserIGN>{player_ign}</UserIGN>}
           <SubTitle isActive={false}>
@@ -54,20 +56,28 @@ export const FormStepOne: React.FC<FormStepOneProps> = ({
         name="player_ign"
         control={control}
         rules={playerIgnValidation}
+        defaultValue={player?.player_ign}
         render={({ field: { onChange, ref, ...rest } }) => (
           <Input
             {...rest}
             maxLength={14}
-            onChangeText={onChange}
+            value={rest.value || ""}
             label="Enter player IGN"
             placeholder="十・Drifter"
-            error={errors.player_ign}
+            error={errors?.player_ign}
+            onChangeText={(text) => {
+              onChange(text);
+              if (errors?.player_ign) {
+                clearErrors?.("player_ign");
+              }
+            }}
           />
         )}
       />
 
       <Spacer size={60} />
       <NextStepButton
+        isValid={!!player_ign}
         onPress={onButtonPress}
         style={{
           elevation: 5,

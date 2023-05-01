@@ -4,7 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getUniqueId } from "../../helpers";
 import { supabase } from "../../config/supabase";
 import { USER_FIRST_LAUNCH } from "../../constants";
-import { signUpGuest, signInGuest } from "../../config/network";
+import { signUpGuest, signInGuest, signOutGuest } from "../../config/network";
 
 export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   // check if guest auth exists

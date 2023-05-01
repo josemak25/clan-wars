@@ -6,8 +6,9 @@ import {
 } from "react-native-paper";
 
 import { ErrorMessageContainer as __ErrorMessageContainer } from "../../components/input/input.styles";
+import { Platform } from "react-native";
 
-export { ErrorMessage } from "../../components/input/input.styles";
+export { ErrorMessage, Label } from "../../components/input/input.styles";
 
 export const Container = styled.View`
   flex: 1;
@@ -182,10 +183,8 @@ export const UploadProgress = styled.View<{
 }>`
   top: 0;
   bottom: 0;
-  left: 0.5px;
-  right: 0.5px;
   position: absolute;
-  width: ${(p) => p.progress}px;
+  width: ${(p) => p.progress - 3}px;
   background-color: ${(p) => p.theme.palette.background};
   border-top-left-radius: ${(p) => p.theme.layout.radius - 2}px;
   border-bottom-left-radius: ${(p) => p.theme.layout.radius - 2}px;
@@ -222,11 +221,23 @@ export const UploadIconContainer = styled.View`
   right: ${(p) => p.theme.layout.gutter - 10}px;
 `;
 
-export const ErrorMessageContainer = styled(__ErrorMessageContainer)`
+export const ErrorMessageContainer = styled(__ErrorMessageContainer)<{
+  maxWidth?: number;
+  teamSize?: number;
+}>`
   margin-bottom: 8px;
   padding-right: 8px;
   align-items: flex-end;
-  flex-direction: column;
+
+  ${(p) => {
+    if (p.maxWidth && p.teamSize) {
+      return css`
+        max-width: ${p.maxWidth * p.teamSize +
+        p.theme.layout.radius *
+          (p.teamSize - Platform.select({ default: 1, web: 0 }))}px;
+      `;
+    }
+  }}
 `;
 
 export const Terms = styled(SubTitle)`
@@ -245,8 +256,12 @@ export const TeamScrollView = styled.ScrollView.attrs((p) => ({
   },
 }))``;
 
-export const TeamButton = styled.TouchableOpacity<{ error?: boolean }>`
+export const TeamButton = styled.TouchableOpacity<{
+  error?: boolean;
+  isAdded: boolean;
+}>`
   height: 100px;
+  min-width: 120px;
   align-items: center;
   justify-content: center;
   gap: ${(p) => p.theme.layout.radius * 1.3}px;
@@ -256,10 +271,14 @@ export const TeamButton = styled.TouchableOpacity<{ error?: boolean }>`
   border: 1.5px
     ${(p) =>
       p.theme.hexToRGB(
-        p.error ? p.theme.palette.error : p.theme.palette.text,
-        p.error ? 0.7 : 0.2
-      )}
-    dashed;
+        p.isAdded
+          ? p.theme.palette.primary
+          : p.error && !p.isAdded
+          ? p.theme.palette.error
+          : p.theme.palette.text,
+        p.isAdded ? 1 : p.error ? 0.7 : 0.2
+      )};
+  border-style: ${(p) => (p.isAdded ? "solid" : "dashed")};
 `;
 
 export const PlayerName = styled(SubTitle)`

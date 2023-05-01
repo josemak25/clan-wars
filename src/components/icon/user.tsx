@@ -9,7 +9,7 @@ import Svg, {
   ClipPath,
 } from "react-native-svg";
 
-export const User = (props: SvgProps) => (
+export const User = ({ color = "#7d69ff", ...props }: SvgProps) => (
   <View
     //@ts-ignore
     style={{ borderRadius: "100%", overflow: "hidden" }}
@@ -43,8 +43,8 @@ export const User = (props: SvgProps) => (
         >
           <G
             data-name="Group 1610"
-            fill="#7d69ff"
-            stroke="#7d69ff"
+            fill={color}
+            stroke={color}
             strokeWidth={2.5}
           >
             <G

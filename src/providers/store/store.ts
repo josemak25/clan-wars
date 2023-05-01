@@ -23,6 +23,7 @@ const persistConfig = {
   version: APP_VERSION,
   storage: AsyncStorage,
   key: __ROOT_REDUX_STATE_KEY__,
+  whitelist: ["locale", "screen", "colorMode", "isReceiveNotifications"], // only this values will be persisted
 };
 
 const reactotronEnhancer = (): any => {

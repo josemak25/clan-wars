@@ -1,35 +1,37 @@
 import React, { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { shallowEqual } from "react-redux";
+import { Modal } from "react-native";
+import { ScrollView } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useTheme } from "styled-components/native";
-import { Platform, ScrollView } from "react-native";
 import { SubmitHandler, useForm } from "react-hook-form";
-import Animated, { FadeInLeft, FadeInRight } from "react-native-reanimated";
-import BottomSheet, {
+import Animated, {
+  FadeInLeft,
+  FadeInRight,
+  useAnimatedKeyboard,
+  useAnimatedStyle,
+} from "react-native-reanimated";
+import {
+  BottomSheetView,
+  BottomSheetModal,
   BottomSheetBackdropProps,
-  useBottomSheetDynamicSnapPoints,
 } from "@gorhom/bottom-sheet";
 
 import { generateId } from "../../helpers";
+import { Providers } from "../../providers";
 import { FormStepOne } from "./form-step-one";
 import { FormStepTwo } from "./form-step-two";
 import { IAddPlayerFormStep } from "../../../types";
 import { BottomSheetBackdrop } from "../modal-backdrop";
-import { RootState } from "../../providers/store/store";
 import { settingsActions } from "../../providers/store/reducers";
+import { useDispatch, useSelector, useResponsiveScreen } from "../../hooks";
 import { ITournamentTeam } from "../../providers/store/reducers/tournament/interfaces";
-import {
-  useDispatch,
-  useKeyboard,
-  useSelector,
-  useOnLayout,
-  useResponsiveScreen,
-} from "../../hooks";
 
 import {
   Step,
   Title,
   Spacer,
+  Contents,
   SubTitle,
   StepIndex,
   Container,
@@ -38,6 +40,7 @@ import {
   CloseButton,
   StepContainer,
   StepScrollView,
+  MaxWidthWrapper,
   InputContainer,
 } from "./add-player-modal.styles";
 
@@ -58,45 +61,48 @@ const defaultFormSteps: IAddPlayerFormStep[] = [
   },
 ];
 
-export const AddPlayerModal: React.FC = () => {
+type AddPlayerModalProps = {
+  player?: ITournamentTeam;
+  onSavePlayer: (player: ITournamentTeam) => void;
+};
+
+export const AddPlayerModal: React.FC<AddPlayerModalProps> = ({
+  player,
+  onSavePlayer,
+}) => {
   const dispatch = useDispatch();
-  const { keyboardShown } = useKeyboard();
+  const keyboard = useAnimatedKeyboard();
   const scrollRef = useRef<ScrollView>(null);
-  const [contentLayout, onLayout] = useOnLayout();
-  const bottomSheetRef = useRef<BottomSheet>(null);
+  const { palette, breakpoints } = useTheme();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const { palette, layout, breakpoints } = useTheme();
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
   const [formSteps, setFormSteps] = useState(defaultFormSteps);
   const { isMinScreenSize, isDesktopOrLaptop } = useResponsiveScreen();
 
   const {
+    watch,
+    reset,
     control,
     trigger,
+    setValue,
     clearErrors,
     handleSubmit,
     getFieldState,
     formState: { errors },
   } = useForm<Partial<ITournamentTeam>>();
 
+  const isLastPageOfFormActive = currentIndex === formSteps.length - 1;
+  const isScreenLessThanMaxWidth = isMinScreenSize(breakpoints.tablet_viewport);
+
+  const snapPoints = useMemo(() => ["100%"], []);
+
+  const translateStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: -keyboard.height.value / 3 }],
+  }));
+
   const { isAddPlayerModalVisible } = useSelector(
     ({ settings }) => settings,
     shallowEqual
-  );
-
-  const initialSnapPoints = useMemo(
-    () => Platform.select({ default: ["CONTENT_HEIGHT"], web: ["50%"] }),
-    []
-  );
-
-  const {
-    animatedSnapPoints,
-    handleContentLayout,
-    animatedHandleHeight,
-    animatedContentHeight,
-  } = useBottomSheetDynamicSnapPoints(initialSnapPoints);
-
-  const BackdropComponent = (props: BottomSheetBackdropProps) => (
-    <BottomSheetBackdrop {...props} closeModal={() => {}} />
   );
 
   const validateCurrentFormBeforeRoute = async () => {
@@ -107,8 +113,8 @@ export const AddPlayerModal: React.FC = () => {
 
   const goNext = async () => {
     // return if error only route to next form if no errors
-    // const error = await validateCurrentFormBeforeRoute();
-    // if (error) return;
+    const error = await validateCurrentFormBeforeRoute();
+    if (error) return;
 
     const nextIndex = currentIndex + 1;
     const newFormSteps = formSteps.map((step, i) => ({
@@ -132,132 +138,145 @@ export const AddPlayerModal: React.FC = () => {
   };
 
   const onClose = () => {
+    reset();
     clearErrors();
     setCurrentIndex(0);
     setFormSteps(defaultFormSteps);
+    bottomSheetRef.current?.close();
+  };
+
+  const closeModal = () => {
+    onClose();
     dispatch(settingsActions.toggleAddPlayerModalVisibility());
   };
 
-  const onSubmit: SubmitHandler<Partial<ITournamentTeam>> = (data) => {};
+  const onSubmit: SubmitHandler<Partial<ITournamentTeam>> = (data) => {
+    const date = new Date().toISOString();
 
-  const MAX_WIDTH = breakpoints.tablet_viewport;
-  const isScreenLessThanMaxWidth = isMinScreenSize(MAX_WIDTH);
-  const bottomInset = layout.screen.height - Number(contentLayout?.height || 0);
+    onSavePlayer({
+      ...data,
+      total_kills: 0,
+      created_at: date,
+      updated_at: date,
+      id: formSteps[0].id,
+      player_id: formSteps[1].id,
+    } as ITournamentTeam);
+
+    dispatch(settingsActions.toggleAddPlayerModalVisibility());
+  };
+
+  const BackdropComponent = (props: BottomSheetBackdropProps) => (
+    <BottomSheetBackdrop {...props} closeModal={closeModal} />
+  );
 
   useEffect(() => {
-    isAddPlayerModalVisible && bottomSheetRef.current?.expand();
+    if (isAddPlayerModalVisible) {
+      bottomSheetRef.current?.present();
+    }
   }, [isAddPlayerModalVisible]);
 
-  if (!isAddPlayerModalVisible) {
-    return null;
-  }
-
   return (
-    <BottomSheet
-      index={0}
-      detached
-      onClose={onClose}
+    <BottomSheetModal
+      enablePanDownToClose
       ref={bottomSheetRef}
+      snapPoints={snapPoints}
       handleComponent={() => null}
-      snapPoints={animatedSnapPoints}
-      handleHeight={animatedHandleHeight}
-      contentHeight={animatedContentHeight}
       backdropComponent={BackdropComponent}
-      bottomInset={bottomInset / (keyboardShown ? 1.5 : 2)}
       backgroundStyle={{ backgroundColor: palette.transparent }}
-      containerStyle={[
-        { width: "100%", maxWidth: MAX_WIDTH },
-        isScreenLessThanMaxWidth && {
-          marginLeft: (layout.screen.width - MAX_WIDTH) / 2,
-        },
-      ]}
-      style={{
-        overflow: "hidden",
-        borderRadius: layout.radius,
-        marginHorizontal: layout.gutter,
-      }}
     >
-      <Container
-        isScreenLessThanMaxWidth={isScreenLessThanMaxWidth}
-        onLayout={(event) => {
-          onLayout(event);
-          handleContentLayout(event);
-        }}
-      >
-        <StepContainer isScreenLessThanMaxWidth={isScreenLessThanMaxWidth}>
-          <Title wrap>Anonymous eSport</Title>
-          <Spacer size={15} />
-          <SubTitle>Register your player</SubTitle>
-          <Spacer size={30} />
+      <Providers>
+        <Container style={translateStyle}>
+          <MaxWidthWrapper>
+            <Contents isScreenLessThanMaxWidth={isScreenLessThanMaxWidth}>
+              <StepContainer
+                isScreenLessThanMaxWidth={isScreenLessThanMaxWidth}
+              >
+                <Title wrap>Anonymous eSport</Title>
+                <Spacer size={15} />
+                <SubTitle>Register your player</SubTitle>
+                <Spacer size={30} />
 
-          <StepScrollView
-            ref={scrollRef}
-            isScreenLessThanMaxWidth={isScreenLessThanMaxWidth}
-          >
-            {formSteps.map(({ id, isViewable, title }, index) => (
-              <Fragment key={id}>
-                <Step
-                  isActive={currentIndex === index}
-                  onPress={() => onRoutePress(index)}
-                  disabled={!isViewable || currentIndex === index}
+                <StepScrollView
+                  ref={scrollRef}
+                  isScreenLessThanMaxWidth={isScreenLessThanMaxWidth}
                 >
-                  <StepNumber isActive={currentIndex === index}>
-                    <StepIndex isActive={currentIndex === index}>
-                      {index + 1}
-                    </StepIndex>
-                  </StepNumber>
-                  <SubTitle isActive={currentIndex === index}>{title}</SubTitle>
-                </Step>
+                  {formSteps.map(({ id, isViewable, title }, index) => (
+                    <Fragment key={id}>
+                      <Step
+                        isActive={currentIndex === index}
+                        onPress={() => onRoutePress(index)}
+                        disabled={!isViewable || currentIndex === index}
+                      >
+                        <StepNumber isActive={currentIndex === index}>
+                          <StepIndex isActive={currentIndex === index}>
+                            {index + 1}
+                          </StepIndex>
+                        </StepNumber>
+                        <SubTitle isActive={currentIndex === index}>
+                          {title}
+                        </SubTitle>
+                      </Step>
 
-                {index === 0 && (
-                  <StepDivider
-                    isScreenLessThanMaxWidth={isScreenLessThanMaxWidth}
+                      {index === 0 && (
+                        <StepDivider
+                          isScreenLessThanMaxWidth={isScreenLessThanMaxWidth}
+                        />
+                      )}
+                    </Fragment>
+                  ))}
+                </StepScrollView>
+              </StepContainer>
+
+              <InputContainer
+                isScreenLessThanMaxWidth={isScreenLessThanMaxWidth}
+              >
+                {forms.map((Form, index) =>
+                  currentIndex === index ? (
+                    <Animated.View
+                      key={`${index}_form_step`}
+                      entering={index === 0 ? FadeInRight : FadeInLeft}
+                    >
+                      <Form
+                        watch={watch}
+                        errors={errors}
+                        player={player}
+                        control={control}
+                        setValue={setValue}
+                        clearErrors={clearErrors}
+                        isScreenLessThanMaxWidth={isScreenLessThanMaxWidth}
+                        onButtonPress={
+                          isLastPageOfFormActive
+                            ? handleSubmit(onSubmit)
+                            : goNext
+                        }
+                      />
+                    </Animated.View>
+                  ) : null
+                )}
+              </InputContainer>
+
+              <CloseButton
+                size={25}
+                onPress={closeModal}
+                icon={() => (
+                  <Ionicons
+                    name="close"
+                    color={palette.text}
+                    size={isDesktopOrLaptop ? 24 : 20}
                   />
                 )}
-              </Fragment>
-            ))}
-          </StepScrollView>
-        </StepContainer>
-
-        <InputContainer isScreenLessThanMaxWidth={isScreenLessThanMaxWidth}>
-          {forms.map((Form, index) =>
-            currentIndex === index ? (
-              <Animated.View
-                key={`${index}_form_step`}
-                entering={index === 0 ? FadeInRight : FadeInLeft}
-              >
-                <Form
-                  errors={errors}
-                  control={control}
-                  isScreenLessThanMaxWidth={isScreenLessThanMaxWidth}
-                  onButtonPress={() =>
-                    index === 0 ? goNext() : handleSubmit(onSubmit)
-                  }
-                />
-              </Animated.View>
-            ) : null
-          )}
-        </InputContainer>
-
-        <CloseButton
-          size={25}
-          onPress={onClose}
-          icon={() => (
-            <Ionicons
-              name="close"
-              color={palette.text}
-              size={isDesktopOrLaptop ? 24 : 20}
-            />
-          )}
-          style={{
-            elevation: 5,
-            shadowRadius: 3.84,
-            shadowOpacity: 0.25,
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 2 },
-          }}
-        />
-      </Container>
-    </BottomSheet>
+                style={{
+                  elevation: 5,
+                  shadowRadius: 3.84,
+                  shadowOpacity: 0.25,
+                  shadowColor: "#000",
+                  shadowOffset: { width: 0, height: 2 },
+                }}
+              />
+            </Contents>
+          </MaxWidthWrapper>
+        </Container>
+      </Providers>
+    </BottomSheetModal>
   );
 };

@@ -1,3 +1,4 @@
+import Animated from "react-native-reanimated";
 import styled, { css } from "styled-components/native";
 import { IconButton as __IconButton } from "react-native-paper";
 
@@ -10,8 +11,21 @@ export {
   ErrorMessageContainer,
 } from "../input/input.styles";
 
-export const Container = styled.View<{ isScreenLessThanMaxWidth: boolean }>`
+export const Container = styled(Animated.View)`
   flex: 1;
+  align-items: center;
+  justify-content: center;
+  background-color: ${(p) => p.theme.hexToRGB(p.theme.colors.light.text, 0.7)};
+`;
+
+export const MaxWidthWrapper = styled.View`
+  overflow: hidden;
+  border-radius: ${(p) => p.theme.layout.radius}px;
+  max-width: ${(p) => p.theme.breakpoints.tablet_viewport - 50}px;
+  width: ${(p) => p.theme.layout.screen.width - p.theme.layout.gutter * 2}px;
+`;
+
+export const Contents = styled.View<{ isScreenLessThanMaxWidth: boolean }>`
   background-color: ${(p) => p.theme.palette.background};
   flex-direction: ${(p) => (p.isScreenLessThanMaxWidth ? "row" : "column")};
 `;
@@ -34,7 +48,7 @@ export const SubTitle = styled(Title)`
   font-family: ${(p) => p.theme.fonts.variants.roboto_regular};
 `;
 
-export const StepContainer = styled(Container)`
+export const StepContainer = styled(Contents)`
   flex-direction: column;
   background-color: ${(p) => p.theme.palette.light_background};
   padding: ${(p) =>
@@ -43,6 +57,12 @@ export const StepContainer = styled(Container)`
 
 export const InputContainer = styled(StepContainer)`
   background-color: ${(p) => p.theme.palette.card_background};
+
+  ${(p) =>
+    p.isScreenLessThanMaxWidth &&
+    css`
+      flex: 1;
+    `};
 `;
 
 export const StepScrollView = styled.ScrollView.attrs<{
@@ -77,7 +97,7 @@ export const Step = styled.TouchableOpacity<{ isActive: boolean }>`
       : p.theme.palette.transparent};
 `;
 
-export const StepDivider = styled(Container)`
+export const StepDivider = styled(Contents)`
   width: ${(p) => (p.isScreenLessThanMaxWidth ? 1 : 50)}px;
   height: ${(p) => (p.isScreenLessThanMaxWidth ? 30 : 1)}px;
   background-color: ${(p) => p.theme.hexToRGB(p.theme.palette.text, 0.1)};
@@ -126,12 +146,20 @@ export const InputContents = styled(StepContainer)`
   padding: ${(p) => (p.isScreenLessThanMaxWidth ? 80 : 20)}px 0px 0px 0px;
 `;
 
-export const NextStepButton = styled(__NextStepButton).attrs((p) => ({
+export const NextStepButton = styled(__NextStepButton).attrs<{
+  isValid: boolean;
+}>((p) => ({
   buttonColor: p.theme.hexToRGB(
-    p.theme.isDarkMode ? p.theme.palette.background : p.theme.palette.text,
-    p.theme.isDarkMode ? 0.6 : 0.3
+    p.isValid
+      ? p.theme.palette.primary
+      : p.theme.isDarkMode
+      ? p.theme.palette.background
+      : p.theme.palette.text,
+    p.isValid ? 1 : p.theme.isDarkMode ? 0.6 : 0.3
   ),
-}))`
+}))<{
+  isValid: boolean;
+}>`
   border-radius: ${(p) => p.theme.layout.radius * 5}px;
 `;
 

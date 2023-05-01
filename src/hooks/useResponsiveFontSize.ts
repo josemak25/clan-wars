@@ -20,7 +20,7 @@ export function useResponsiveFontSize() {
   // guideline height for standard 5" device screen is 680
   const value = (
     fontSize: number,
-    standardScreenHeight = !isDesktopOrLaptop ? height : width
+    standardScreenHeight = !isDesktopOrLaptop ? height : width + 100
   ): number => {
     const heightPercent = (fontSize * deviceHeight) / standardScreenHeight;
     return Math.round(heightPercent);

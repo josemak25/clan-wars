@@ -9,6 +9,7 @@ const initialState: ISettingsState = {
   colorMode: IColorMode.LIGHT,
   isDetailModalVisible: false,
   isReceiveNotifications: true,
+  isLogoUploadCompleted: false,
   isAddPlayerModalVisible: false,
   screen: SwitchScreen.UNAUTHENTICATED_SCREENS,
 };
@@ -36,6 +37,10 @@ export const { reducer: settingsReducer, actions: settingsActions } =
 
       toggleDetailModalVisibility: (state) => {
         state.isDetailModalVisible = !state.isDetailModalVisible;
+      },
+
+      toggleIsLogoUploadCompleted: (state, action: PayloadAction<boolean>) => {
+        state.isLogoUploadCompleted = action.payload;
       },
 
       changeScreen: (state, action: PayloadAction<SwitchScreen>) => {

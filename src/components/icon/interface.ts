@@ -1,3 +1,4 @@
+import { ViewStyle } from "react-native";
 import { SvgProps } from "react-native-svg";
 
 import { Logo } from "./logo";
@@ -71,4 +72,5 @@ export type IconProps = SvgProps & {
   color?: string;
   isOnlyIcon?: boolean;
   avatarId?: AvatarType;
+  containerStyle?: ViewStyle;
 };

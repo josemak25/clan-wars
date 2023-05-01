@@ -1,12 +1,20 @@
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
+import { shallowEqual } from "react-redux";
 import { ImagePickerAsset } from "expo-image-picker";
 
 import { uploadFile } from "../config/network";
+import { useSelector, useDispatch } from "./store";
+import { settingsActions } from "../providers/store/reducers";
 
 export const useLogoUpload = () => {
-  const isComplete = useRef(false);
+  const dispatch = useDispatch();
   const [progress, setProgress] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+
+  const { isLogoUploadCompleted } = useSelector(
+    ({ settings }) => settings,
+    shallowEqual
+  );
 
   const cancelUpload = () => setIsLoading(false);
 
@@ -18,10 +26,10 @@ export const useLogoUpload = () => {
   const uploadLogo = async (
     file: ImagePickerAsset & { extension: string }
   ): Promise<string> => {
-    isComplete.current = false;
+    dispatch(settingsActions.toggleIsLogoUploadCompleted(false));
     setIsLoading(true);
     const image_url = await uploadFile(file, onProgress);
-    isComplete.current = true;
+    dispatch(settingsActions.toggleIsLogoUploadCompleted(true));
     setIsLoading(false);
     return image_url;
   };
@@ -32,8 +40,8 @@ export const useLogoUpload = () => {
       isLoading,
       uploadLogo,
       cancelUpload,
-      isComplete: isComplete.current,
+      isComplete: isLogoUploadCompleted,
     }),
-    [progress, isLoading, isComplete, uploadLogo, cancelUpload]
+    [progress, isLoading, isLogoUploadCompleted, uploadLogo, cancelUpload]
   );
 };

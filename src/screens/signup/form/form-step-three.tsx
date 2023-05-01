@@ -1,9 +1,9 @@
 import React, { Fragment } from "react";
-import { Linking } from "react-native";
 import { FormattedMessage } from "react-intl";
+import { Controller } from "react-hook-form";
 import * as ImagePicker from "expo-image-picker";
+import { Linking, Platform } from "react-native";
 import { useTheme } from "styled-components/native";
-import { Controller, useForm } from "react-hook-form";
 import Animated, { FadeInUp, FadeOutUp } from "react-native-reanimated";
 
 import messages from "../messages";
@@ -30,11 +30,11 @@ import {
 } from "../signup.styles";
 
 export const FormStepThree: React.FC<FormStepProps> = ({
+  watch,
   errors,
   control,
   setValue,
   setError,
-  getValues,
   clearErrors,
 }) => {
   const { layout, palette, hexToRGB } = useTheme();
@@ -50,19 +50,10 @@ export const FormStepThree: React.FC<FormStepProps> = ({
   } = useLogoUpload();
 
   const progress =
-    (Number(progressLayout?.width || 0) / 100) * uploadedProgress;
+    (Number(progressLayout?.width || 0) / 100) *
+    (isComplete ? 100 : uploadedProgress);
 
-  const clan_logo = getValues("clan_logo");
-  const clan_name = getValues("clan_name");
-
-  console.log({ clan_logo, clan_name });
-  console.log({
-    progress,
-    isLoading,
-    isComplete,
-    progressLayout,
-    uploadedProgress,
-  });
+  const [clan_logo, clan_name] = watch(["clan_logo", "clan_name"]);
 
   const pickLogo = async (): Promise<void> => {
     const status = await requestPermission();
@@ -89,7 +80,10 @@ export const FormStepThree: React.FC<FormStepProps> = ({
 
     const file = result.assets[0];
     const EXTENSIONS = ["png", "jpeg", "jpg", "gif"];
-    const extension = file.uri?.split(";")[0].split("/")[1];
+    const extension = Platform.select({
+      web: file.uri?.split(";")[0].split("/")[1],
+      default: file.uri.substring(file.uri.length - 4).split(".")[1],
+    });
 
     if (!EXTENSIONS.includes(extension)) {
       return setError("clan_logo", { message: "Image format not supported" });

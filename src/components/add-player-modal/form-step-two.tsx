@@ -1,7 +1,7 @@
 import React, { Fragment, useMemo } from "react";
+import { Controller } from "react-hook-form";
 import { FormattedMessage } from "react-intl";
 import { useTheme } from "styled-components/native";
-import { Controller, useForm } from "react-hook-form";
 
 import { Icon } from "../icon";
 import messages from "./messages";
@@ -23,22 +23,24 @@ import {
 } from "./add-player-modal.styles";
 
 type FormStepOneProps = {
+  player?: ITournamentTeam;
   onButtonPress: VoidFunction;
   isScreenLessThanMaxWidth: boolean;
-} & FormStepProps<Partial<ITournamentTeam>>;
+} & Partial<FormStepProps<Partial<ITournamentTeam>>>;
 
 export const FormStepTwo: React.FC<FormStepOneProps> = ({
+  watch,
+  player,
   errors,
   control,
+  setValue,
   onButtonPress,
   isScreenLessThanMaxWidth,
 }) => {
   const { palette } = useTheme();
   const { avatarValidation } = useFormValidation();
-  const { watch, setValue } = useForm<Partial<ITournamentTeam>>();
+  const avatar = watch?.("avatar") || player?.avatar;
   const chunks = useMemo(() => chunk(avatarList, avatarList.length / 2), []);
-
-  const avatar = watch("avatar");
 
   return (
     <InputContents isScreenLessThanMaxWidth={isScreenLessThanMaxWidth}>
@@ -46,25 +48,24 @@ export const FormStepTwo: React.FC<FormStepOneProps> = ({
         name="avatar"
         control={control}
         rules={avatarValidation}
+        defaultValue={player?.avatar}
         render={() => (
           <Fragment>
             <ErrorMessageContainer>
-              {<Label error={!!errors.avatar}>Click to pick an image</Label>}
-              {errors.avatar && (
-                <ErrorMessage>{errors.avatar.message}</ErrorMessage>
+              {<Label error={!!errors?.avatar}>Click to pick an image</Label>}
+              {errors?.avatar && (
+                <ErrorMessage>{errors?.avatar.message}</ErrorMessage>
               )}
             </ErrorMessageContainer>
 
             {chunks.map((chunk, key) => (
               <AvatarScrollView key={key}>
                 {chunk.map((name) => (
-                  <Avatar key={name} onPress={() => setValue("avatar", name)}>
+                  <Avatar key={name} onPress={() => setValue?.("avatar", name)}>
                     <Icon
                       name="avatar"
                       avatarId={name}
-                      backgroundColor={
-                        name === avatar ? palette.primary : undefined
-                      }
+                      color={name === avatar ? palette.primary : undefined}
                     />
                   </Avatar>
                 ))}
@@ -76,6 +77,7 @@ export const FormStepTwo: React.FC<FormStepOneProps> = ({
 
       <Spacer size={60} />
       <NextStepButton
+        isValid={!!avatar}
         onPress={onButtonPress}
         style={{
           elevation: 5,

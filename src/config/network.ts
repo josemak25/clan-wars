@@ -52,6 +52,7 @@ export const signInGuest = async (
  * @returns Promise<{ error: AuthError | null }>
  */
 export const signOutGuest = async (): Promise<{ error: AuthError | null }> => {
+  await AsyncStorage.clear();
   return supabase.auth.signOut();
 };
 

@@ -11,7 +11,6 @@ import { Providers } from "./src/providers";
 import { Navigation } from "./src/navigation";
 import { WebTabs } from "./src/navigation/tabs-web";
 import { CrashScreen } from "./src/components/error-boundary";
-import { AddPlayerModal } from "./src/components/add-player-modal";
 import * as serviceWorkerRegistration from "./src/service-worker-registration";
 
 if (__DEV__) {
@@ -31,7 +30,6 @@ export default function App() {
         <Providers>
           <Navigation />
           {Platform.select({ web: <WebTabs /> })}
-          <AddPlayerModal />
         </Providers>
       </ErrorBoundary>
     </GestureHandlerRootView>

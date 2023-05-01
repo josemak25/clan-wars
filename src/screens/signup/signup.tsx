@@ -1,15 +1,18 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
+import { Keyboard } from "react-native";
 import { shallowEqual } from "react-redux";
 import { FormattedMessage } from "react-intl";
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Animated, { FadeInLeft, FadeInRight } from "react-native-reanimated";
 
 import messages from "./messages";
-import { useSelector } from "../../hooks";
 import { IFormStep } from "../../../types";
 import { generateId } from "../../helpers";
+import { useSelector } from "../../hooks";
 import { PaymentModal } from "../../components/paystack";
 import { RootStackScreenProps } from "../../../types/navigation";
+import { ConfirmPaymentModal } from "../../components/confirm-payment-modal";
 import { ITournamentClan } from "../../providers/store/reducers/tournament/interfaces";
 import {
   FormStepOne,
@@ -80,11 +83,14 @@ const forms = [
   FormStepFive,
 ];
 
-export const SignUpScreen: React.FC<RootStackScreenProps<"SignUpScreen">> = ({
-  navigation,
-}) => {
+export const SignUpScreen: React.FC<
+  RootStackScreenProps<"SignUpScreen">
+> = () => {
   const [isNext, setIsNext] = useState(true);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(4);
+  const [isConfirmed, setIsConfirmed] = useState(false);
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
   const [formSteps, setFormSteps] = useState(defaultFormSteps);
   const [clan, setClan] = useState<ITournamentClan | null>(null);
 
@@ -94,16 +100,18 @@ export const SignUpScreen: React.FC<RootStackScreenProps<"SignUpScreen">> = ({
   );
 
   const {
+    watch,
     control,
     trigger,
     setError,
     setValue,
-    getValues,
     clearErrors,
     handleSubmit,
     getFieldState,
     formState: { errors },
   } = useForm<ITournamentClan>();
+
+  const team = watch("team") || [];
 
   const isFirstPageOfFormActive = currentIndex === 0;
   const isLastPageOfFormActive = currentIndex === formSteps.length - 1;
@@ -116,7 +124,21 @@ export const SignUpScreen: React.FC<RootStackScreenProps<"SignUpScreen">> = ({
 
   const validateCurrentFormBeforeRoute = async () => {
     const { key } = formSteps[currentIndex];
-    await trigger(key);
+
+    const teamLength = team.filter(({ player_ign }) => player_ign).length;
+
+    if (key === "team") {
+      setError("team", {
+        message: !teamLength
+          ? "Team is required"
+          : teamLength < selectedTournament?.team_size!
+          ? `You must add all players`
+          : undefined,
+      });
+    } else {
+      await trigger(key);
+    }
+
     return getFieldState(key).error?.message;
   };
 
@@ -143,7 +165,14 @@ export const SignUpScreen: React.FC<RootStackScreenProps<"SignUpScreen">> = ({
   };
 
   const onSubmit: SubmitHandler<ITournamentClan> = (data) => {
+    Keyboard.dismiss();
+    setIsLoading(!isLoading);
     setClan(data);
+
+    setTimeout(() => {
+      setIsLoading(false);
+      bottomSheetRef.current?.present();
+    }, 500);
   };
 
   return (
@@ -163,11 +192,11 @@ export const SignUpScreen: React.FC<RootStackScreenProps<"SignUpScreen">> = ({
                 entering={isNext ? FadeInRight : FadeInLeft}
               >
                 <Form
+                  watch={watch}
                   errors={errors}
                   control={control}
                   setError={setError}
                   setValue={setValue}
-                  getValues={getValues}
                   clearErrors={clearErrors}
                 />
               </Animated.View>
@@ -183,6 +212,7 @@ export const SignUpScreen: React.FC<RootStackScreenProps<"SignUpScreen">> = ({
           )}
 
           <NextStepButton
+            loading={isLoading}
             onPress={isLastPageOfFormActive ? handleSubmit(onSubmit) : goNext}
           >
             <FormattedMessage
@@ -194,10 +224,23 @@ export const SignUpScreen: React.FC<RootStackScreenProps<"SignUpScreen">> = ({
         </ButtonContainer>
       </MaxWidthContainer>
 
+      <ConfirmPaymentModal
+        team={[
+          { id: "avatar_1", avatar: "avatar_1", player_ign: "十・Goldpurlp" },
+          { id: "avatar_10", avatar: "avatar_10", player_ign: "十・Mistake" },
+          { id: "avatar_11", avatar: "avatar_11" },
+          { id: "avatar_20", avatar: "avatar_20" },
+        ]}
+        bottomSheetRef={bottomSheetRef}
+        selectedTournament={selectedTournament}
+        confirmPayment={() => setIsConfirmed(true)}
+      />
+
       <PaymentModal
         clan={clan}
         onClose={() => {}}
         onSuccess={() => {}}
+        isVisible={isConfirmed}
         selectedTournament={selectedTournament}
       />
     </Container>

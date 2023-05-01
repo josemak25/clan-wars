@@ -9,6 +9,7 @@ import {
 } from "../../providers/store/reducers/tournament/interfaces";
 
 type PaymentModalProps = {
+  isVisible: boolean;
   onClose: () => void;
   onSuccess: () => void;
   clan: ITournamentClan | null;
@@ -18,16 +19,17 @@ type PaymentModalProps = {
 export const PaymentModal: React.FC<PaymentModalProps> = ({
   clan,
   onClose,
+  isVisible,
   onSuccess,
   selectedTournament,
 }) => {
   const paystackRef = useRef<paystackProps.PayStackRef>(null);
 
   useEffect(() => {
-    if (clan) {
+    if (clan && isVisible) {
       paystackRef.current?.startTransaction();
     }
-  }, [clan]);
+  }, [clan, isVisible]);
 
   return (
     <Paystack

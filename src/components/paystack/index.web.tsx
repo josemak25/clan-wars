@@ -9,6 +9,7 @@ import {
 } from "../../providers/store/reducers/tournament/interfaces";
 
 type PaymentModalProps = {
+  isVisible: boolean;
   onClose: () => void;
   onSuccess: () => void;
   clan: ITournamentClan | null;
@@ -18,6 +19,7 @@ type PaymentModalProps = {
 export const PaymentModal: React.FC<PaymentModalProps> = ({
   clan,
   onClose,
+  isVisible,
   onSuccess,
   selectedTournament,
 }) => {
@@ -30,10 +32,10 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
   });
 
   useEffect(() => {
-    if (clan) {
+    if (clan && isVisible) {
       initializePayment(onSuccess, onClose);
     }
-  }, [clan]);
+  }, [clan, isVisible]);
 
   return null;
 };

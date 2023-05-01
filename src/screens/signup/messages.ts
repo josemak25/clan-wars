@@ -101,6 +101,10 @@ const messages = defineMessages({
     id: "signup.add_fourth_player",
     defaultMessage: "Add fourth player",
   },
+  add_your_players: {
+    id: "signup.add_your_players",
+    defaultMessage: "Please add your players",
+  },
 
   back: {
     id: "signup.back",

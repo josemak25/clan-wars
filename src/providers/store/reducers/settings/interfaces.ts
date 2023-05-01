@@ -19,6 +19,7 @@ export interface ISettingsState {
   screen: SwitchScreen;
   colorMode: IColorMode;
   isDetailModalVisible: boolean;
+  isLogoUploadCompleted: boolean;
   isReceiveNotifications: boolean;
   isAddPlayerModalVisible: boolean;
 }

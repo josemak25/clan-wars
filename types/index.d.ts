@@ -3,9 +3,10 @@ import {
   Control,
   useForm,
   FieldErrors,
+  UseFormWatch,
   UseFormSetValue,
   UseFormSetError,
-  UseFormGetValues,
+  UseFormClearErrors,
 } from "react-hook-form";
 import {
   ITournamentClan,
@@ -35,12 +36,12 @@ export interface IAddPlayerFormStep
 }
 
 export type FormStepProps<T = ITournamentClan> = {
+  watch: UseFormWatch<T>;
   errors: FieldErrors<T>;
   control: Control<T, any>;
   setValue: UseFormSetValue<T>;
   setError: UseFormSetError<T>;
   clearErrors: UseFormClearErrors<T>;
-  getValues: UseFormGetValues<ITournamentClan>;
 };
 
 export interface GroupInterface {

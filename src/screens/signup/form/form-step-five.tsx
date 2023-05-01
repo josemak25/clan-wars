@@ -34,9 +34,9 @@ export const FormStepFive: React.FC<FormStepProps> = ({
 
       <Spacer size={40} />
       <Controller
-        name="contact_email_address"
         control={control}
-        rules={emailValidation}
+        name="contact_email_address"
+        // rules={emailValidation}
         render={({ field: { onChange, ref, ...rest } }) => (
           <Input
             {...rest}
