@@ -33,6 +33,10 @@ const messages = defineMessages({
     id: "signup.clan_logo_details",
     defaultMessage: `Please select and upload a logo of your clan for the tournament.`,
   },
+  pick_a_clan_logo: {
+    id: "signup.pick_a_clan_logo",
+    defaultMessage: `Please select your image.`,
+  },
   build_clan_team: {
     id: "signup.build_clan_team",
     defaultMessage: `Alone we can win lobbies, but together we can win tournaments.`,

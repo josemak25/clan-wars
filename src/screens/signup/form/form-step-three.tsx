@@ -27,6 +27,7 @@ import {
   UploadIconContainer,
   LogoUploadContainer,
   ErrorMessageContainer,
+  Label,
 } from "../signup.styles";
 
 export const FormStepThree: React.FC<FormStepProps> = ({
@@ -129,11 +130,15 @@ export const FormStepThree: React.FC<FormStepProps> = ({
         rules={clanLogoValidation}
         render={() => (
           <Fragment>
-            {errors.clan_logo && (
-              <ErrorMessageContainer>
+            <ErrorMessageContainer>
+              <Label error={!!errors.team?.message}>
+                <FormattedMessage {...messages.pick_a_clan_logo} />
+              </Label>
+
+              {errors.clan_logo && (
                 <ErrorMessage>{errors.clan_logo.message}</ErrorMessage>
-              </ErrorMessageContainer>
-            )}
+              )}
+            </ErrorMessageContainer>
 
             <LogoContainer>
               <LogoContents onPress={pickLogo} error={!!errors.clan_logo}>
@@ -154,7 +159,7 @@ export const FormStepThree: React.FC<FormStepProps> = ({
                       isUploadComplete={isComplete}
                     />
 
-                    <Title size={16}>
+                    <Title size={16} zIndex={1}>
                       <FormattedMessage
                         {...messages[
                           isComplete ? "upload_completed" : "uploading_logo"

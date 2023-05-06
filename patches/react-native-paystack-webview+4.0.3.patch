@@ -1,0 +1,37 @@
+diff --git a/node_modules/react-native-paystack-webview/lib/paystack.js b/node_modules/react-native-paystack-webview/lib/paystack.js
+index 47fd9ac..aaeef3b 100644
+--- a/node_modules/react-native-paystack-webview/lib/paystack.js
++++ b/node_modules/react-native-paystack-webview/lib/paystack.js
+@@ -108,6 +108,7 @@ const Paystack = ({ paystackKey, billingEmail, phone, lastName, firstName, amoun
+                 const reference = webResponse.transactionRef;
+                 if (onSuccess) {
+                     onSuccess({
++                        ...reference,
+                         status: 'success',
+                         transactionRef: reference,
+                         data: webResponse,
+diff --git a/node_modules/react-native-paystack-webview/lib/types/index.d.ts b/node_modules/react-native-paystack-webview/lib/types/index.d.ts
+index 80d6a92..2e192ae 100644
+--- a/node_modules/react-native-paystack-webview/lib/types/index.d.ts
++++ b/node_modules/react-native-paystack-webview/lib/types/index.d.ts
+@@ -1,10 +1,18 @@
+ import * as React from 'react';
+ export declare type Currency = 'NGN' | 'GHS' | 'USD' | 'ZAR';
+-export declare type PaymentChannels = 'bank' | 'card' | 'qr' | 'ussd' | 'mobile_money';
++export declare type PaymentChannels = 'bank_transfer' | 'bank' | 'card' | 'qr' | 'ussd' | 'mobile_money';
+ interface Response {
+     status: string;
++    trxref: string;
++    trans: string;
++    status: string;
++    message: string;
++    reference: string;
++    transaction: string;
++    redirecturl: string
+ }
+-interface SuccessResponse extends Response {
++
++export interface SuccessResponse extends Response {
+     transactionRef?: string;
+     data?: any;
+ }

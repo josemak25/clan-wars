@@ -1,14 +1,14 @@
-import React, { Fragment, useEffect, useMemo, useRef, useState } from "react";
-import { shallowEqual } from "react-redux";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import { ScrollView } from "react-native";
+import { shallowEqual } from "react-redux";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useTheme } from "styled-components/native";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Animated, {
   FadeInLeft,
   FadeInRight,
-  useAnimatedKeyboard,
   useAnimatedStyle,
+  useAnimatedKeyboard,
 } from "react-native-reanimated";
 import {
   BottomSheetModal,
@@ -41,6 +41,8 @@ import {
   MaxWidthWrapper,
   InputContainer,
 } from "./add-player-modal.styles";
+
+const snapPoints = ["100%"];
 
 const forms = [FormStepOne, FormStepTwo];
 
@@ -92,8 +94,6 @@ export const AddPlayerModal: React.FC<AddPlayerModalProps> = ({
   const isLastPageOfFormActive = currentIndex === formSteps.length - 1;
   const isScreenLessThanMaxWidth = isMinScreenSize(breakpoints.tablet_viewport);
 
-  const snapPoints = useMemo(() => ["100%"], []);
-
   const translateStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: -keyboard.height.value / 3 }],
   }));
@@ -140,11 +140,9 @@ export const AddPlayerModal: React.FC<AddPlayerModalProps> = ({
     clearErrors();
     setCurrentIndex(0);
     setFormSteps(defaultFormSteps);
-    bottomSheetRef.current?.close();
   };
 
   const closeModal = () => {
-    onClose();
     dispatch(settingsActions.toggleAddPlayerModalVisibility());
   };
 
@@ -156,8 +154,8 @@ export const AddPlayerModal: React.FC<AddPlayerModalProps> = ({
       total_kills: 0,
       created_at: date,
       updated_at: date,
-      id: formSteps[0].id,
-      player_id: formSteps[1].id,
+      id: generateId(),
+      player_id: generateId(),
     } as ITournamentTeam);
 
     dispatch(settingsActions.toggleAddPlayerModalVisibility());
@@ -170,14 +168,17 @@ export const AddPlayerModal: React.FC<AddPlayerModalProps> = ({
   useEffect(() => {
     if (isAddPlayerModalVisible) {
       bottomSheetRef.current?.present();
+    } else {
+      bottomSheetRef.current?.close();
     }
   }, [isAddPlayerModalVisible]);
 
   return (
     <BottomSheetModal
-      enablePanDownToClose
+      onDismiss={onClose}
       ref={bottomSheetRef}
       snapPoints={snapPoints}
+      enablePanDownToClose={false}
       handleComponent={() => null}
       backdropComponent={BackdropComponent}
       backgroundStyle={{ backgroundColor: palette.transparent }}

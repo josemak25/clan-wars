@@ -4,22 +4,20 @@ import { ListRenderItem, Platform } from "react-native";
 
 import { Icon } from "../../components/icon";
 import { Tournament } from "../../components/tournament";
+import { FallbackScreen } from "../../components/fallback";
 import { RootStackScreenProps } from "../../../types/navigation";
 import { useDispatch, useResponsiveScreen, useTournaments } from "../../hooks";
+import { ITournament } from "../../providers/store/reducers/tournament/interfaces";
 import {
   settingsActions,
   tournamentActions,
 } from "../../providers/store/reducers";
-import { ITournament } from "../../providers/store/reducers/tournament/interfaces";
 
 import {
-  Title,
   Header,
   FlatList,
-  SubTitle,
   Container,
   EmptyCell,
-  RetryButton,
   ActivityIndicator,
   ListEmptyContainer,
 } from "./home.styles";
@@ -46,12 +44,12 @@ export const HomeScreen: React.FC<RootStackScreenProps<"HomeScreen">> = ({
     navigation.navigate("SignUpScreen");
   };
 
-  const numColumns = Math.min(
-    3,
+  const numColumns = Math.max(
+    1,
     Math.floor(layout.screen.width / (breakpoints.small_mobile + layout.gutter))
   );
 
-  const lastCells = data.length % numColumns || 0;
+  const lastCells = data.length % numColumns;
   const isFillEmptyCells = lastCells !== 0;
   const numberOfEmptyCells = isFillEmptyCells ? numColumns - lastCells : 0;
 
@@ -80,12 +78,11 @@ export const HomeScreen: React.FC<RootStackScreenProps<"HomeScreen">> = ({
       {isLoading && <ActivityIndicator isDesktopOrLaptop={isDesktopOrLaptop} />}
 
       {error && (
-        <Fragment>
-          <Icon size={90} name="error" />
-          <Title>Oops, Something Went Wrong</Title>
-          <SubTitle>Sorry about that! Please try again later</SubTitle>
-          <RetryButton onPress={onRetry}>Try again</RetryButton>
-        </Fragment>
+        <FallbackScreen
+          error={error}
+          resetError={onRetry}
+          subtitle="fetching_data_subtitle"
+        />
       )}
     </ListEmptyContainer>
   );

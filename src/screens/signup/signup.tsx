@@ -7,10 +7,11 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import Animated, { FadeInLeft, FadeInRight } from "react-native-reanimated";
 
 import messages from "./messages";
+import { useSelector } from "../../hooks";
 import { IFormStep } from "../../../types";
 import { generateId } from "../../helpers";
-import { useSelector } from "../../hooks";
 import { PaymentModal } from "../../components/paystack";
+import { SuccessModal } from "../../components/success-modal";
 import { RootStackScreenProps } from "../../../types/navigation";
 import { ConfirmPaymentModal } from "../../components/confirm-payment-modal";
 import { ITournamentClan } from "../../providers/store/reducers/tournament/interfaces";
@@ -90,8 +91,10 @@ export const SignUpScreen: React.FC<
   const [isLoading, setIsLoading] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isConfirmed, setIsConfirmed] = useState(false);
-  const bottomSheetRef = useRef<BottomSheetModal>(null);
+  const successSheetRef = useRef<BottomSheetModal>(null);
   const [formSteps, setFormSteps] = useState(defaultFormSteps);
+  const [paymentReference, setPaymentReference] = useState("");
+  const confirmPaymentSheetRef = useRef<BottomSheetModal>(null);
   const [clan, setClan] = useState<ITournamentClan | null>(null);
 
   const { selectedTournament } = useSelector(
@@ -100,6 +103,7 @@ export const SignUpScreen: React.FC<
   );
 
   const {
+    reset,
     watch,
     control,
     trigger,
@@ -124,7 +128,6 @@ export const SignUpScreen: React.FC<
 
   const validateCurrentFormBeforeRoute = async () => {
     const { key } = formSteps[currentIndex];
-
     const teamLength = team.filter(({ player_ign }) => player_ign).length;
 
     if (key === "team") {
@@ -171,7 +174,7 @@ export const SignUpScreen: React.FC<
 
     setTimeout(() => {
       setIsLoading(false);
-      bottomSheetRef.current?.present();
+      confirmPaymentSheetRef.current?.present();
     }, 500);
   };
 
@@ -226,17 +229,36 @@ export const SignUpScreen: React.FC<
 
       <ConfirmPaymentModal
         team={team}
-        bottomSheetRef={bottomSheetRef}
+        bottomSheetRef={confirmPaymentSheetRef}
         selectedTournament={selectedTournament}
-        confirmPayment={() => setIsConfirmed(true)}
+        confirmPayment={() => {
+          setIsConfirmed(true);
+          setPaymentReference(generateId());
+        }}
       />
+
+      <SuccessModal bottomSheetRef={successSheetRef} />
 
       <PaymentModal
         clan={clan}
-        onClose={() => {}}
-        onSuccess={() => {}}
         isVisible={isConfirmed}
+        reference={paymentReference}
         selectedTournament={selectedTournament}
+        onSuccess={(data) => {
+          console.log({ data, paymentReference });
+
+          if (data.reference !== paymentReference) {
+            return;
+          }
+
+          reset();
+          successSheetRef.current?.present();
+          console.tron?.("onSuccess", data);
+        }}
+        onClose={() => {
+          setIsConfirmed(false);
+          confirmPaymentSheetRef.current?.present();
+        }}
       />
     </Container>
   );

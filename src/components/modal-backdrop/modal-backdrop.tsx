@@ -10,7 +10,7 @@ import Animated, {
 
 export const BottomSheetBackdrop: React.FC<
   BottomSheetBackdropProps & {
-    closeModal: VoidFunction;
+    closeModal?: VoidFunction;
   }
 > = ({ style, animatedIndex, closeModal }) => {
   const { colors } = useTheme();
@@ -36,7 +36,7 @@ export const BottomSheetBackdrop: React.FC<
   );
 
   return (
-    <TouchableWithoutFeedback onPress={closeModal}>
+    <TouchableWithoutFeedback disabled={!closeModal} onPress={closeModal}>
       <Animated.View style={containerStyle} />
     </TouchableWithoutFeedback>
   );

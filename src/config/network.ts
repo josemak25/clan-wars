@@ -5,12 +5,15 @@ import {
 } from "@supabase/supabase-js";
 import { decode } from "base64-arraybuffer";
 import { ImagePickerAsset } from "expo-image-picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { supabase } from "./supabase";
 import { SUPER_BASE_KEY, SUPER_BASE_URL } from "@env";
 import { ISignupGuest, ISigninGuest } from "../providers/auth/interfaces";
-import { ITournament } from "../providers/store/reducers/tournament/interfaces";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  ITournament,
+  ITournamentClan,
+} from "../providers/store/reducers/tournament/interfaces";
 
 /**
  *
@@ -102,6 +105,21 @@ export const uploadFile = async (
 
     xhr.send(decode(payload.base64!));
   });
+};
+
+/**
+ *
+ * @description signout a guest user
+ * @function checkClanNameAvailability
+ * @returns Promise<{ error: AuthError | null }>
+ */
+export const checkClanNameAvailability = async (
+  clan_name: string
+): Promise<PostgrestSingleResponse<{ clan_name: string | unknown }[]>> => {
+  return supabase
+    .from<"tournament_clan", ITournamentClan>("tournament_clan")
+    .select("clan_name")
+    .eq("clan_name", clan_name);
 };
 
 /**

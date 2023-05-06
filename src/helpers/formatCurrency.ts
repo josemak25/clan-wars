@@ -5,9 +5,8 @@
  * @returns string
  */
 
-type FormatOptions = {
+type FormatOptions = Partial<Intl.NumberFormatOptions> & {
   locale?: string;
-  currency?: string;
 };
 
 export const formatCurrency = (
@@ -20,6 +19,7 @@ export const formatCurrency = (
     currency,
     style: "currency",
     minimumSignificantDigits: 1,
+    ...options,
   });
 
   let converted = formatter.format(amount);

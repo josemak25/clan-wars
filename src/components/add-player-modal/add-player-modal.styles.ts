@@ -25,7 +25,7 @@ export const MaxWidthWrapper = styled.View`
   width: ${(p) => p.theme.layout.screen.width - p.theme.layout.gutter * 2}px;
 `;
 
-export const Contents = styled.View<{ isScreenLessThanMaxWidth: boolean }>`
+export const Contents = styled.View<{ isScreenLessThanMaxWidth?: boolean }>`
   background-color: ${(p) => p.theme.palette.background};
   flex-direction: ${(p) => (p.isScreenLessThanMaxWidth ? "row" : "column")};
 `;

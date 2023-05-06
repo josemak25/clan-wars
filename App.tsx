@@ -10,7 +10,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Providers } from "./src/providers";
 import { Navigation } from "./src/navigation";
 import { WebTabs } from "./src/navigation/tabs-web";
-import { CrashScreen } from "./src/components/error-boundary";
+import { FallbackScreen } from "./src/components/fallback";
 import * as serviceWorkerRegistration from "./src/service-worker-registration";
 
 if (__DEV__) {
@@ -26,7 +26,7 @@ SplashScreen.preventAutoHideAsync();
 export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <ErrorBoundary FallbackComponent={CrashScreen}>
+      <ErrorBoundary FallbackComponent={FallbackScreen}>
         <Providers>
           <Navigation />
           {Platform.select({ web: <WebTabs /> })}

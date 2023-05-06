@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { Platform } from "react-native";
 import { Controller } from "react-hook-form";
 import { FormattedMessage } from "react-intl";
 
@@ -65,6 +66,7 @@ export const FormStepOne: React.FC<FormStepOneProps> = ({
             label="Enter player IGN"
             placeholder="十・Drifter"
             error={errors?.player_ign}
+            autoFocus={Platform.OS !== "web"}
             onChangeText={(text) => {
               onChange(text);
               if (errors?.player_ign) {

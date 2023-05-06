@@ -3,11 +3,25 @@ import { FallbackComponentProps } from "react-native-error-boundary";
 import { Text, View, SafeAreaView, TouchableOpacity } from "react-native";
 
 import { Icon } from "../icon";
+import messages from "./messages";
+import { IconType } from "../icon/interface";
 import { makeUseStyles, reportError } from "../../helpers";
+import { translator } from "../../providers/internationalization";
 
-export const CrashScreen: React.FC<FallbackComponentProps> = ({
+type FallbackScreenProps = FallbackComponentProps & {
+  icon?: IconType;
+  title?: keyof typeof messages;
+  subtitle?: keyof typeof messages;
+  buttonText?: keyof typeof messages;
+};
+
+export const FallbackScreen: React.FC<FallbackScreenProps> = ({
   error,
   resetError,
+  icon = "error",
+  title = "default_title",
+  subtitle = "default_subtitle",
+  buttonText = "default_button_text",
 }) => {
   const { styles } = useStyles();
 
@@ -19,15 +33,18 @@ export const CrashScreen: React.FC<FallbackComponentProps> = ({
   return (
     <SafeAreaView style={styles.safeView}>
       <View style={styles.container}>
-        <Icon size={100} name="error" />
-        <Text style={styles.title}>Oops, Something Went Wrong</Text>
-        <Text style={[styles.title, styles.subtitle]}>
-          The app ran into a problem and could not continue. We apologize for
-          any inconvenience this has caused! Press the button below to restart
-          the app. Please contact us if this issue persists.
+        <Icon size={90} name={icon} />
+        <Text style={styles.title}>
+          {translator?.formatMessage?.(messages[title])}
         </Text>
-        <TouchableOpacity onPress={handleClearError} style={styles.button}>
-          <Text style={styles.text}>Try again</Text>
+        <Text style={[styles.title, styles.subtitle]}>
+          {translator?.formatMessage?.(messages[subtitle])}
+        </Text>
+
+        <TouchableOpacity style={styles.button} onPress={handleClearError}>
+          <Text style={styles.text}>
+            {translator?.formatMessage?.(messages[buttonText])}
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -65,12 +82,12 @@ const useStyles = makeUseStyles(
     },
     button: {
       height: 50,
+      minWidth: 300,
       borderWidth: 1,
       marginVertical: 45,
       alignItems: "center",
       justifyContent: "center",
       borderRadius: layout.radius / 2,
-      minWidth: breakpoints.small_mobile / 1.2,
       borderColor: hexToRGB(palette.text, 0.2),
     },
     text: {

@@ -34,6 +34,7 @@ export const FormStepTwo: React.FC<FormStepOneProps> = ({
   errors,
   control,
   setValue,
+  clearErrors,
   onButtonPress,
   isScreenLessThanMaxWidth,
 }) => {
@@ -61,7 +62,15 @@ export const FormStepTwo: React.FC<FormStepOneProps> = ({
             {chunks.map((chunk, key) => (
               <AvatarScrollView key={key}>
                 {chunk.map((name) => (
-                  <Avatar key={name} onPress={() => setValue?.("avatar", name)}>
+                  <Avatar
+                    key={name}
+                    onPress={() => {
+                      if (errors?.avatar) {
+                        clearErrors?.("avatar");
+                      }
+                      setValue?.("avatar", name);
+                    }}
+                  >
                     <Icon
                       name="avatar"
                       avatarId={name}

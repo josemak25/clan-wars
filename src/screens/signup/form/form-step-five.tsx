@@ -35,11 +35,12 @@ export const FormStepFive: React.FC<FormStepProps> = ({
       <Spacer size={40} />
       <Controller
         control={control}
+        rules={emailValidation}
         name="contact_email_address"
-        // rules={emailValidation}
         render={({ field: { onChange, ref, ...rest } }) => (
           <Input
             {...rest}
+            autoFocus
             placeholder="info@anonymous.com"
             error={errors.contact_email_address}
             label={formatMessage(messages.best_contact_clan)}

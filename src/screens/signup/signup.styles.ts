@@ -54,10 +54,20 @@ export const FormStepScrollViewWrapper = styled.View`
   flex-direction: row;
 `;
 
-export const Title = styled(Text)<{ error?: boolean; size?: number }>`
+export const Title = styled(Text)<{
+  error?: boolean;
+  size?: number;
+  zIndex?: number;
+}>`
   font-family: ${(p) => p.theme.fonts.variants.roboto_bold};
   font-size: ${(p) => p.theme.fonts.scale.value(p.size || 35)}px;
   color: ${(p) => (p.error ? p.theme.palette.error : p.theme.palette.text)};
+
+  ${(p) =>
+    p.zIndex &&
+    css`
+      z-index: ${p.zIndex};
+    `}
 `;
 
 export const SubTitle = styled(Title)<{ opacity?: number }>`
@@ -182,6 +192,7 @@ export const UploadProgress = styled.View<{
   isUploadComplete: boolean;
 }>`
   top: 0;
+  left: 0;
   bottom: 0;
   position: absolute;
   width: ${(p) => p.progress - 3}px;

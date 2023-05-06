@@ -1,7 +1,12 @@
 import React, { PropsWithChildren } from "react";
 import dayjs from "dayjs";
 import { shallowEqual } from "react-redux";
-import { IntlShape, IntlProvider as BaseIntlProvider } from "react-intl";
+import {
+  IntlShape,
+  createIntl,
+  createIntlCache,
+  RawIntlProvider,
+} from "react-intl";
 
 import "intl";
 import "dayjs/locale/fr";
@@ -16,20 +21,20 @@ import { Locale } from "../store/reducers/settings/interfaces";
 
 export let translator = {} as IntlShape;
 
+// This is optional but highly recommended
+// since it prevents memory leak
+const cache = createIntlCache();
+
 const messages: Record<Locale, {}> = { en, fr, es };
 
 export const IntlProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { locale } = useSelector(({ settings }) => settings, shallowEqual);
-
   dayjs.locale(locale);
 
-  return (
-    <BaseIntlProvider
-      locale={locale}
-      messages={messages[locale]}
-      defaultLocale={LANGUAGE_DEFAULT}
-    >
-      {children}
-    </BaseIntlProvider>
+  translator = createIntl(
+    { locale, defaultLocale: LANGUAGE_DEFAULT, messages: messages[locale] },
+    cache
   );
+
+  return <RawIntlProvider value={translator}>{children}</RawIntlProvider>;
 };

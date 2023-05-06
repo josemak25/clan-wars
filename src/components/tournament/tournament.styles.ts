@@ -12,7 +12,7 @@ export const Container = styled.TouchableOpacity`
   min-height: 150px;
   align-self: center;
   border-radius: ${(p) => p.theme.layout.radius}px;
-  max-width: ${Platform.select({ default: 400, web: 450 })}px;
+  max-width: ${Platform.select({ default: 400, web: 420 })}px;
   background-color: ${(p) => p.theme.palette.card_background};
 `;
 

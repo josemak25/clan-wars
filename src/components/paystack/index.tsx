@@ -1,19 +1,20 @@
 import React, { useEffect, useRef } from "react";
 import { PAY_STACK_PUBLIC_KEY } from "@env";
 import { Paystack, paystackProps } from "react-native-paystack-webview";
+import { SuccessResponse } from "react-native-paystack-webview/lib/types";
 
-import { generateId } from "../../helpers";
 import {
   ITournament,
   ITournamentClan,
 } from "../../providers/store/reducers/tournament/interfaces";
 
 type PaymentModalProps = {
+  reference: string;
   isVisible: boolean;
   onClose: () => void;
-  onSuccess: () => void;
   clan: ITournamentClan | null;
   selectedTournament: ITournament | null;
+  onSuccess: (response: SuccessResponse) => void;
 };
 
 export const PaymentModal: React.FC<PaymentModalProps> = ({
@@ -21,15 +22,16 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
   onClose,
   isVisible,
   onSuccess,
+  reference,
   selectedTournament,
 }) => {
   const paystackRef = useRef<paystackProps.PayStackRef>(null);
 
   useEffect(() => {
-    if (clan && isVisible) {
+    if (clan && reference && isVisible) {
       paystackRef.current?.startTransaction();
     }
-  }, [clan, isVisible]);
+  }, [clan, reference, isVisible]);
 
   return (
     <Paystack
@@ -37,7 +39,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
       ref={paystackRef}
       onCancel={onClose}
       onSuccess={onSuccess}
-      refNumber={generateId()}
+      refNumber={reference}
       paystackKey={PAY_STACK_PUBLIC_KEY}
       billingEmail={clan?.contact_email_address!}
       amount={selectedTournament?.registration_fee!}
