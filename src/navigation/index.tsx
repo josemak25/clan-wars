@@ -11,7 +11,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { TabNavigator } from "./tabs";
 import { BackButton } from "./styles";
-import { usePrepareApp } from "../hooks";
 import { HomeScreen } from "../screens/home";
 import { SignUpScreen } from "../screens/signup";
 import { StackParamList } from "../../types/navigation";
@@ -20,11 +19,6 @@ const Stack = createNativeStackNavigator<StackParamList>();
 
 export const Navigation = () => {
   const { isDarkMode, palette } = useTheme();
-  const { appIsReady, onAppIsReady } = usePrepareApp();
-
-  if (!appIsReady) {
-    return null;
-  }
 
   const theme: Theme = {
     ...DefaultTheme,
@@ -35,7 +29,7 @@ export const Navigation = () => {
   };
 
   return (
-    <NavigationContainer theme={theme} onReady={onAppIsReady}>
+    <NavigationContainer theme={theme}>
       <Stack.Navigator
         initialRouteName="HomeScreen"
         screenOptions={{

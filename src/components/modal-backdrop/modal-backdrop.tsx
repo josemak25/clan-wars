@@ -1,5 +1,4 @@
 import React, { useMemo } from "react";
-import { useTheme } from "styled-components/native";
 import { TouchableWithoutFeedback } from "react-native";
 import { BottomSheetBackdropProps } from "@gorhom/bottom-sheet";
 import Animated, {
@@ -8,12 +7,14 @@ import Animated, {
   useAnimatedStyle,
 } from "react-native-reanimated";
 
+import { makeUseStyles } from "../../helpers";
+
 export const BottomSheetBackdrop: React.FC<
   BottomSheetBackdropProps & {
     closeModal?: VoidFunction;
   }
 > = ({ style, animatedIndex, closeModal }) => {
-  const { colors } = useTheme();
+  const { colors } = useStyles();
 
   // animated variables
   const containerAnimatedStyle = useAnimatedStyle(() => ({
@@ -41,3 +42,5 @@ export const BottomSheetBackdrop: React.FC<
     </TouchableWithoutFeedback>
   );
 };
+
+const useStyles = makeUseStyles(() => ({}));

@@ -1,16 +1,10 @@
-import React, { Fragment, PropsWithChildren, useEffect, useState } from "react";
+import React, { useState, Fragment, useEffect, PropsWithChildren } from "react";
 import NetInfo from "@react-native-community/netinfo";
-import DEFAULT_CONFIGURATION from "@react-native-community/netinfo/src/internal/defaultConfiguration";
 
 import { FallbackScreen } from "../../components/fallback";
 
-NetInfo.configure({
-  ...DEFAULT_CONFIGURATION,
-  reachabilityUrl: "https://randomuser.me/api",
-  reachabilityTest: async (response) => response.status === 200,
-});
-
 export const NetworkProvider: React.FC<PropsWithChildren> = ({ children }) => {
+  const [isVisible, setIsVisible] = useState(false);
   const [isOffline, setOfflineStatus] = useState(false);
 
   const onRetry = async () => {
@@ -21,7 +15,6 @@ export const NetworkProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((netInfo) => {
-      // console.log({ netInfo });
       const offline = !(netInfo.isConnected && netInfo.isInternetReachable);
       setOfflineStatus(offline);
     });
@@ -31,15 +24,29 @@ export const NetworkProvider: React.FC<PropsWithChildren> = ({ children }) => {
     };
   }, []);
 
-  return isOffline ? (
-    <FallbackScreen
-      icon="network"
-      resetError={onRetry}
-      title="no_network_title"
-      subtitle="no_network_subtitle"
-      error={new Error("No internet connection")}
-    />
-  ) : (
-    <Fragment>{children}</Fragment>
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (isVisible !== isOffline) {
+        setIsVisible(isOffline);
+      }
+    }, 1000);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [isOffline]);
+
+  return (
+    <Fragment>
+      {children}
+      <FallbackScreen
+        icon="network"
+        resetError={onRetry}
+        isVisible={isVisible}
+        title="no_network_title"
+        subtitle="no_network_subtitle"
+        error={new Error("No internet connection")}
+      />
+    </Fragment>
   );
 };

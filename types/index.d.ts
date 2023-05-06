@@ -48,3 +48,9 @@ export interface GroupInterface {
   id: number;
   name: string;
 }
+
+export type FallbackComponentProps = {
+  isModal?: boolean;
+  error?: Error | null;
+  resetError: VoidFunction;
+};

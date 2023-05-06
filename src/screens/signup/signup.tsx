@@ -178,6 +178,16 @@ export const SignUpScreen: React.FC<
     }, 500);
   };
 
+  const resetForm = () => {
+    reset();
+    setClan(null);
+    setCurrentIndex(0);
+    setIsLoading(false);
+    setIsConfirmed(false);
+    setPaymentReference("");
+    setFormSteps(defaultFormSteps);
+  };
+
   return (
     <Container>
       <MaxWidthContainer>
@@ -244,16 +254,11 @@ export const SignUpScreen: React.FC<
         isVisible={isConfirmed}
         reference={paymentReference}
         selectedTournament={selectedTournament}
-        onSuccess={(data) => {
-          console.log({ data, paymentReference });
-
-          if (data.reference !== paymentReference) {
-            return;
+        onSuccess={({ reference }) => {
+          if (reference === paymentReference) {
+            resetForm();
+            successSheetRef.current?.present();
           }
-
-          reset();
-          successSheetRef.current?.present();
-          console.tron?.("onSuccess", data);
         }}
         onClose={() => {
           setIsConfirmed(false);

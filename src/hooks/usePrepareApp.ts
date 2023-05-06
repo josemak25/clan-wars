@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import {
   useFonts,
   RobotoCondensed_700Bold,
@@ -6,15 +6,17 @@ import {
   RobotoCondensed_400Regular,
 } from "@expo-google-fonts/roboto-condensed";
 import * as SplashScreen from "expo-splash-screen";
-import { useTheme } from "styled-components/native";
+
+import { FONTS } from "../providers/theme/style";
+
+// Keep the splash screen visible while we fetch resources
+SplashScreen.preventAutoHideAsync();
 
 export const usePrepareApp = () => {
-  const { fonts } = useTheme();
-
   const [appIsReady] = useFonts({
-    [fonts.variants.roboto_bold]: RobotoCondensed_700Bold,
-    [fonts.variants.roboto_light]: RobotoCondensed_300Light,
-    [fonts.variants.roboto_regular]: RobotoCondensed_400Regular,
+    [FONTS.roboto_bold]: RobotoCondensed_700Bold,
+    [FONTS.roboto_light]: RobotoCondensed_300Light,
+    [FONTS.roboto_regular]: RobotoCondensed_400Regular,
   });
 
   const onAppIsReady = useCallback(async () => {
@@ -28,5 +30,9 @@ export const usePrepareApp = () => {
     }
   }, [appIsReady]);
 
-  return { appIsReady, onAppIsReady };
+  useEffect(() => {
+    onAppIsReady();
+  }, [appIsReady]);
+
+  return appIsReady;
 };

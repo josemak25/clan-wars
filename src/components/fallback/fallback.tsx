@@ -1,15 +1,23 @@
-import React from "react";
-import { FallbackComponentProps } from "react-native-error-boundary";
-import { Text, View, SafeAreaView, TouchableOpacity } from "react-native";
+import React, { useCallback } from "react";
+import {
+  Text,
+  View,
+  Modal,
+  StyleSheet,
+  SafeAreaView,
+  TouchableOpacity,
+} from "react-native";
 
 import { Icon } from "../icon";
 import messages from "./messages";
 import { IconType } from "../icon/interface";
+import { FallbackComponentProps } from "../../../types";
 import { makeUseStyles, reportError } from "../../helpers";
 import { translator } from "../../providers/internationalization";
 
 type FallbackScreenProps = FallbackComponentProps & {
   icon?: IconType;
+  isVisible?: boolean;
   title?: keyof typeof messages;
   subtitle?: keyof typeof messages;
   buttonText?: keyof typeof messages;
@@ -19,6 +27,8 @@ export const FallbackScreen: React.FC<FallbackScreenProps> = ({
   error,
   resetError,
   icon = "error",
+  isModal = true,
+  isVisible = false,
   title = "default_title",
   subtitle = "default_subtitle",
   buttonText = "default_button_text",
@@ -26,36 +36,48 @@ export const FallbackScreen: React.FC<FallbackScreenProps> = ({
   const { styles } = useStyles();
 
   const handleClearError = () => {
-    reportError(error);
+    if (error) reportError(error);
     resetError();
   };
 
-  return (
-    <SafeAreaView style={styles.safeView}>
-      <View style={styles.container}>
-        <Icon size={90} name={icon} />
-        <Text style={styles.title}>
-          {translator?.formatMessage?.(messages[title])}
-        </Text>
-        <Text style={[styles.title, styles.subtitle]}>
-          {translator?.formatMessage?.(messages[subtitle])}
-        </Text>
-
-        <TouchableOpacity style={styles.button} onPress={handleClearError}>
-          <Text style={styles.text}>
-            {translator?.formatMessage?.(messages[buttonText])}
+  const renderContent = useCallback(
+    () => (
+      <SafeAreaView style={styles.safeView}>
+        <View style={styles.container}>
+          <Icon size={90} name={icon} />
+          <Text style={styles.title}>
+            {translator?.formatMessage?.(messages[title])}
           </Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+          <Text style={[styles.title, styles.subtitle]}>
+            {translator?.formatMessage?.(messages[subtitle])}
+          </Text>
+
+          <TouchableOpacity style={styles.button} onPress={handleClearError}>
+            <Text style={styles.text}>
+              {translator?.formatMessage?.(messages[buttonText])}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    ),
+    []
+  );
+
+  return isModal ? (
+    <Modal animationType="slide" visible={isVisible}>
+      {renderContent()}
+    </Modal>
+  ) : (
+    renderContent()
   );
 };
 
 const useStyles = makeUseStyles(
-  ({ fonts, palette, layout, hexToRGB, breakpoints }) => ({
+  ({ fonts, palette, layout, hexToRGB, colors, breakpoints }) => ({
     safeView: {
       flex: 1,
       alignItems: "center",
+      justifyContent: "center",
       backgroundColor: palette.background,
     },
     container: {

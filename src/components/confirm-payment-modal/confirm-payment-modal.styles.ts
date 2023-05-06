@@ -15,7 +15,7 @@ export const Container = styled.View<{ isDesktopOrLaptop: boolean }>`
   padding-bottom: ${(p) =>
     Math.min(p.theme.insets.bottom, p.theme.layout.gutter) +
     Platform.select({
-      web: p.theme.layout.gutter * 3.5,
+      // web: p.theme.layout.gutter * 3.5,
       default: p.theme.layout.gutter,
     })}px;
 `;

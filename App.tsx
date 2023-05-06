@@ -1,16 +1,14 @@
 import "react-native-gesture-handler";
 import "@expo/match-media";
 
-import * as React from "react";
 import { Platform } from "react-native";
-import * as SplashScreen from "expo-splash-screen";
-import ErrorBoundary from "react-native-error-boundary";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { Providers } from "./src/providers";
+import { usePrepareApp } from "./src/hooks";
 import { Navigation } from "./src/navigation";
 import { WebTabs } from "./src/navigation/tabs-web";
-import { FallbackScreen } from "./src/components/fallback";
+import { ErrorBoundary } from "./src/components/error-boundary";
 import * as serviceWorkerRegistration from "./src/service-worker-registration";
 
 if (__DEV__) {
@@ -20,13 +18,16 @@ if (__DEV__) {
   require("./src/helpers/ignoreWarnings");
 }
 
-// Keep the splash screen visible while we fetch resources
-SplashScreen.preventAutoHideAsync();
-
 export default function App() {
+  const appIsReady = usePrepareApp();
+
+  if (!appIsReady) {
+    return null;
+  }
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <ErrorBoundary FallbackComponent={FallbackScreen}>
+      <ErrorBoundary>
         <Providers>
           <Navigation />
           {Platform.select({ web: <WebTabs /> })}
