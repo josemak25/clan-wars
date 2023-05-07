@@ -77,7 +77,7 @@ export const HomeScreen: React.FC<RootStackScreenProps<"HomeScreen">> = ({
     <ListEmptyContainer>
       {isLoading && <ActivityIndicator isDesktopOrLaptop={isDesktopOrLaptop} />}
 
-      {!isEmpty && (
+      {isEmpty && (
         <FallbackScreen
           isModal={false}
           resetError={onRetry}
