@@ -52,6 +52,5 @@ export const ActivityIndicator = styled(__ActivityIndicator).attrs<{
 
 export const ListEmptyContainer = styled.View`
   flex: 1;
-  align-items: center;
   justify-content: center;
 `;

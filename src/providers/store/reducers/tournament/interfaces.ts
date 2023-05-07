@@ -51,6 +51,7 @@ export interface ITournamentClan {
 }
 
 export interface ITournamentState {
+  isEmpty: boolean;
   isLoading: boolean;
   data: ITournament[];
   error: Error | null;

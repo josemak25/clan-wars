@@ -28,7 +28,7 @@ export const HomeScreen: React.FC<RootStackScreenProps<"HomeScreen">> = ({
   const dispatch = useDispatch();
   const { layout, breakpoints } = useTheme();
   const { isDesktopOrLaptop } = useResponsiveScreen();
-  const { data, isLoading, error, onRetry } = useTournaments();
+  const { data, isLoading, isEmpty, error, onRetry } = useTournaments();
 
   const onEventPress = (tournament: ITournament) => {
     dispatch(tournamentActions.setSelectedTournament(tournament));
@@ -76,6 +76,15 @@ export const HomeScreen: React.FC<RootStackScreenProps<"HomeScreen">> = ({
   const ListEmptyComponent = () => (
     <ListEmptyContainer>
       {isLoading && <ActivityIndicator isDesktopOrLaptop={isDesktopOrLaptop} />}
+
+      {!isEmpty && (
+        <FallbackScreen
+          isModal={false}
+          resetError={onRetry}
+          title="no_data_title"
+          subtitle="no_data_subtitle"
+        />
+      )}
 
       <FallbackScreen
         error={error}

@@ -9,6 +9,7 @@ export const TOURNAMENT_SLICE_NAME = "tournament";
 const initialState: ITournamentState = {
   data: [],
   error: null,
+  isEmpty: false,
   isLoading: false,
   selectedTournament: null,
 };
@@ -48,11 +49,14 @@ export const { reducer: tournamentReducer, actions: tournamentActions } =
         })
         .addCase(fetchAllTournament.fulfilled, (state, action) => {
           // Add tournament to the state tournament array
-          state.isLoading = false;
-          state.data = __uniqby(
+          const tournaments = __uniqby(
             state.data.concat(action.payload.data || []),
             "id"
           );
+
+          state.isLoading = false;
+          state.data = tournaments;
+          state.isEmpty = !tournaments.length;
         });
     },
   });

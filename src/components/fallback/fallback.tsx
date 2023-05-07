@@ -49,7 +49,9 @@ export const FallbackScreen: React.FC<FallbackScreenProps> = ({
             {translator?.formatMessage?.(messages[title])}
           </Text>
           <Text style={[styles.title, styles.subtitle]}>
-            {translator?.formatMessage?.(messages[subtitle])}
+            {translator
+              ?.formatMessage?.(messages[subtitle])
+              .replaceAll("~", "\n")}
           </Text>
 
           <TouchableOpacity style={styles.button} onPress={handleClearError}>
@@ -73,7 +75,7 @@ export const FallbackScreen: React.FC<FallbackScreenProps> = ({
 };
 
 const useStyles = makeUseStyles(
-  ({ fonts, palette, layout, hexToRGB, colors, breakpoints }) => ({
+  ({ fonts, palette, layout, hexToRGB, breakpoints }) => ({
     safeView: {
       flex: 1,
       alignItems: "center",
