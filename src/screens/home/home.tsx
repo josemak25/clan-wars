@@ -79,6 +79,8 @@ export const HomeScreen: React.FC<RootStackScreenProps<"HomeScreen">> = ({
 
       {isEmpty && (
         <FallbackScreen
+          icon="empty"
+          iconSize={100}
           isModal={false}
           resetError={onRetry}
           title="no_data_title"

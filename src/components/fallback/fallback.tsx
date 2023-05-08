@@ -3,7 +3,6 @@ import {
   Text,
   View,
   Modal,
-  StyleSheet,
   SafeAreaView,
   TouchableOpacity,
 } from "react-native";
@@ -17,6 +16,7 @@ import { translator } from "../../providers/internationalization";
 
 type FallbackScreenProps = FallbackComponentProps & {
   icon?: IconType;
+  iconSize?: number;
   isVisible?: boolean;
   title?: keyof typeof messages;
   subtitle?: keyof typeof messages;
@@ -26,6 +26,7 @@ type FallbackScreenProps = FallbackComponentProps & {
 export const FallbackScreen: React.FC<FallbackScreenProps> = ({
   error,
   resetError,
+  iconSize = 90,
   icon = "error",
   isModal = true,
   isVisible = false,
@@ -44,7 +45,7 @@ export const FallbackScreen: React.FC<FallbackScreenProps> = ({
     () => (
       <SafeAreaView style={styles.safeView}>
         <View style={styles.container}>
-          <Icon size={90} name={icon} />
+          <Icon size={iconSize} name={icon} />
           <Text style={styles.title}>
             {translator?.formatMessage?.(messages[title])}
           </Text>

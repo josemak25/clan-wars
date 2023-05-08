@@ -142,7 +142,10 @@ export const FormStepThree: React.FC<FormStepProps> = ({
 
             <LogoContainer>
               <LogoContents onPress={pickLogo} error={!!errors.clan_logo}>
-                <Image source={require("../../../../assets/gallery.png")} />
+                <Image
+                  source={require("../../../../assets/gallery.png")}
+                  defaultSource={require("../../../../assets/gallery.png")}
+                />
                 <Title size={16} error={!!errors.clan_logo}>
                   <FormattedMessage {...messages.click_to_add_image} />
                 </Title>
