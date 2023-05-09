@@ -13,13 +13,21 @@ const messages = defineMessages({
     id: "fallback.no_network_subtitle",
     defaultMessage: "Connect to the internet and try again.",
   },
-  no_data_title: {
-    id: "fallback.no_data_title",
+  no_tournament_data_title: {
+    id: "fallback.no_tournament_data_title",
     defaultMessage: "No tournaments",
   },
-  no_data_subtitle: {
-    id: "fallback.no_data_subtitle",
+  no_participant_data_title: {
+    id: "fallback.no_participants_data_title",
+    defaultMessage: "No participants",
+  },
+  no_tournament_data_subtitle: {
+    id: "fallback.no_tournament_data_subtitle",
     defaultMessage: `There are no tournaments at the moment {br} Please refresh to try again.`,
+  },
+  no_participant_data_subtitle: {
+    id: "fallback.no_participant_data_subtitle",
+    defaultMessage: `There are no participants at the moment {br} Please refresh to try again.`,
   },
   fetching_data_subtitle: {
     id: "fallback.fetching_data_subtitle",

@@ -7,13 +7,7 @@ import { FormStepProps } from "../../../../types";
 import { Input } from "../../../components/input";
 import { useFormValidation } from "../../../hooks";
 
-import {
-  Terms,
-  Title,
-  Spacer,
-  SubTitle,
-  FormStepWrapper,
-} from "../signup.styles";
+import { Title, Spacer, SubTitle, FormStepWrapper } from "../signup.styles";
 
 export const FormStepFive: React.FC<FormStepProps> = ({
   errors,
@@ -21,52 +15,38 @@ export const FormStepFive: React.FC<FormStepProps> = ({
   clearErrors,
 }) => {
   const { formatMessage } = useIntl();
-  const { emailValidation } = useFormValidation();
+  const { phoneValidation } = useFormValidation();
 
   return (
     <FormStepWrapper>
       <Title>
-        <FormattedMessage {...messages.confirm_submission} />
+        <FormattedMessage {...messages.best_contact_clan} />
       </Title>
       <SubTitle>
-        <FormattedMessage {...messages.confirm_submission_details} />
+        <FormattedMessage {...messages.best_contact_clan_details} />
       </SubTitle>
 
       <Spacer size={40} />
       <Controller
         control={control}
-        rules={emailValidation}
-        name="contact_email_address"
-        render={({ field: { onChange, ref, ...rest } }) => (
+        rules={phoneValidation}
+        name="contact_phone_number"
+        render={({ field: { onChange, ...rest } }) => (
           <Input
             {...rest}
             autoFocus
-            placeholder="info@anonymous.com"
-            error={errors.contact_email_address}
-            label={formatMessage(messages.best_contact_clan)}
+            placeholder="+234-813-297-8120"
+            error={errors.contact_phone_number}
+            label={formatMessage(messages.contact_phone_number)}
             onChangeText={(text) => {
               onChange(text);
-              if (errors.contact_email_address) {
-                clearErrors("contact_email_address");
+              if (errors.contact_phone_number) {
+                clearErrors("contact_phone_number");
               }
             }}
           />
         )}
       />
-
-      <Spacer size={6} />
-      <SubTitle size={16} opacity={1}>
-        <FormattedMessage {...messages.agreement} />{" "}
-        <Terms size={16}>
-          <FormattedMessage {...messages.terms} />
-        </Terms>{" "}
-        <SubTitle size={16} opacity={1}>
-          <FormattedMessage {...messages.and} />
-        </SubTitle>{" "}
-        <Terms size={16}>
-          <FormattedMessage {...messages.privacy_policy} />
-        </Terms>
-      </SubTitle>
     </FormStepWrapper>
   );
 };

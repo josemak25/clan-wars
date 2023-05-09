@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Keyboard } from "react-native";
 import { shallowEqual } from "react-redux";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Animated, { FadeInLeft, FadeInRight } from "react-native-reanimated";
@@ -9,20 +9,13 @@ import Animated, { FadeInLeft, FadeInRight } from "react-native-reanimated";
 import messages from "./messages";
 import { useSelector } from "../../hooks";
 import { IFormStep } from "../../../types";
-import { generateId } from "../../helpers";
 import { PaymentModal } from "../../components/paystack";
+import { generateId, isValidNumber } from "../../helpers";
 import { SuccessModal } from "../../components/success-modal";
 import { RootStackScreenProps } from "../../../types/navigation";
+import { defaultFormSteps, forms, FormStepIndicator } from "./form";
 import { ConfirmPaymentModal } from "../../components/confirm-payment-modal";
-import { ITournamentClan } from "../../providers/store/reducers/tournament/interfaces";
-import {
-  FormStepOne,
-  FormStepTwo,
-  FormStepFive,
-  FormStepFour,
-  FormStepThree,
-  FormStepIndicator,
-} from "./form";
+import { ITournamentClan } from "../../providers/store/reducers/participants/interfaces";
 
 import {
   Container,
@@ -33,60 +26,10 @@ import {
   FormStepScrollViewWrapper,
 } from "./signup.styles";
 
-const defaultFormSteps: IFormStep[] = [
-  {
-    isViewable: true,
-    icon: "android",
-    id: generateId(),
-    key: "clan_name",
-    highlighted: true,
-    title: "Clan name",
-  },
-  {
-    id: generateId(),
-    key: "team_name",
-    isViewable: false,
-    highlighted: true,
-    icon: "basketball",
-    title: "Team name",
-  },
-  {
-    icon: "ansible",
-    key: "clan_logo",
-    id: generateId(),
-    isViewable: false,
-    highlighted: true,
-    title: "Clan logo",
-  },
-  {
-    key: "team",
-    id: generateId(),
-    highlighted: true,
-    isViewable: false,
-    icon: "alarm-bell",
-    title: "Build your team",
-  },
-  {
-    id: generateId(),
-    isViewable: false,
-    highlighted: false,
-    icon: "gauge-full",
-    title: "confirmation",
-    key: "contact_email_address",
-  },
-];
-
-const forms = [
-  FormStepOne,
-  FormStepTwo,
-  FormStepThree,
-  FormStepFour,
-  FormStepFive,
-];
-
 export const SignUpScreen: React.FC<
   RootStackScreenProps<"SignUpScreen">
 > = () => {
+  const { formatMessage } = useIntl();
   const [isNext, setIsNext] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -115,7 +58,10 @@ export const SignUpScreen: React.FC<
     formState: { errors },
   } = useForm<ITournamentClan>();
 
-  const team = watch("team") || [];
+  const [team = [], contact_phone_number] = watch([
+    "team",
+    "contact_phone_number",
+  ]);
 
   const isFirstPageOfFormActive = currentIndex === 0;
   const isLastPageOfFormActive = currentIndex === formSteps.length - 1;
@@ -130,6 +76,15 @@ export const SignUpScreen: React.FC<
     const { key } = formSteps[currentIndex];
     const teamLength = team.filter(({ player_ign }) => player_ign).length;
 
+    if (
+      key === "contact_phone_number" &&
+      !isValidNumber(contact_phone_number)
+    ) {
+      setError("contact_phone_number", {
+        message: formatMessage(messages.invalid_contact_phone_number),
+      });
+    }
+
     if (key === "team") {
       setError("team", {
         message: !teamLength
@@ -138,7 +93,9 @@ export const SignUpScreen: React.FC<
           ? `You must add all players`
           : undefined,
       });
-    } else {
+    }
+
+    if (key !== "contact_phone_number" && key !== "team") {
       await trigger(key);
     }
 

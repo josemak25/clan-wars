@@ -2,7 +2,7 @@ import React from "react";
 import { View } from "react-native";
 
 import { Participant } from "../participant";
-import { ITournamentClan } from "../../providers/store/reducers/tournament/interfaces";
+import { ITournamentClan } from "../../providers/store/reducers/participants/interfaces";
 
 import {
   Title,

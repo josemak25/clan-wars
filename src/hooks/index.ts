@@ -7,6 +7,7 @@ export * from "./usePrepareApp";
 export * from "./useLogoUpload";
 export * from "./useTournaments";
 export * from "./useColorScheme";
+export * from "./useParticipants";
 export * from "./useFormValidation";
 export * from "./useResponsiveScreen";
 export * from "./useResponsiveFontSize";

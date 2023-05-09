@@ -14,8 +14,10 @@ import {
 import {
   settingsReducer,
   tournamentReducer,
+  participantsReducer,
   SETTINGS_SLICE_NAME,
   TOURNAMENT_SLICE_NAME,
+  PARTICIPANTS_SLICE_NAME,
 } from "./reducers";
 import { APP_VERSION, __ROOT_REDUX_STATE_KEY__ } from "../../constants";
 
@@ -40,6 +42,7 @@ const reactotronEnhancer = (): any => {
 const rootReducer = combineReducers({
   [SETTINGS_SLICE_NAME]: settingsReducer,
   [TOURNAMENT_SLICE_NAME]: tournamentReducer,
+  [PARTICIPANTS_SLICE_NAME]: participantsReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

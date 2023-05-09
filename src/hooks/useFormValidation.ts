@@ -11,6 +11,11 @@ const messages = defineMessages({
     defaultMessage: "Enter a valid email address",
   },
 
+  phone_required: {
+    id: "form.validator.phone_required",
+    defaultMessage: "Phone is required",
+  },
+
   clan_name_required: {
     id: "form.validator.clan_name_required",
     defaultMessage: "Clan is required",
@@ -53,6 +58,13 @@ export const useFormValidation = () => {
     },
   };
 
+  const phoneValidation = {
+    required: {
+      value: true,
+      message: intl.formatMessage(messages.phone_required),
+    },
+  };
+
   const clanNameValidation = {
     required: {
       value: true,
@@ -89,6 +101,7 @@ export const useFormValidation = () => {
   };
 
   return {
+    phoneValidation,
     emailValidation,
     avatarValidation,
     clanLogoValidation,

@@ -31,10 +31,10 @@ export const FormStepOne: React.FC<FormStepProps> = ({
         name="clan_name"
         control={control}
         rules={clanNameValidation}
-        render={({ field: { onChange, ref, ...rest } }) => (
+        render={({ field: { onChange, ...rest } }) => (
           <Input
             {...rest}
-            // autoFocus
+            autoFocus
             error={errors.clan_name}
             placeholder="Anonymous eSport"
             label={formatMessage(messages.enter_the_clan_name)}

@@ -46,7 +46,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   useEffect(() => {
     // signOutGuest();
-    checkIfGuestExists();
+    // checkIfGuestExists();
   }, []);
 
   return <Fragment>{children}</Fragment>;

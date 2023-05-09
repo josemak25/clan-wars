@@ -10,8 +10,8 @@ export type StackParamList = {
 };
 
 export type TabParamList = {
-  ParticipatesScreen: undefined;
   StatisticsScreen: undefined;
+  ParticipantsScreen: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof StackParamList> =

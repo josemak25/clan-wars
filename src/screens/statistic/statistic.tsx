@@ -8,7 +8,7 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { RootState } from "../../providers/store/store";
 import { Participant } from "../../components/participant";
 import { RootTabScreenProps } from "../../../types/navigation";
-import { useResponsiveScreen, useSelector } from "../../hooks";
+import { useParticipants, useResponsiveScreen, useSelector } from "../../hooks";
 import {
   getTopWinners,
   getTeamTotalKills,
@@ -37,8 +37,9 @@ import {
 
 export const StatisticsScreen: React.FC<
   RootTabScreenProps<"StatisticsScreen">
-> = (props) => {
+> = () => {
   const { palette } = useTheme();
+  const { data: participants } = useParticipants();
   const { isDesktopOrLaptop } = useResponsiveScreen();
 
   const { selectedTournament } = useSelector(
@@ -46,7 +47,7 @@ export const StatisticsScreen: React.FC<
     shallowEqual
   );
 
-  const winners = rankWinnersByKills(selectedTournament?.participates);
+  const winners = rankWinnersByKills(participants);
   const topWinners = getTopWinners(winners);
   const trophies = getWinnersTrophies(winners);
 
@@ -58,7 +59,7 @@ export const StatisticsScreen: React.FC<
       <WinnerContainer>
         {topWinners.map(({ data, position }) => (
           <ClanImageContainer
-            key={data.id}
+            key={`${data?.id}_${position}`}
             style={[
               position === 2 && { left: 25 },
               position === 3 && { right: 25 },
@@ -103,12 +104,15 @@ export const StatisticsScreen: React.FC<
                 size={
                   position !== 1 ? (isDesktopOrLaptop ? 130 : 95) : undefined
                 }
-                uri={data.clan_logo}
-                preview={{ uri: data.clan_logo }}
+                uri={data?.clan_logo}
+                preview={{ uri: data?.clan_logo }}
+                defaultSource={require("../../../assets/default_user.svg")}
               />
             </ClanImageWrapper>
-            <ClanName numberOfLines={1}>{data.clan_name}</ClanName>
-            <Scores numberOfLines={1}>{getTeamTotalKills(data.team)}</Scores>
+            <ClanName numberOfLines={1}>
+              {data?.clan_name || "Unknown"}
+            </ClanName>
+            <Scores numberOfLines={1}>{getTeamTotalKills(data?.team)}</Scores>
           </ClanImageContainer>
         ))}
       </WinnerContainer>
@@ -119,17 +123,17 @@ export const StatisticsScreen: React.FC<
 
       <TimerContainer>
         <Timer>
-          Starts at •{" "}
+          Starts at •
           {dayjs(selectedTournament?.start_date).format(
-            "ddd DD MMM YYYY hh : mm A"
+            " ddd DD MMM YYYY hh : mm A"
           )}
         </Timer>
 
         <Timer>
           <Timer>
-            Ends at •{" "}
+            Ends at •
             {dayjs(selectedTournament?.updated_at).format(
-              "ddd DD MMM YYYY hh : mm A"
+              " ddd DD MMM YYYY hh : mm A"
             )}
           </Timer>
         </Timer>

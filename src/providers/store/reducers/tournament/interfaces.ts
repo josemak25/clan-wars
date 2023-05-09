@@ -1,5 +1,3 @@
-import { AvatarType } from "../../../../components/icon/interface";
-
 export interface ITournament {
   id: string;
   title: string;
@@ -26,28 +24,6 @@ export interface ITournamentHost {
   avatar: string;
   created_at: string | number;
   updated_at: string | number;
-}
-
-export interface ITournamentTeam {
-  id: string;
-  player_id: string;
-  avatar: AvatarType;
-  total_kills: number;
-  player_ign: string | null;
-  created_at: string | number;
-  updated_at: string | number;
-}
-
-export interface ITournamentClan {
-  id: string;
-  clan_name: string;
-  clan_logo: string;
-  team_name: string;
-  clan_leader_id: string;
-  team: ITournamentTeam[];
-  updated_at: string | number;
-  created_at: string | number;
-  contact_email_address: string;
 }
 
 export interface ITournamentState {

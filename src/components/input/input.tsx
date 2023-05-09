@@ -1,8 +1,8 @@
 import React, { Fragment, PropsWithChildren, useState } from "react";
 import { FieldError } from "react-hook-form";
-import { TextInputProps } from "react-native";
 import { useTheme } from "styled-components/native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { TextInputProps, TextInput as __TextInput } from "react-native";
 
 import {
   Label,
@@ -20,12 +20,16 @@ type InputProps = {
   playerId?: boolean;
 } & TextInputProps;
 
-export const Input: React.FC<PropsWithChildren<InputProps>> = (props) => {
+export const Input = React.forwardRef<
+  __TextInput,
+  PropsWithChildren<InputProps>
+>((props, ref) => {
   const { palette, hexToRGB } = useTheme();
   const [isFocused, setIsFocused] = useState(false);
   const {
     error,
     label,
+    value,
     children,
     textContentType,
     playerId = false,
@@ -40,8 +44,10 @@ export const Input: React.FC<PropsWithChildren<InputProps>> = (props) => {
       </ErrorMessageContainer>
       <Container error={!!error} isFocused={isFocused}>
         <TextInput
+          ref={ref}
           {...restProps}
           error={!!error}
+          defaultValue={value} // this helps omit controlled form input error from react-hooks-form
           onFocus={(e) => {
             restProps?.onFocus?.(e);
             setIsFocused(!isFocused);
@@ -70,4 +76,4 @@ export const Input: React.FC<PropsWithChildren<InputProps>> = (props) => {
       </Container>
     </Fragment>
   );
-};
+});

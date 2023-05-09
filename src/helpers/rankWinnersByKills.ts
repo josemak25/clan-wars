@@ -6,8 +6,8 @@
  * @returns string
  */
 
-import { ITournamentClan } from "../providers/store/reducers/tournament/interfaces";
 import { getTeamTotalKills } from "./getTeamTotalKills";
+import { ITournamentClan } from "../providers/store/reducers/participants/interfaces";
 
 export const rankWinnersByKills = (
   participates?: ITournamentClan[]

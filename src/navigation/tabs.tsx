@@ -3,7 +3,7 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 
 import { TabParamList } from "../../types/navigation";
 import { StatisticsScreen } from "../screens/statistic";
-import { ParticipatesScreen } from "../screens/participates";
+import { ParticipantsScreen } from "../screens/participants";
 
 const Tab = createMaterialTopTabNavigator<TabParamList>();
 
@@ -31,8 +31,8 @@ export const TabNavigator = () => {
         options={{ title: "Statistics" }}
       />
       <Tab.Screen
-        name="ParticipatesScreen"
-        component={ParticipatesScreen}
+        name="ParticipantsScreen"
+        component={ParticipantsScreen}
         options={{ title: "Participates" }}
       />
     </Tab.Navigator>

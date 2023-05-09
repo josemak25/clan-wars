@@ -31,7 +31,7 @@ export const FormStepTwo: React.FC<FormStepProps> = ({
         name="team_name"
         control={control}
         rules={teamNameValidation}
-        render={({ field: { onChange, ref, ...rest } }) => (
+        render={({ field: { onChange, ...rest } }) => (
           <Input
             {...rest}
             autoFocus

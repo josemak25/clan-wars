@@ -11,7 +11,7 @@ import {
 import {
   ITournamentClan,
   ITournamentTeam,
-} from "../src/providers/store/reducers/tournament/interfaces";
+} from "../src/providers/store/reducers/participants/interfaces";
 
 declare global {
   interface Console {

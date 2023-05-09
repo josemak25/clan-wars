@@ -6,13 +6,15 @@
  * @returns ITournamentClan[]
  */
 
-import { ITournamentClan } from "../providers/store/reducers/tournament/interfaces";
+import { ITournamentClan } from "../providers/store/reducers/participants/interfaces";
 
 export const getTopWinners = (teams: ITournamentClan[]) => {
   const [first, second, third] = teams;
+  const temp = {} as ITournamentClan;
+
   return [
-    { position: 2, data: second },
-    { position: 1, data: first },
-    { position: 3, data: third },
+    { position: 2, data: second || temp },
+    { position: 1, data: first || temp },
+    { position: 3, data: third || temp },
   ];
 };

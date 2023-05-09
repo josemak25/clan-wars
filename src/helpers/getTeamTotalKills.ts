@@ -6,8 +6,8 @@
  * @returns number
  */
 
-import { ITournamentTeam } from "../providers/store/reducers/tournament/interfaces";
+import { ITournamentTeam } from "../providers/store/reducers/participants/interfaces";
 
 export const getTeamTotalKills = (team: ITournamentTeam[]): number => {
-  return team.reduce((acc, player) => (acc += player.total_kills), 0);
+  return team?.reduce((acc, player) => (acc += player.total_kills), 0) || 0;
 };

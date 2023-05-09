@@ -45,6 +45,14 @@ const messages = defineMessages({
     id: "signup.build_clan_team_details",
     defaultMessage: `Build your team of four players, for coming together is a beginning, staying together is progress, and working together is success.`,
   },
+  best_contact_clan: {
+    id: "signup.best_contact_clan",
+    defaultMessage: "Contact",
+  },
+  best_contact_clan_details: {
+    id: "signup.best_contact_clan_details",
+    defaultMessage: `Please fill in your active phone number for we to easily contact you.`,
+  },
   confirm_submission: {
     id: "signup.confirm_submission",
     defaultMessage: "Confirm Submission",
@@ -69,9 +77,17 @@ const messages = defineMessages({
     id: "signup.and",
     defaultMessage: " and ",
   },
-  best_contact_clan: {
-    id: "signup.best_contact_clan",
+  contact_email_address: {
+    id: "signup.contact_email_address",
     defaultMessage: "What's your best contact email?",
+  },
+  contact_phone_number: {
+    id: "signup.contact_phone_number",
+    defaultMessage: "What's your active phone number?",
+  },
+  invalid_contact_phone_number: {
+    id: "signup.invalid_contact_phone_number",
+    defaultMessage: "Phone is invalid",
   },
   image_support: {
     id: "signup.image_support",

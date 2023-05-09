@@ -77,14 +77,14 @@ export const HomeScreen: React.FC<RootStackScreenProps<"HomeScreen">> = ({
     <ListEmptyContainer>
       {isLoading && <ActivityIndicator isDesktopOrLaptop={isDesktopOrLaptop} />}
 
-      {isEmpty && (
+      {!isLoading && isEmpty && (
         <FallbackScreen
           icon="empty"
           iconSize={100}
           isModal={false}
           resetError={onRetry}
-          title="no_data_title"
-          subtitle="no_data_subtitle"
+          title="no_tournament_data_title"
+          subtitle="no_tournament_data_subtitle"
         />
       )}
 

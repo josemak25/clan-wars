@@ -10,10 +10,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { supabase } from "./supabase";
 import { SUPER_BASE_KEY, SUPER_BASE_URL } from "@env";
 import { ISignupGuest, ISigninGuest } from "../providers/auth/interfaces";
-import {
-  ITournament,
-  ITournamentClan,
-} from "../providers/store/reducers/tournament/interfaces";
+import { ITournament } from "../providers/store/reducers/tournament/interfaces";
+import { ITournamentClan } from "../providers/store/reducers/participants/interfaces";
 
 /**
  *
@@ -138,3 +136,41 @@ export const fetchTournaments = async (): Promise<
         )
     `);
 };
+
+/**
+ *
+ * @description fetch all tournament participants
+ * @function fetchParticipants
+ */
+export const fetchParticipants = async (tournamentId: string) => {
+  return supabase
+    .from<"tournament_participants", ITournamentClan>("tournament_participants")
+    .select(
+      `
+        *,
+        clan_team (
+          *,
+          tournament_clan (
+            *
+          )
+        )
+    `
+    )
+    .eq("id", tournamentId);
+};
+
+// `
+// *,
+// clan_team (
+//   *,
+//   tournament_clan (
+//     *
+//   ),
+//   clan_team_player (
+//     *,
+//     tournament_kills (
+//       total_kills
+//     )
+//   )
+// )
+// `
