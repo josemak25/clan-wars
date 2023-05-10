@@ -1,13 +1,13 @@
 import { Platform } from "react-native";
 import styled from "styled-components/native";
 
-import { Name, Avatar as __Avatar } from "../participant/participant.styles";
-
-export {
-  Profile,
-  KillCount,
-  PlayerDetail,
+import {
+  Name,
+  Avatar as __Avatar,
+  PlayerDetail as __PlayerDetail,
 } from "../participant/participant.styles";
+
+export { Profile, KillCount } from "../participant/participant.styles";
 
 export const Container = styled.View`
   width: 100%;
@@ -38,12 +38,15 @@ export const LeaderContainer = styled.View`
   align-items: center;
 `;
 
-export const Avatar = styled(__Avatar)``;
-
-export const ClanLogo = styled(Avatar)`
+export const ClanLogo = styled(__Avatar)`
   right: -5px;
   bottom: -8px;
   position: absolute;
+`;
+
+export const PlayerDetail = styled(__PlayerDetail)`
+  flex-direction: column;
+  align-items: flex-start;
 `;
 
 export const PlayerRank = styled(Title)`

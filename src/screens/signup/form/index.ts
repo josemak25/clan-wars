@@ -57,7 +57,7 @@ export const defaultFormSteps: IFormStep[] = [
     isViewable: false,
     highlighted: true,
     icon: "phone-classic",
-    key: "contact_phone_number",
+    key: "phone_number",
   },
   {
     id: generateId(),
@@ -65,6 +65,6 @@ export const defaultFormSteps: IFormStep[] = [
     highlighted: false,
     icon: "gauge-full",
     title: "confirmation",
-    key: "contact_email_address",
+    key: "email_address",
   },
 ];

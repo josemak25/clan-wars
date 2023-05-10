@@ -1,5 +1,4 @@
 import React, { useRef } from "react";
-import { Platform } from "react-native";
 import { Controller } from "react-hook-form";
 import { FormattedMessage } from "react-intl";
 
@@ -9,7 +8,7 @@ import messages from "./messages";
 import { generateId } from "../../helpers";
 import { FormStepProps } from "../../../types";
 import { useFormValidation } from "../../hooks";
-import { ITournamentTeam } from "../../providers/store/reducers/tournament/interfaces";
+import { ITournamentTeam } from "../../providers/store/reducers/participants/interfaces";
 
 import {
   Spacer,
@@ -66,7 +65,6 @@ export const FormStepOne: React.FC<FormStepOneProps> = ({
             label="Enter player IGN"
             placeholder="十・Drifter"
             error={errors?.player_ign}
-            autoFocus={Platform.OS !== "web"}
             onChangeText={(text) => {
               onChange(text);
               if (errors?.player_ign) {

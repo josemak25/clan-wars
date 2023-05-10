@@ -34,7 +34,6 @@ export const FormStepTwo: React.FC<FormStepProps> = ({
         render={({ field: { onChange, ...rest } }) => (
           <Input
             {...rest}
-            autoFocus
             error={errors.team_name}
             placeholder="Peaky blinders"
             label={formatMessage(messages.enter_the_team_name)}

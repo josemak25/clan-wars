@@ -41,7 +41,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
       onSuccess={onSuccess}
       refNumber={reference}
       paystackKey={PAY_STACK_PUBLIC_KEY}
-      billingEmail={clan?.contact_email_address!}
+      billingEmail={clan?.email_address!}
       amount={selectedTournament?.registration_fee!}
       channels={["bank_transfer", "card", "mobile_money", "bank", "ussd", "qr"]}
     />

@@ -68,6 +68,17 @@ export const ClanImage = styled(Image)<{
     p.size ? p.size : p.isDesktopOrLaptop ? 180 : 140}px;
 `;
 
+export const DefaultClanImage = styled.Image<{
+  size?: number;
+  isDesktopOrLaptop: boolean;
+}>`
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: ${(p) =>
+    p.size ? p.size : p.isDesktopOrLaptop ? 180 : 140}px;
+`;
+
 export const ClanImageWrapper = styled.View<{
   size?: number;
   isDesktopOrLaptop: boolean;

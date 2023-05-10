@@ -30,18 +30,17 @@ export const FormStepFive: React.FC<FormStepProps> = ({
       <Controller
         control={control}
         rules={phoneValidation}
-        name="contact_phone_number"
+        name="phone_number"
         render={({ field: { onChange, ...rest } }) => (
           <Input
             {...rest}
-            autoFocus
             placeholder="+234-813-297-8120"
-            error={errors.contact_phone_number}
-            label={formatMessage(messages.contact_phone_number)}
+            error={errors.phone_number}
+            label={formatMessage(messages.phone_number)}
             onChangeText={(text) => {
               onChange(text);
-              if (errors.contact_phone_number) {
-                clearErrors("contact_phone_number");
+              if (errors.phone_number) {
+                clearErrors("phone_number");
               }
             }}
           />

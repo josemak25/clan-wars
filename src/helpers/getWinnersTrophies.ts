@@ -7,7 +7,7 @@
  */
 
 import { ParticipantProps } from "../components/participant";
-import { ITournamentClan } from "../providers/store/reducers/tournament/interfaces";
+import { ITournamentClan } from "../providers/store/reducers/participants/interfaces";
 
 const icons: ParticipantProps["icon"][] = [
   "ios-trophy",

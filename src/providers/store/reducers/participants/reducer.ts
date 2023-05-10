@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { ITournamentTeamState } from "./interfaces";
 import { fetchParticipants } from "../../../../config/network";
+import { ITournamentClan, ITournamentTeamState } from "./interfaces";
 
 export const PARTICIPANTS_SLICE_NAME = "tournament_participants";
 
@@ -15,8 +15,8 @@ const initialState: ITournamentTeamState = {
 // Fetch tournaments, create the thunk
 export const fetchTournamentParticipants = createAsyncThunk(
   `${PARTICIPANTS_SLICE_NAME}/fetchTournamentParticipants`,
-  async (tournamentId: string) => {
-    const response = await fetchParticipants(tournamentId);
+  async (tournament_id: string) => {
+    const response = await fetchParticipants(tournament_id);
 
     if (response.error) {
       throw Error(response.error.message);
@@ -44,8 +44,11 @@ export const { reducer: participantsReducer, actions: participantsActions } =
         .addCase(fetchTournamentParticipants.fulfilled, (state, action) => {
           // Add tournament participates to the state participates array
           state.isLoading = false;
-          state.data = action.payload.data as any;
           state.isEmpty = !action.payload.data.length;
+          state.data = action.payload.data.map((data) => ({
+            ...data,
+            team: data.tournament_players,
+          })) as ITournamentClan[];
         });
     },
   });

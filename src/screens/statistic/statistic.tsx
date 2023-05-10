@@ -28,9 +28,10 @@ import {
   ScrollView,
   WinnerBadge,
   TimerContainer,
-  ClanImageWrapper,
   ButtonContainer,
   WinnerContainer,
+  ClanImageWrapper,
+  DefaultClanImage,
   ClanImageContainer,
   ClanScoresContainer,
 } from "./statistic.styles";
@@ -99,15 +100,25 @@ export const StatisticsScreen: React.FC<
                 },
               ]}
             >
-              <ClanImage
-                isDesktopOrLaptop={isDesktopOrLaptop}
-                size={
-                  position !== 1 ? (isDesktopOrLaptop ? 130 : 95) : undefined
-                }
-                uri={data?.clan_logo}
-                preview={{ uri: data?.clan_logo }}
-                defaultSource={require("../../../assets/default_user.svg")}
-              />
+              {data?.clan_logo ? (
+                <ClanImage
+                  isDesktopOrLaptop={isDesktopOrLaptop}
+                  size={
+                    position !== 1 ? (isDesktopOrLaptop ? 130 : 95) : undefined
+                  }
+                  uri={data.clan_logo}
+                  preview={{ uri: data.clan_logo }}
+                />
+              ) : (
+                <DefaultClanImage
+                  isDesktopOrLaptop={isDesktopOrLaptop}
+                  size={
+                    position !== 1 ? (isDesktopOrLaptop ? 130 : 95) : undefined
+                  }
+                  source={require("../../../assets/default_user.png")}
+                  defaultSource={require("../../../assets/default_user.png")}
+                />
+              )}
             </ClanImageWrapper>
             <ClanName numberOfLines={1}>
               {data?.clan_name || "Unknown"}
@@ -154,12 +165,17 @@ export const StatisticsScreen: React.FC<
       <ClanScoresContainer>
         {winners.map((clan) => (
           <Participant
+            key={clan.id}
             name={clan.clan_name}
             image_uri={clan.clan_logo}
-            icon={trophies[clan.id].icon}
             image_preview={clan.clan_logo}
             kill_count={getTeamTotalKills(clan.team)}
             iconBackground={trophies[clan.id].iconBackground}
+            icon={
+              selectedTournament?.winner_participant_id
+                ? trophies[clan.id].icon
+                : undefined
+            }
           />
         ))}
       </ClanScoresContainer>

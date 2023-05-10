@@ -23,7 +23,7 @@ import { IAddPlayerFormStep } from "../../../types";
 import { BottomSheetBackdrop } from "../modal-backdrop";
 import { settingsActions } from "../../providers/store/reducers";
 import { useDispatch, useSelector, useResponsiveScreen } from "../../hooks";
-import { ITournamentTeam } from "../../providers/store/reducers/tournament/interfaces";
+import { ITournamentTeam } from "../../providers/store/reducers/participants/interfaces";
 
 import {
   Step,
@@ -151,7 +151,7 @@ export const AddPlayerModal: React.FC<AddPlayerModalProps> = ({
 
     onSavePlayer({
       ...data,
-      total_kills: 0,
+      kills: 0,
       created_at: date,
       updated_at: date,
       id: generateId(),

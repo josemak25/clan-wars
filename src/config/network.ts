@@ -107,21 +107,6 @@ export const uploadFile = async (
 
 /**
  *
- * @description signout a guest user
- * @function checkClanNameAvailability
- * @returns Promise<{ error: AuthError | null }>
- */
-export const checkClanNameAvailability = async (
-  clan_name: string
-): Promise<PostgrestSingleResponse<{ clan_name: string | unknown }[]>> => {
-  return supabase
-    .from<"tournament_clan", ITournamentClan>("tournament_clan")
-    .select("clan_name")
-    .eq("clan_name", clan_name);
-};
-
-/**
- *
  * @description fetch all tournaments
  * @function fetchTournaments
  * @returns  PostgrestSingleResponse<ITournament[]>
@@ -129,12 +114,14 @@ export const checkClanNameAvailability = async (
 export const fetchTournaments = async (): Promise<
   PostgrestSingleResponse<ITournament[]>
 > => {
-  return supabase.from<"tournament", ITournament>("tournament").select(`
+  return supabase.from<"tournaments", ITournament>("tournaments").select(
+    `
         *,
         tournament_host (
           *
         )
-    `);
+    `
+  );
 };
 
 /**
@@ -142,35 +129,16 @@ export const fetchTournaments = async (): Promise<
  * @description fetch all tournament participants
  * @function fetchParticipants
  */
-export const fetchParticipants = async (tournamentId: string) => {
+export const fetchParticipants = async (tournament_id: string) => {
   return supabase
     .from<"tournament_participants", ITournamentClan>("tournament_participants")
     .select(
       `
-        *,
-        clan_team (
-          *,
-          tournament_clan (
-            *
-          )
-        )
-    `
+      *,
+        tournament_players (
+          *
+      )
+ `
     )
-    .eq("id", tournamentId);
+    .eq("tournament_id", tournament_id);
 };
-
-// `
-// *,
-// clan_team (
-//   *,
-//   tournament_clan (
-//     *
-//   ),
-//   clan_team_player (
-//     *,
-//     tournament_kills (
-//       total_kills
-//     )
-//   )
-// )
-// `

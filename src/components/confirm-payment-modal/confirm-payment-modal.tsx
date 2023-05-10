@@ -20,10 +20,8 @@ import { Providers } from "../../providers";
 import { formatCurrency } from "../../helpers";
 import { useResponsiveScreen } from "../../hooks";
 import { BottomSheetBackdrop } from "../modal-backdrop";
-import {
-  ITournament,
-  ITournamentTeam,
-} from "../../providers/store/reducers/tournament/interfaces";
+import { ITournament } from "../../providers/store/reducers/tournament/interfaces";
+import { ITournamentTeam } from "../../providers/store/reducers/participants/interfaces";
 
 import {
   Title,

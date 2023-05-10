@@ -36,18 +36,17 @@ export const FormStepSix: React.FC<FormStepProps> = ({
       <Controller
         control={control}
         rules={emailValidation}
-        name="contact_email_address"
+        name="email_address"
         render={({ field: { onChange, ...rest } }) => (
           <Input
             {...rest}
-            autoFocus
             placeholder="info@anonymous.com"
-            error={errors.contact_email_address}
-            label={formatMessage(messages.contact_email_address)}
+            error={errors.email_address}
+            label={formatMessage(messages.email_address)}
             onChangeText={(text) => {
               onChange(text);
-              if (errors.contact_email_address) {
-                clearErrors("contact_email_address");
+              if (errors.email_address) {
+                clearErrors("email_address");
               }
             }}
           />

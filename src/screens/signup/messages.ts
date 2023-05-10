@@ -77,12 +77,12 @@ const messages = defineMessages({
     id: "signup.and",
     defaultMessage: " and ",
   },
-  contact_email_address: {
-    id: "signup.contact_email_address",
+  email_address: {
+    id: "signup.email_address",
     defaultMessage: "What's your best contact email?",
   },
-  contact_phone_number: {
-    id: "signup.contact_phone_number",
+  phone_number: {
+    id: "signup.phone_number",
     defaultMessage: "What's your active phone number?",
   },
   invalid_contact_phone_number: {

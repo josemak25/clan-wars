@@ -56,14 +56,14 @@ export const Tournament: React.FC<TournamentProps> = (props) => {
     cover_image,
     participates,
     onEventPress,
-    winner_clan_id,
     joinTournament,
     tournament_icon,
     tournament_host,
+    winner_participant_id,
   } = props;
 
   const isEventStarted = dayjs().unix() >= dayjs(start_date).unix();
-  const isEventFinished = isEventStarted && !!winner_clan_id;
+  const isEventFinished = isEventStarted && !!winner_participant_id;
 
   const handleButtonPress = () => {
     if (!isEventStarted && !isEventFinished) {

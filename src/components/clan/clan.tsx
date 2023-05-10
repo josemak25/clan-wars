@@ -1,12 +1,12 @@
 import React from "react";
 import { View } from "react-native";
 
+import { Icon } from "../icon";
 import { Participant } from "../participant";
 import { ITournamentClan } from "../../providers/store/reducers/participants/interfaces";
 
 import {
   Title,
-  Avatar,
   Profile,
   Contents,
   ClanLogo,
@@ -19,11 +19,13 @@ import {
 } from "./clan.styles";
 
 export const Clan: React.FC<ITournamentClan> = (props) => {
-  const { clan_logo, clan_leader_id, clan_name, team } = props;
+  const { clan_logo, clan_name, team } = props;
 
-  const [clan_leader, ...members] = team.sort((a, b) =>
-    a.player_id > clan_leader_id ? 1 : b.player_id > clan_leader_id ? -1 : 0
-  );
+  const clan_leader = team.find((e) => e.is_team_leader);
+
+  const members = team
+    .filter((e) => !e.is_team_leader)
+    .sort((a, b) => Number(b.kills) - Number(a.kills));
 
   return (
     <Container>
@@ -32,7 +34,7 @@ export const Clan: React.FC<ITournamentClan> = (props) => {
         <LeaderContainer>
           <Profile>
             <View>
-              <Avatar size={60} uri={clan_logo} preview={{ uri: clan_logo }} />
+              <Icon size={60} name="avatar" avatarId={clan_leader?.avatar} />
               <ClanLogo
                 size={32}
                 uri={clan_logo}
@@ -41,18 +43,18 @@ export const Clan: React.FC<ITournamentClan> = (props) => {
             </View>
             <PlayerDetail margin={8}>
               <PlayerRank>LEADER</PlayerRank>
-              <LeaderName>{clan_leader.player_ign}</LeaderName>
+              <LeaderName>{clan_leader?.player_ign}</LeaderName>
             </PlayerDetail>
           </Profile>
-          <KillCount>{clan_leader.total_kills}</KillCount>
+          <KillCount>{clan_leader?.kills}</KillCount>
         </LeaderContainer>
 
-        {members.map(({ id, player_ign, avatar, total_kills }) => (
+        {members.map(({ id, player_ign, avatar, kills }) => (
           <Participant
             key={id}
+            avatar={avatar}
             name={player_ign}
-            image_uri={avatar}
-            kill_count={total_kills}
+            kill_count={kills}
             image_preview={avatar}
           />
         ))}

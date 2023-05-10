@@ -58,10 +58,7 @@ export const SignUpScreen: React.FC<
     formState: { errors },
   } = useForm<ITournamentClan>();
 
-  const [team = [], contact_phone_number] = watch([
-    "team",
-    "contact_phone_number",
-  ]);
+  const [team = [], phone_number] = watch(["team", "phone_number"]);
 
   const isFirstPageOfFormActive = currentIndex === 0;
   const isLastPageOfFormActive = currentIndex === formSteps.length - 1;
@@ -76,11 +73,8 @@ export const SignUpScreen: React.FC<
     const { key } = formSteps[currentIndex];
     const teamLength = team.filter(({ player_ign }) => player_ign).length;
 
-    if (
-      key === "contact_phone_number" &&
-      !isValidNumber(contact_phone_number)
-    ) {
-      setError("contact_phone_number", {
+    if (key === "phone_number" && !isValidNumber(phone_number)) {
+      setError("phone_number", {
         message: formatMessage(messages.invalid_contact_phone_number),
       });
     }
@@ -95,7 +89,7 @@ export const SignUpScreen: React.FC<
       });
     }
 
-    if (key !== "contact_phone_number" && key !== "team") {
+    if (key !== "phone_number" && key !== "team") {
       await trigger(key);
     }
 

@@ -27,7 +27,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
   const initializePayment = usePaystackPayment({
     reference,
     publicKey: PAY_STACK_PUBLIC_KEY,
-    email: clan?.contact_email_address!,
+    email: clan?.email_address!,
     channels: ["bank_transfer", "card", "mobile_money", "bank", "ussd", "qr"],
     amount: Number(selectedTournament?.registration_fee!) * 100, // Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
   });

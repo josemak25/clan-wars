@@ -34,7 +34,6 @@ export const FormStepOne: React.FC<FormStepProps> = ({
         render={({ field: { onChange, ...rest } }) => (
           <Input
             {...rest}
-            autoFocus
             error={errors.clan_name}
             placeholder="Anonymous eSport"
             label={formatMessage(messages.enter_the_clan_name)}
