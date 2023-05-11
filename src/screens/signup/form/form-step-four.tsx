@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { shallowEqual } from "react-redux";
 import { FormattedMessage } from "react-intl";
 import { Controller } from "react-hook-form";
@@ -6,11 +6,12 @@ import { LayoutChangeEvent } from "react-native";
 import { useTheme } from "styled-components/native";
 
 import messages from "../messages";
+import { generateId } from "../../../helpers";
 import { Icon } from "../../../components/icon";
 import { FormStepProps } from "../../../../types";
 import { settingsActions } from "../../../providers/store/reducers";
 import { AddPlayerModal } from "../../../components/add-player-modal";
-import { ITournamentTeam } from "../../../providers/store/reducers/tournament/interfaces";
+import { ITournamentTeam } from "../../../providers/store/reducers/participants/interfaces";
 import {
   useSelector,
   useDispatch,
@@ -70,10 +71,15 @@ export const FormStepFour: React.FC<FormStepProps> = ({
   };
 
   const onSavePlayer = (player: ITournamentTeam) => {
-    team[playerIndex] = player;
+    team[playerIndex] = { ...player, is_team_leader: !playerIndex };
     setValue("team", team);
     clearErrors("team");
   };
+
+  const teamButtons = useMemo(
+    () => [...Array(selectedTournament?.team_size)].map(generateId),
+    []
+  );
 
   return (
     <FormStepWrapper>
@@ -100,10 +106,10 @@ export const FormStepFour: React.FC<FormStepProps> = ({
       </ErrorMessageContainer>
 
       <TeamScrollView>
-        {[...Array(selectedTournament?.team_size)].map((_, index) => (
+        {teamButtons.map((player_id, index) => (
           <Controller
-            key={index}
             name="team"
+            key={player_id}
             control={control}
             rules={clanNameValidation}
             render={() => (
@@ -140,7 +146,11 @@ export const FormStepFour: React.FC<FormStepProps> = ({
         ))}
       </TeamScrollView>
 
-      <AddPlayerModal player={team[playerIndex]} onSavePlayer={onSavePlayer} />
+      <AddPlayerModal
+        player={team[playerIndex]}
+        onSavePlayer={onSavePlayer}
+        default_player_id={teamButtons[playerIndex]}
+      />
     </FormStepWrapper>
   );
 };

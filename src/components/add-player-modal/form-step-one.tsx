@@ -1,11 +1,10 @@
-import React, { useRef } from "react";
+import React from "react";
 import { Controller } from "react-hook-form";
 import { FormattedMessage } from "react-intl";
 
 import { Icon } from "../icon";
 import { Input } from "../input";
 import messages from "./messages";
-import { generateId } from "../../helpers";
 import { FormStepProps } from "../../../types";
 import { useFormValidation } from "../../hooks";
 import { ITournamentTeam } from "../../providers/store/reducers/participants/interfaces";
@@ -22,6 +21,7 @@ import {
 
 type FormStepOneProps = {
   player?: ITournamentTeam;
+  default_player_id: string;
   onButtonPress: VoidFunction;
   isScreenLessThanMaxWidth: boolean;
 } & Partial<FormStepProps<Partial<ITournamentTeam>>>;
@@ -33,11 +33,12 @@ export const FormStepOne: React.FC<FormStepOneProps> = ({
   control,
   clearErrors,
   onButtonPress,
+  default_player_id,
   isScreenLessThanMaxWidth,
 }) => {
   const { playerIgnValidation } = useFormValidation();
+  const player_id = player?.player_id || default_player_id;
   const player_ign = watch?.("player_ign") || player?.player_ign;
-  const user_id = useRef(player?.player_id || generateId()).current;
 
   return (
     <InputContents isScreenLessThanMaxWidth={isScreenLessThanMaxWidth}>
@@ -46,7 +47,7 @@ export const FormStepOne: React.FC<FormStepOneProps> = ({
         <UserContents>
           {player_ign && <UserIGN>{player_ign}</UserIGN>}
           <SubTitle isActive={false}>
-            {user_id.substring(0, 8)}...{user_id.substring(10, 22)}
+            {player_id.substring(0, 8)}...{player_id.substring(10, 22)}
           </SubTitle>
         </UserContents>
       </UserContainer>

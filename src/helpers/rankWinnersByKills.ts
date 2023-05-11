@@ -24,7 +24,9 @@ export const rankWinnersByKills = (
   for (let index = 0; index < participates.length; index++) {
     const participant = participates[index];
     const kills = getTeamTotalKills(participant.team);
-    rankingMap[participant.id] = { kills, participant };
+    if (kills) {
+      rankingMap[participant.id] = { kills, participant };
+    }
   }
 
   const ranks = Object.entries(rankingMap).sort(

@@ -10,9 +10,7 @@ import Animated, {
 import { makeUseStyles } from "../../helpers";
 
 export const BottomSheetBackdrop: React.FC<
-  BottomSheetBackdropProps & {
-    closeModal?: VoidFunction;
-  }
+  BottomSheetBackdropProps & { closeModal?: VoidFunction }
 > = ({ style, animatedIndex, closeModal }) => {
   const { colors } = useStyles();
 

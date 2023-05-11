@@ -6,6 +6,7 @@ export interface ITournamentTeam {
   player_id: string;
   player_ign: string;
   avatar: AvatarType;
+  participant_id: string;
   is_team_leader: boolean;
   created_at: string | number;
   updated_at: string | number;
@@ -17,6 +18,7 @@ export interface ITournamentClan {
   clan_logo: string;
   team_name: string;
   phone_number: string;
+  tournament_id: string;
   email_address: string;
   clan_leader_id: string;
   team: ITournamentTeam[];

@@ -48,6 +48,7 @@ import {
 type ConfirmPaymentModalProps = {
   team: ITournamentTeam[];
   confirmPayment: VoidFunction;
+  isCompletingRegistration: boolean;
   selectedTournament: ITournament | null;
   bottomSheetRef: React.RefObject<BottomSheetModalMethods>;
 };
@@ -57,6 +58,7 @@ export const ConfirmPaymentModal: React.FC<ConfirmPaymentModalProps> = ({
   bottomSheetRef,
   confirmPayment,
   selectedTournament,
+  isCompletingRegistration,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { isMinScreenSize, isDesktopOrLaptop } = useResponsiveScreen();
@@ -78,7 +80,10 @@ export const ConfirmPaymentModal: React.FC<ConfirmPaymentModalProps> = ({
   const onClose = () => bottomSheetRef.current?.close();
 
   const BackdropComponent = (props: BottomSheetBackdropProps) => (
-    <BottomSheetBackdrop {...props} closeModal={onClose} />
+    <BottomSheetBackdrop
+      {...props}
+      closeModal={isCompletingRegistration ? undefined : onClose}
+    />
   );
 
   const handleConfirm = () => {
@@ -93,12 +98,12 @@ export const ConfirmPaymentModal: React.FC<ConfirmPaymentModalProps> = ({
   return (
     <BottomSheetModal
       ref={bottomSheetRef}
-      enablePanDownToClose
       snapPoints={animatedSnapPoints}
       handleHeight={animatedHandleHeight}
       contentHeight={animatedContentHeight}
       backdropComponent={BackdropComponent}
       handleIndicatorStyle={{ opacity: 0.3 }}
+      enablePanDownToClose={!isCompletingRegistration}
       containerStyle={[
         { width: "100%", maxWidth: MAX_WIDTH },
         isScreenLessThanMaxWidth && {
@@ -228,19 +233,26 @@ export const ConfirmPaymentModal: React.FC<ConfirmPaymentModalProps> = ({
 
           <Spacer size={30} />
           <ButtonContainer isScreenLessThanMaxWidth={isScreenLessThanMaxWidth}>
-            <ButtonWrapper size={0.6}>
-              <Button
-                isCancel
-                onPress={onClose}
-                mode="outlined"
-                style={{ borderColor: hexToRGB(palette.text, 0.2) }}
-              >
-                Cancel
-              </Button>
-            </ButtonWrapper>
+            {!isCompletingRegistration && (
+              <ButtonWrapper size={0.6}>
+                <Button
+                  isCancel
+                  mode="outlined"
+                  onPress={onClose}
+                  style={{ borderColor: hexToRGB(palette.text, 0.2) }}
+                >
+                  Cancel
+                </Button>
+              </ButtonWrapper>
+            )}
             <ButtonWrapper>
-              <Button loading={isLoading} onPress={handleConfirm}>
-                Confirm and Submit
+              <Button
+                onPress={handleConfirm}
+                loading={isLoading || isCompletingRegistration}
+              >
+                {isCompletingRegistration
+                  ? "Completing submission"
+                  : "Confirm and Submit"}
               </Button>
             </ButtonWrapper>
           </ButtonContainer>

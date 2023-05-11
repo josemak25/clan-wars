@@ -2,9 +2,9 @@ import { useMemo, useState } from "react";
 import { shallowEqual } from "react-redux";
 import { ImagePickerAsset } from "expo-image-picker";
 
-import { uploadFile } from "../config/network";
 import { useSelector, useDispatch } from "./store";
 import { settingsActions } from "../providers/store/reducers";
+import { getLogoSignedUrl, uploadFile } from "../config/network";
 
 export const useLogoUpload = () => {
   const dispatch = useDispatch();
@@ -28,10 +28,11 @@ export const useLogoUpload = () => {
   ): Promise<string> => {
     dispatch(settingsActions.toggleIsLogoUploadCompleted(false));
     setIsLoading(true);
-    const image_url = await uploadFile(file, onProgress);
+    const bucket_url = await uploadFile(file, onProgress);
+    const { data } = await getLogoSignedUrl(bucket_url.split("/")[1]);
     dispatch(settingsActions.toggleIsLogoUploadCompleted(true));
     setIsLoading(false);
-    return image_url;
+    return data?.signedUrl!;
   };
 
   return useMemo(

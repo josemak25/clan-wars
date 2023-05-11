@@ -10,10 +10,11 @@ import messages from "./messages";
 import { useSelector } from "../../hooks";
 import { IFormStep } from "../../../types";
 import { PaymentModal } from "../../components/paystack";
-import { generateId, isValidNumber } from "../../helpers";
+import { createParticipant } from "../../config/network";
 import { SuccessModal } from "../../components/success-modal";
 import { RootStackScreenProps } from "../../../types/navigation";
 import { defaultFormSteps, forms, FormStepIndicator } from "./form";
+import { generateId, isValidNumber, reportError } from "../../helpers";
 import { ConfirmPaymentModal } from "../../components/confirm-payment-modal";
 import { ITournamentClan } from "../../providers/store/reducers/participants/interfaces";
 
@@ -26,9 +27,9 @@ import {
   FormStepScrollViewWrapper,
 } from "./signup.styles";
 
-export const SignUpScreen: React.FC<
-  RootStackScreenProps<"SignUpScreen">
-> = () => {
+export const SignUpScreen: React.FC<RootStackScreenProps<"SignUpScreen">> = ({
+  navigation,
+}) => {
   const { formatMessage } = useIntl();
   const [isNext, setIsNext] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -118,7 +119,7 @@ export const SignUpScreen: React.FC<
     setCurrentIndex(nextIndex);
   };
 
-  const onSubmit: SubmitHandler<ITournamentClan> = (data) => {
+  const verifyForm: SubmitHandler<ITournamentClan> = (data) => {
     Keyboard.dismiss();
     setIsLoading(!isLoading);
     setClan(data);
@@ -137,6 +138,26 @@ export const SignUpScreen: React.FC<
     setIsConfirmed(false);
     setPaymentReference("");
     setFormSteps(defaultFormSteps);
+  };
+
+  const submitForm = async (reference: string) => {
+    try {
+      if (clan && reference === paymentReference) {
+        confirmPaymentSheetRef.current?.present();
+        setIsLoading(!isLoading);
+
+        await createParticipant({
+          ...clan,
+          tournament_id: selectedTournament?.id!!,
+        });
+
+        confirmPaymentSheetRef.current?.dismiss();
+        successSheetRef.current?.present();
+        resetForm();
+      }
+    } catch (error) {
+      reportError(error as Error);
+    }
   };
 
   return (
@@ -177,7 +198,7 @@ export const SignUpScreen: React.FC<
 
           <NextStepButton
             loading={isLoading}
-            onPress={isLastPageOfFormActive ? handleSubmit(onSubmit) : goNext}
+            onPress={isLastPageOfFormActive ? handleSubmit(verifyForm) : goNext}
           >
             <FormattedMessage
               {...messages[
@@ -190,6 +211,7 @@ export const SignUpScreen: React.FC<
 
       <ConfirmPaymentModal
         team={team}
+        isCompletingRegistration={isLoading}
         bottomSheetRef={confirmPaymentSheetRef}
         selectedTournament={selectedTournament}
         confirmPayment={() => {
@@ -198,19 +220,25 @@ export const SignUpScreen: React.FC<
         }}
       />
 
-      <SuccessModal bottomSheetRef={successSheetRef} />
+      <SuccessModal
+        bottomSheetRef={successSheetRef}
+        onClose={() => navigation.replace("HomeScreen")}
+      />
 
       <PaymentModal
         clan={clan}
         isVisible={isConfirmed}
         reference={paymentReference}
         selectedTournament={selectedTournament}
-        onSuccess={({ reference }) => {
-          if (reference === paymentReference) {
-            resetForm();
-            successSheetRef.current?.present();
-          }
-        }}
+        channels={[
+          "bank_transfer",
+          "card",
+          "mobile_money",
+          "bank",
+          "ussd",
+          "qr",
+        ]}
+        onSuccess={({ reference }) => submitForm(reference)}
         onClose={() => {
           setIsConfirmed(false);
           confirmPaymentSheetRef.current?.present();

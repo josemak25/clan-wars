@@ -1,67 +1,73 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { useTheme } from "styled-components/native";
 import { NavigationContainer } from "@react-navigation/native";
 import { shallowEqual } from "react-redux";
-import BottomSheet, {
+import {
   BottomSheetView,
+  BottomSheetModal,
   BottomSheetBackdropProps,
 } from "@gorhom/bottom-sheet";
 
 import { TabNavigator } from "./tabs";
-import { useDispatch, useSelector } from "../hooks";
 import { RootState } from "../providers/store/store";
 import { settingsActions } from "../providers/store/reducers";
 import { BottomSheetBackdrop } from "../components/modal-backdrop";
-
-const snapPoints = ["95%"];
+import { useDispatch, useResponsiveScreen, useSelector } from "../hooks";
 
 export const WebTabs = () => {
   const dispatch = useDispatch();
-  const { palette, layout } = useTheme();
-  const bottomSheetRef = useRef<BottomSheet>(null);
+  const { isMinScreenSize } = useResponsiveScreen();
+  const enablePanDownToClose = isMinScreenSize(1024);
+  const { palette, layout, breakpoints } = useTheme();
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
+
+  const snapPoints = useMemo(
+    () => [enablePanDownToClose ? "90%" : "85%"],
+    [enablePanDownToClose]
+  );
 
   const { isDetailModalVisible } = useSelector(
     ({ settings }: RootState) => settings,
     shallowEqual
   );
 
-  const onClose = () => bottomSheetRef.current?.close();
+  const onClose = () => {
+    bottomSheetRef.current?.close();
+    dispatch(settingsActions.toggleDetailModalVisibility());
+  };
 
   const BackdropComponent = (props: BottomSheetBackdropProps) => (
     <BottomSheetBackdrop {...props} closeModal={onClose} />
   );
 
   useEffect(() => {
-    isDetailModalVisible && bottomSheetRef.current?.expand();
+    if (isDetailModalVisible) {
+      bottomSheetRef.current?.present();
+    } else {
+      bottomSheetRef.current?.close();
+    }
   }, [isDetailModalVisible]);
 
-  if (!isDetailModalVisible) {
-    return null;
-  }
-
   return (
-    <BottomSheet
-      index={0}
-      enablePanDownToClose
+    <BottomSheetModal
       ref={bottomSheetRef}
       snapPoints={snapPoints}
       handleComponent={() => null}
       backdropComponent={BackdropComponent}
-      containerHeight={layout.screen.height}
-      onClose={() => dispatch(settingsActions.toggleDetailModalVisibility())}
+      enablePanDownToClose={enablePanDownToClose}
+      backgroundStyle={{ backgroundColor: palette.background }}
       style={{
-        maxWidth: 705,
         margin: "auto",
         overflow: "hidden",
         borderRadius: layout.radius,
+        maxWidth: breakpoints.tablet_viewport - 63,
       }}
-      backgroundStyle={{ backgroundColor: palette.background }}
     >
       <BottomSheetView style={{ flex: 1 }}>
         <NavigationContainer independent>
           <TabNavigator />
         </NavigationContainer>
       </BottomSheetView>
-    </BottomSheet>
+    </BottomSheetModal>
   );
 };

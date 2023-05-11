@@ -63,12 +63,14 @@ const defaultFormSteps: IAddPlayerFormStep[] = [
 
 type AddPlayerModalProps = {
   player?: ITournamentTeam;
+  default_player_id: string;
   onSavePlayer: (player: ITournamentTeam) => void;
 };
 
 export const AddPlayerModal: React.FC<AddPlayerModalProps> = ({
   player,
   onSavePlayer,
+  default_player_id,
 }) => {
   const dispatch = useDispatch();
   const keyboard = useAnimatedKeyboard();
@@ -147,15 +149,11 @@ export const AddPlayerModal: React.FC<AddPlayerModalProps> = ({
   };
 
   const onSubmit: SubmitHandler<Partial<ITournamentTeam>> = (data) => {
-    const date = new Date().toISOString();
-
     onSavePlayer({
       ...data,
       kills: 0,
-      created_at: date,
-      updated_at: date,
       id: generateId(),
-      player_id: generateId(),
+      player_id: default_player_id,
     } as ITournamentTeam);
 
     dispatch(settingsActions.toggleAddPlayerModalVisibility());
@@ -242,6 +240,7 @@ export const AddPlayerModal: React.FC<AddPlayerModalProps> = ({
                         control={control}
                         setValue={setValue}
                         clearErrors={clearErrors}
+                        default_player_id={default_player_id}
                         isScreenLessThanMaxWidth={isScreenLessThanMaxWidth}
                         onButtonPress={
                           isLastPageOfFormActive

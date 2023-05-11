@@ -9,7 +9,7 @@ import { chunk } from "../../helpers";
 import { FormStepProps } from "../../../types";
 import { avatarList } from "../icon/interface";
 import { useFormValidation } from "../../hooks";
-import { ITournamentTeam } from "../../providers/store/reducers/tournament/interfaces";
+import { ITournamentTeam } from "../../providers/store/reducers/participants/interfaces";
 
 import {
   Label,

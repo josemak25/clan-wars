@@ -55,7 +55,6 @@ export const Clan: React.FC<ITournamentClan> = (props) => {
             avatar={avatar}
             name={player_ign}
             kill_count={kills}
-            image_preview={avatar}
           />
         ))}
       </Contents>

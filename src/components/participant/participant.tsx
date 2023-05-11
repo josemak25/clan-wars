@@ -20,7 +20,7 @@ export type ParticipantProps = {
   image_uri?: string;
   kill_count: number;
   avatar?: AvatarType;
-  image_preview: string;
+  image_preview?: string;
   iconBackground?: string;
   icon?: React.ComponentProps<typeof Ionicons>["name"];
 };
@@ -34,7 +34,7 @@ export const Participant: React.FC<ParticipantProps> = (props) => {
         {props.image_uri && (
           <Avatar
             uri={props.image_uri}
-            preview={{ uri: props.image_preview }}
+            preview={{ uri: props?.image_preview }}
           />
         )}
 

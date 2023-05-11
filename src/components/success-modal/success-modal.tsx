@@ -24,25 +24,30 @@ import {
 } from "./success-modal.styles";
 
 type SuccessModalModalProps = {
+  onClose: VoidFunction;
   bottomSheetRef: React.RefObject<BottomSheetModalMethods>;
 };
 
 const snapPoints = ["100%"];
 
 export const SuccessModal: React.FC<SuccessModalModalProps> = ({
+  onClose,
   bottomSheetRef,
 }) => {
   const { palette, colors } = useTheme();
 
-  const onClose = () => bottomSheetRef.current?.close();
+  const onDismiss = () => {
+    onClose();
+    bottomSheetRef.current?.close();
+  };
 
   const BackdropComponent = (props: BottomSheetBackdropProps) => (
-    <BottomSheetBackdrop {...props} />
+    <BottomSheetBackdrop {...props} closeModal={onDismiss} />
   );
 
   return (
     <BottomSheetModal
-      onDismiss={onClose}
+      onDismiss={onDismiss}
       ref={bottomSheetRef}
       snapPoints={snapPoints}
       enablePanDownToClose={false}

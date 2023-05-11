@@ -11,7 +11,10 @@ import { supabase } from "./supabase";
 import { SUPER_BASE_KEY, SUPER_BASE_URL } from "@env";
 import { ISignupGuest, ISigninGuest } from "../providers/auth/interfaces";
 import { ITournament } from "../providers/store/reducers/tournament/interfaces";
-import { ITournamentClan } from "../providers/store/reducers/participants/interfaces";
+import {
+  ITournamentClan,
+  ITournamentTeam,
+} from "../providers/store/reducers/participants/interfaces";
 
 /**
  *
@@ -68,8 +71,7 @@ export const uploadFile = async (
   payload: ImagePickerAsset & { extension: string },
   onProgress: XMLHttpRequestEventTarget["onprogress"]
 ): Promise<string> => {
-  return new Promise(async (resolve, reject) => {
-    const { data } = await supabase.auth.getSession();
+  return new Promise((resolve, reject) => {
     const endpoint = `${SUPER_BASE_URL}/storage/v1/object/clan_logos/${payload.fileName!}`;
 
     const xhr = new XMLHttpRequest();
@@ -78,11 +80,8 @@ export const uploadFile = async (
     xhr.setRequestHeader("x-upsert", "false");
     xhr.setRequestHeader("apikey", SUPER_BASE_KEY);
     xhr.setRequestHeader("cache-control", "max-age=3600");
+    xhr.setRequestHeader("authorization", `Bearer ${SUPER_BASE_KEY}`);
     xhr.setRequestHeader("content-type", `image/${payload.extension}`);
-    xhr.setRequestHeader(
-      "authorization",
-      `Bearer ${data.session?.access_token!}`
-    );
 
     xhr.onreadystatechange = () => {
       // In local files, status is 0 upon success in Mozilla Firefox
@@ -103,6 +102,17 @@ export const uploadFile = async (
 
     xhr.send(decode(payload.base64!));
   });
+};
+
+/**
+ *
+ * @description get clan logo public url
+ * @function getLogoSignedUrl
+ * @property string - url
+ */
+export const getLogoSignedUrl = (url: string) => {
+  const expiresIn = 1000 * 60 * 60 * 24 * 365; // 1 year
+  return supabase.storage.from("clan_logos").createSignedUrl(url, expiresIn);
 };
 
 /**
@@ -134,11 +144,42 @@ export const fetchParticipants = async (tournament_id: string) => {
     .from<"tournament_participants", ITournamentClan>("tournament_participants")
     .select(
       `
-      *,
+        *,
         tournament_players (
           *
-      )
- `
+        )
+    `
     )
     .eq("tournament_id", tournament_id);
+};
+
+/**
+ *
+ * @description create a tournament participant
+ * @function createParticipant
+ */
+export const createParticipant = async (payload: ITournamentClan) => {
+  console.log("==========payload==========");
+  console.log(payload);
+  console.log("========payload============");
+
+  const { team, ...rest } = payload;
+
+  const { data: participant } = await supabase
+    .from<"tournament_participants", ITournamentClan>("tournament_participants")
+    .insert([rest as never])
+    .select("id");
+
+  console.log("=========participant======");
+  console.log(participant);
+  console.log("========participant=============");
+
+  const tournament_team = team.map((player) => ({
+    ...player,
+    participant_id: participant![0].id,
+  }));
+
+  await supabase
+    .from<"tournament_players", ITournamentTeam>("tournament_players")
+    .insert([tournament_team as never]);
 };
