@@ -1,56 +1,63 @@
-import Reactotron from "reactotron-react-native";
-import {
-  Control,
-  useForm,
-  FieldErrors,
-  UseFormWatch,
-  UseFormSetValue,
-  UseFormSetError,
-  UseFormClearErrors,
-} from "react-hook-form";
-import {
-  ITournamentClan,
-  ITournamentTeam,
-} from "../src/providers/store/reducers/participants/interfaces";
-
-declare global {
-  interface Console {
-    tron: (typeof Reactotron)["log"];
-  }
-}
-
-console.tron = reactotron.log;
-
-export interface IFormStep {
+export interface ITournamentTeam {
   id: string;
-  icon: string;
-  title: string;
-  isViewable: boolean;
-  highlighted: boolean;
-  key: keyof ITournamentClan;
+  kills: number;
+  avatar: string;
+  player_id: string;
+  player_ign: string;
+  participant_id: string;
+  is_team_leader: boolean;
+  created_at: string | number;
+  updated_at: string | number;
 }
 
-export interface IAddPlayerFormStep
-  extends Omit<IFormStep, "icon" | "highlighted"> {
-  key: keyof ITournamentTeam;
+export interface ITournamentClan {
+  id: string;
+  clan_name: string;
+  clan_logo: string;
+  team_name: string;
+  phone_number: string;
+  tournament_id: string;
+  email_address: string;
+  clan_leader_id: string;
+  team: ITournamentTeam[];
+  updated_at: string | number;
+  created_at: string | number;
+  tournament_players: ITournamentTeam[];
 }
 
-export type FormStepProps<T = ITournamentClan> = {
-  watch: UseFormWatch<T>;
-  errors: FieldErrors<T>;
-  control: Control<T, any>;
-  setValue: UseFormSetValue<T>;
-  setError: UseFormSetError<T>;
-  clearErrors: UseFormClearErrors<T>;
-};
-
-export interface GroupInterface {
-  id: number;
+export interface ITournamentHost {
+  id: string;
   name: string;
+  avatar: string;
+  created_at: string | number;
+  updated_at: string | number;
 }
 
-export type FallbackComponentProps = {
-  isModal?: boolean;
-  error?: Error | null;
-  resetError: VoidFunction;
-};
+export interface ITournamentPaymentReceipt {
+  id: string;
+  tournament_id: string;
+  payment_reference: string;
+  created_at: string | number;
+  updated_at: string | number;
+  tournament_participant: string;
+}
+
+export interface ITournament {
+  id: string;
+  title: string;
+  tags: string[];
+  host_id: string;
+  team_size: number;
+  room_size: number;
+  price_pool: number;
+  participates: number;
+  cover_image?: string;
+  tournament_icon?: string;
+  registration_fee: string;
+  end_date: string | number;
+  updated_at: string | number;
+  created_at: string | number;
+  start_date: string | number;
+  winner_participant_id?: string;
+  tournament_host: ITournamentHost;
+}
