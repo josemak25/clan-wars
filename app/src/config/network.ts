@@ -11,10 +11,7 @@ import { supabase } from "./supabase";
 import { SUPER_BASE_KEY, SUPER_BASE_URL } from "@env";
 import { ISignupGuest, ISigninGuest } from "../providers/auth/interfaces";
 import { ITournament } from "../providers/store/reducers/tournament/interfaces";
-import {
-  ITournamentClan,
-  ITournamentTeam,
-} from "../providers/store/reducers/participants/interfaces";
+import { ITournamentClan } from "../providers/store/reducers/participants/interfaces";
 
 /**
  *
@@ -119,7 +116,7 @@ export const getLogoSignedUrl = (url: string) => {
  *
  * @description fetch all tournaments
  * @function fetchTournaments
- * @returns  PostgrestSingleResponse<ITournament[]>
+ * @returns PostgrestSingleResponse<ITournament[]>
  */
 export const fetchTournaments = async (): Promise<
   PostgrestSingleResponse<ITournament[]>
@@ -161,9 +158,20 @@ export const fetchParticipants = async (tournament_id: string) => {
 export const registerForTournament = async (
   payload: ITournamentClan & { payment_reference: string }
 ) => {
-  const { error } = await supabase.functions.invoke("register-tournament", {
-    body: payload,
-  });
+  const { createClient } = require("@supabase/supabase-js");
+
+  // Use the credentials outputted in your terminal when running `supabase start`
+  const supabaseLocal = createClient(
+    "http://localhost:54321",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0"
+  );
+
+  console.log("payload", payload);
+
+  const { error } = await supabaseLocal.functions.invoke(
+    "register-tournament",
+    { body: payload }
+  );
 
   if (error) throw error;
 };

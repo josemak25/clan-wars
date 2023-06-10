@@ -1,4 +1,4 @@
-interface ResponseInterface {
+interface PayStackResponseInterface {
   status: boolean;
   message: string;
   data: {
@@ -31,21 +31,43 @@ interface ResponseInterface {
   };
 }
 
+interface VerifyPaymentResponseInterface {
+  error: string | null;
+  data: PayStackResponseInterface["data"] | null;
+}
+
 export const verifyPayment = async (
   payment_reference: string,
-): Promise<ResponseInterface["data"]> => {
-  const request = new Request(
-    `https://api.paystack.co/transaction/verify/${payment_reference}`,
-    {
-      method: "GET",
-      headers: {
-        // Paystack API KEY - env var exported by default.
-        Authorization: Deno.env.get("PAY_STACK_PUBLIC_KEY") ?? "",
-      },
-    },
-  );
+  email_address: string,
+): Promise<VerifyPaymentResponseInterface> => {
+  const result: VerifyPaymentResponseInterface = { error: null, data: null };
 
-  const response = await fetch(request);
-  const { data }: ResponseInterface = await response.json();
-  return data;
+  try {
+    const request = new Request(
+      `https://api.paystack.co/transaction/verify/${payment_reference}`,
+      {
+        method: "GET",
+        headers: {
+          // Paystack API KEY - env var exported by default.
+          Authorization: `Bearer ${Deno.env.get("PAY_STACK_SECRET_KEY")}`,
+        },
+      },
+    );
+
+    const response = await fetch(request);
+    const { data }: PayStackResponseInterface = await response.json();
+
+    // throw error if payment data returned from paystack was not successful
+    if (
+      data?.status !== "success" ||
+      data?.reference !== payment_reference ||
+      data?.customer.email !== email_address
+    ) {
+      throw new Error("Failed to register tournament, no payment's made");
+    }
+
+    return { ...result, data };
+  } catch (error) {
+    return { ...result, error };
+  }
 };
