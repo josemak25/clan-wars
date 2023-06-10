@@ -14,11 +14,11 @@ export const checkPaymentReceipt = async (
         "tournament_payment_receipts",
       )
       .select("id")
-      .eq("payment_reference", payment_reference)
-      .eq("tournament_id", tournament_id);
+      .eq("tournament_id", tournament_id)
+      .eq("payment_reference", payment_reference);
 
   // throw error if payment reference already exit
-  if (payment_receipt) {
+  if (payment_receipt![0]?.id) {
     result.error = new Error("Already registered for this tournament!");
   }
 
