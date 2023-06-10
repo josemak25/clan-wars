@@ -158,20 +158,9 @@ export const fetchParticipants = async (tournament_id: string) => {
 export const registerForTournament = async (
   payload: ITournamentClan & { payment_reference: string }
 ) => {
-  const { createClient } = require("@supabase/supabase-js");
-
-  // Use the credentials outputted in your terminal when running `supabase start`
-  const supabaseLocal = createClient(
-    "http://localhost:54321",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0"
-  );
-
-  console.log("payload", payload);
-
-  const { error } = await supabaseLocal.functions.invoke(
-    "register-tournament",
-    { body: payload }
-  );
+  const { error } = await supabase.functions.invoke("register-tournament", {
+    body: payload,
+  });
 
   if (error) throw error;
 };
