@@ -14,8 +14,8 @@ export const checkPaymentReceipt = async (
         "tournament_payment_receipts",
       )
       .select("id")
-      .eq("tournament_id", tournament_id)
-      .eq("payment_reference", payment_reference);
+      .eq("payment_reference", payment_reference)
+      .eq("tournament_id", tournament_id);
 
   // throw error if payment reference already exit
   if (payment_receipt) {
