@@ -43,9 +43,8 @@ type TournamentProps = {
   joinTournament: (id: ITournament["id"]) => void;
 } & ITournament;
 
-export const TOURNAMENT_MIN_WIDTH = Platform.select({ default: 380, web: 350 });
-export const TOURNAMENT_MAX_WIDTH =
-  TOURNAMENT_MIN_WIDTH + Platform.select({ default: 20, web: 30 });
+export const TOURNAMENT_MIN_WIDTH = 380;
+export const TOURNAMENT_MAX_WIDTH = TOURNAMENT_MIN_WIDTH + 20;
 
 export const Tournament: React.FC<TournamentProps> = (props) => {
   const { palette, colors, hexToRGB } = useTheme();
@@ -156,7 +155,7 @@ export const Tournament: React.FC<TournamentProps> = (props) => {
                   color={hexToRGB(palette.text, 0.4)}
                 />
                 <PriceSubtitle>
-                  {participates}/{room_size}
+                  {participates * team_size}/{room_size}
                 </PriceSubtitle>
               </PriceTrophy>
             </PriceWrapper>

@@ -14,6 +14,7 @@ import { useLogoUpload, useFormValidation, useOnLayout } from "../../../hooks";
 import {
   Image,
   Title,
+  Label,
   Spacer,
   SubTitle,
   UploadIcon,
@@ -27,7 +28,6 @@ import {
   UploadIconContainer,
   LogoUploadContainer,
   ErrorMessageContainer,
-  Label,
 } from "../signup.styles";
 
 export const FormStepThree: React.FC<FormStepProps> = ({

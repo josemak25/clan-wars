@@ -9,7 +9,6 @@ import {
 } from "@gorhom/bottom-sheet";
 
 import { TabNavigator } from "./tabs";
-import { RootState } from "../providers/store/store";
 import { useDispatch, useSelector } from "../hooks";
 import { settingsActions } from "../providers/store/reducers";
 import { BottomSheetBackdrop } from "../components/modal-backdrop";
@@ -22,7 +21,7 @@ export const WebTabs = () => {
   const bottomSheetRef = useRef<BottomSheetModal>(null);
 
   const { isDetailModalVisible } = useSelector(
-    ({ settings }: RootState) => settings,
+    ({ settings }) => settings,
     shallowEqual
   );
 

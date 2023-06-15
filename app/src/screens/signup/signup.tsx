@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Keyboard } from "react-native";
 import { shallowEqual } from "react-redux";
-import Toast from "react-native-toast-message";
 import { FormattedMessage, useIntl } from "react-intl";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -155,11 +154,6 @@ export const SignUpScreen: React.FC<RootStackScreenProps<"SignUpScreen">> = ({
         successSheetRef.current?.present();
       }
     } catch (error: any) {
-      Toast.show({
-        type: "error",
-        text2: error.message,
-        text1: "An Error occurred 😔",
-      });
       reportError(error as Error);
     } finally {
       setIsLoading(false);

@@ -1,12 +1,18 @@
 import React, { Fragment } from "react";
+import { shallowEqual } from "react-redux";
 import { useTheme } from "styled-components/native";
 import { ListRenderItem, Platform } from "react-native";
 
 import { Icon } from "../../components/icon";
 import { FallbackScreen } from "../../components/fallback";
 import { RootStackScreenProps } from "../../../types/navigation";
-import { useDispatch, useResponsiveScreen, useTournaments } from "../../hooks";
 import { ITournament } from "../../providers/store/reducers/tournament/interfaces";
+import {
+  useDispatch,
+  useSelector,
+  useTournaments,
+  useResponsiveScreen,
+} from "../../hooks";
 import {
   Tournament,
   TOURNAMENT_MAX_WIDTH,
@@ -33,6 +39,11 @@ export const HomeScreen: React.FC<RootStackScreenProps<"HomeScreen">> = ({
   const dispatch = useDispatch();
   const { isDesktopOrLaptop } = useResponsiveScreen();
   const { data, isLoading, isEmpty, error, onRetry } = useTournaments();
+
+  const { isDetailModalVisible } = useSelector(
+    ({ settings }) => settings,
+    shallowEqual
+  );
 
   const onEventPress = (tournament: ITournament) => {
     dispatch(tournamentActions.setSelectedTournament(tournament));
@@ -119,6 +130,7 @@ export const HomeScreen: React.FC<RootStackScreenProps<"HomeScreen">> = ({
         renderItem={renderItem}
         stickyHeaderIndices={[0]}
         stickyHeaderHiddenOnScroll
+        scrollEnabled={!isDetailModalVisible}
         //@ts-ignore
         isMultipleRows={numColumns > 1}
         isDesktopOrLaptop={isDesktopOrLaptop}

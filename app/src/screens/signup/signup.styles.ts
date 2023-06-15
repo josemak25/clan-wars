@@ -1,3 +1,4 @@
+import { Platform } from "react-native";
 import styled, { css } from "styled-components/native";
 import {
   Text,
@@ -6,21 +7,23 @@ import {
 } from "react-native-paper";
 
 import { ErrorMessageContainer as __ErrorMessageContainer } from "../../components/input/input.styles";
-import { Platform } from "react-native";
 
 export { ErrorMessage, Label } from "../../components/input/input.styles";
 
-export const Container = styled.View`
+export const Container = styled.ScrollView.attrs((p) => ({
+  contentContainerStyle: {
+    flexGrow: 1,
+    alignItems: "center",
+    paddingTop: p.theme.layout.gutter * 2.5,
+  },
+}))`
   flex: 1;
-  align-items: center;
-  padding-top: ${(p) => p.theme.layout.gutter * 2.5}px;
   background-color: ${(p) => p.theme.palette.background};
 `;
 
 export const MaxWidthContainer = styled.View`
   flex: 1;
   width: 100%;
-  overflow: hidden;
   max-width: ${(p) => p.theme.breakpoints.tablet_viewport - 100}px;
 `;
 
@@ -92,6 +95,7 @@ export const ButtonContainer = styled.View`
   flex-direction: row;
   justify-content: flex-end;
   margin: 50px ${(p) => p.theme.layout.gutter}px;
+  padding-bottom: ${(p) => p.theme.insets.bottom + p.theme.layout.gutter * 2};
 `;
 
 export const StepTitle = styled(Title)`

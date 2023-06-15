@@ -7,7 +7,7 @@ const messages = defineMessages({
   },
   subtitle: {
     id: "success_modal.subtitle",
-    defaultMessage: `This is a paid tournament and requires all participates to pay a one time registration fee, the payment qualifies you to be able to play the this tournament.`,
+    defaultMessage: `You will be informed of your tournament participation 48hrs prior to start date via SMS or you may also check your contact email for follow-ups.`,
   },
   close: {
     id: "success_modal.close",

@@ -26,6 +26,8 @@ export function useResponsiveFontSize() {
     // const heightPercent = (fontSize * deviceHeight) / standardScreenHeight;
     // return Math.round(heightPercent) ;
 
+    // return fontSize;
+
     return Platform.select({ default: fontSize, web: fontSize - 2 });
   };
 

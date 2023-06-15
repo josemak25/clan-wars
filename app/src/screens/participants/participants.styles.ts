@@ -9,7 +9,7 @@ export const FlatList = styled(__FlatList).attrs((p) => ({
     gap: 50,
     flexGrow: 1,
     paddingTop: p.theme.layout.gutter,
-    paddingBottom: p.theme.layout.gutter * 2,
+    paddingBottom: p.theme.insets.bottom + p.theme.layout.gutter,
   },
 }))`
   flex: 1;
