@@ -33,8 +33,8 @@ import {
 export const ThemeProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const dispatch = useDispatch();
   const insets = useSafeAreaInsets();
-  const scale = useResponsiveFontSize();
   const systemTheme = useColorScheme();
+  const scale = useResponsiveFontSize();
   const dimension = useWindowDimensions();
   const { colorMode } = useSelector(({ settings }) => settings, shallowEqual);
 

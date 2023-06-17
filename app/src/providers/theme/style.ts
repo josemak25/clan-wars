@@ -61,7 +61,6 @@ declare module "styled-components/native" {
       // scale app font
       scale: {
         value: (number: number) => number;
-        percentage: (number: number) => number;
       };
     };
     // App dark mode condition

@@ -1,35 +1,19 @@
-import { Platform, useWindowDimensions } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-
-// import { useResponsiveScreen } from "./useResponsiveScreen";
+import { PixelRatio, Platform } from "react-native";
+import { useMediaQuery } from "react-responsive";
 
 export function useResponsiveFontSize() {
-  const insets = useSafeAreaInsets();
-  const { height, width } = useWindowDimensions();
-  // const { isDesktopOrLaptop } = useResponsiveScreen();
+  const isMobile = useMediaQuery({ maxWidth: 500 });
 
-  const offset = width > height ? 0 : insets.top;
-  const standardLength = width > height ? width : height;
-  const deviceHeight = standardLength - offset;
+  const value = (fontSize: number): number => {
+    const fontScale = PixelRatio.getFontScale();
 
-  const percentage = (percent: number): number => {
-    const heightPercent = (percent * deviceHeight) / 100;
-    return Math.round(heightPercent);
+    const size = Platform.select({
+      web: isMobile ? fontSize - 1 / fontScale : fontSize / fontScale,
+      default: isMobile ? fontSize + 2 / fontScale : fontSize / fontScale,
+    });
+
+    return size;
   };
 
-  // guideline height for standard 5" device screen is 680
-  const value = (
-    fontSize: number
-    // standardScreenHeight = !isDesktopOrLaptop ? height : width + 100
-    // standardScreenHeight = Math.max(height, width) + 100
-  ): number => {
-    // const heightPercent = (fontSize * deviceHeight) / standardScreenHeight;
-    // return Math.round(heightPercent) ;
-
-    // return fontSize;
-
-    return Platform.select({ default: fontSize, web: fontSize - 2 });
-  };
-
-  return { value, percentage };
+  return { value };
 }
