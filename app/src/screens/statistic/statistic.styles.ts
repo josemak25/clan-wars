@@ -10,6 +10,7 @@ export {
   ButtonContainer,
 } from "../../components/tournament/tournament.styles";
 export { Spacer } from "../signup/signup.styles";
+export { ActivityIndicator } from "../home/home.styles";
 
 export const ScrollView = styled.ScrollView.attrs<{
   isDesktopOrLaptop: boolean;
@@ -107,7 +108,7 @@ export const Scores = styled(ClanName)`
   font-family: ${(p) => p.theme.fonts.variants.roboto_bold};
 `;
 
-export const ClanScoresContainer = styled.View`
+export const ClanScoresContainer = styled.View<{ isLoading?: boolean }>`
   gap: ${(p) => p.theme.layout.gutter}px;
-  margin-top: ${(p) => p.theme.layout.gutter * 3}px;
+  margin-top: ${(p) => p.theme.layout.gutter * (p.isLoading ? 5 : 3)}px;
 `;

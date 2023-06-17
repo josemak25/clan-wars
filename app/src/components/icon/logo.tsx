@@ -12,9 +12,9 @@ export const Logo = ({
   const { colors, palette } = useTheme();
 
   return (
-    <LogoButton style={style}>
-      <LogoContainer>
-        <View style={{ top: -4, left: -28 }}>
+    <LogoContainer style={style}>
+      <LogoWrapper>
+        <View style={{ top: -4, left: -25, transform: [{ scale: 0.9 }] }}>
           <Svg height="70" width="100" viewBox="0 0 600 3000" {...props}>
             <Path
               fill={colors.dark.text}
@@ -55,7 +55,7 @@ export const Logo = ({
             />
           </Svg>
         </View>
-      </LogoContainer>
+      </LogoWrapper>
 
       {isonlyicon !== "true" ? (
         <Fragment>
@@ -76,14 +76,14 @@ export const Logo = ({
           <LogoTitle>nonymous</LogoTitle>
         </Fragment>
       ) : null}
-    </LogoButton>
+    </LogoContainer>
   );
 };
 
-const LogoContainer = style.View`
-  width: 75px;
-  height: 70px;
-  border-radius: 5px;
+const LogoWrapper = style.View`
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
   align-items: center;
   transform: scale(0.9);
   justify-content: center;
@@ -100,7 +100,7 @@ const LogoTitle = style.Text`
   font-family: ${(p) => p.theme.fonts.variants.roboto_bold};
 `;
 
-const LogoButton = style.View`
+const LogoContainer = style.View`
   left: -25px;
   align-items: center;
   flex-direction: row;

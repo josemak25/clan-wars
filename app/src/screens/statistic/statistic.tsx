@@ -32,6 +32,7 @@ import {
   WinnerContainer,
   ClanImageWrapper,
   DefaultClanImage,
+  ActivityIndicator,
   ClanImageContainer,
   ClanScoresContainer,
 } from "./statistic.styles";
@@ -40,8 +41,8 @@ export const StatisticsScreen: React.FC<
   RootTabScreenProps<"StatisticsScreen">
 > = () => {
   const { palette, layout } = useTheme();
-  const { data: participants } = useParticipants();
   const { isDesktopOrLaptop } = useResponsiveScreen();
+  const { data: participants, isLoading } = useParticipants();
 
   const { selectedTournament } = useSelector(
     ({ tournament }: RootState) => tournament,
@@ -169,22 +170,26 @@ export const StatisticsScreen: React.FC<
         </ButtonContainer>
       ) : null}
 
-      <ClanScoresContainer>
-        {winners.map((clan) => (
-          <Participant
-            key={clan.id}
-            name={clan.clan_name}
-            image_uri={clan.clan_logo}
-            image_preview={clan.clan_logo}
-            kill_count={getTeamTotalKills(clan.team)}
-            iconBackground={trophies[clan.id].iconBackground}
-            icon={
-              selectedTournament?.winner_participant_id
-                ? trophies[clan.id].icon
-                : undefined
-            }
-          />
-        ))}
+      <ClanScoresContainer isLoading={isLoading}>
+        {isLoading ? (
+          <ActivityIndicator isDesktopOrLaptop={isDesktopOrLaptop} />
+        ) : (
+          winners.map((clan) => (
+            <Participant
+              key={clan.id}
+              name={clan.clan_name}
+              image_uri={clan.clan_logo}
+              image_preview={clan.clan_logo}
+              kill_count={getTeamTotalKills(clan.team)}
+              iconBackground={trophies[clan.id].iconBackground}
+              icon={
+                selectedTournament?.winner_participant_id
+                  ? trophies[clan.id].icon
+                  : undefined
+              }
+            />
+          ))
+        )}
       </ClanScoresContainer>
     </ScrollView>
   );
