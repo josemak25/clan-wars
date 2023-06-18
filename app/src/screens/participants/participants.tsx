@@ -2,9 +2,9 @@ import React from "react";
 import { ListRenderItem } from "react-native";
 
 import { Clan } from "../../components/clan";
+import { useParticipants } from "../../hooks";
 import { FallbackScreen } from "../../components/fallback";
 import { RootTabScreenProps } from "../../../types/navigation";
-import { useParticipants, useResponsiveScreen } from "../../hooks";
 import { ITournamentClan } from "../../providers/store/reducers/participants/interfaces";
 
 import {
@@ -16,7 +16,6 @@ import {
 export const ParticipantsScreen: React.FC<
   RootTabScreenProps<"ParticipantsScreen">
 > = () => {
-  const { isDesktopOrLaptop } = useResponsiveScreen();
   const { data, isLoading, isEmpty, error, onRetry } = useParticipants();
 
   const renderItem: ListRenderItem<ITournamentClan> = ({ item }) => (
@@ -25,7 +24,7 @@ export const ParticipantsScreen: React.FC<
 
   const ListEmptyComponent = () => (
     <ListEmptyContainer>
-      {isLoading && <ActivityIndicator isDesktopOrLaptop={isDesktopOrLaptop} />}
+      {isLoading && <ActivityIndicator />}
 
       {!isLoading && isEmpty && (
         <FallbackScreen

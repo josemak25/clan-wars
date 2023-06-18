@@ -61,7 +61,7 @@ export const ConfirmPaymentModal: React.FC<ConfirmPaymentModalProps> = ({
   isCompletingRegistration,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const { isMinScreenSize, isDesktopOrLaptop } = useResponsiveScreen();
+  const { isMinScreenSize } = useResponsiveScreen();
   const { palette, layout, hexToRGB, isDarkMode, breakpoints } = useTheme();
 
   const initialSnapPoints = useMemo(() => ["CONTENT_HEIGHT"], []);
@@ -113,10 +113,7 @@ export const ConfirmPaymentModal: React.FC<ConfirmPaymentModalProps> = ({
       backgroundStyle={{ backgroundColor: palette.light_card_background }}
     >
       <Providers>
-        <Container
-          onLayout={handleContentLayout}
-          isDesktopOrLaptop={isDesktopOrLaptop}
-        >
+        <Container onLayout={handleContentLayout}>
           <Title>
             <FormattedMessage {...messages.title} />
           </Title>
@@ -192,10 +189,7 @@ export const ConfirmPaymentModal: React.FC<ConfirmPaymentModalProps> = ({
 
             <PlayerNameRow>
               {team.slice(0, team.length / 2).map(({ player_ign }, index) => (
-                <PlayerName
-                  key={player_ign}
-                  isDesktopOrLaptop={isDesktopOrLaptop}
-                >
+                <PlayerName key={player_ign}>
                   {player_ign}
                   {index === 0 ? ", " : " "}
                 </PlayerName>
@@ -203,11 +197,11 @@ export const ConfirmPaymentModal: React.FC<ConfirmPaymentModalProps> = ({
 
               {team.length / 2 >= 1 && (
                 <Fragment>
-                  <PlayerName isDesktopOrLaptop={isDesktopOrLaptop}>
+                  <PlayerName>
                     <FormattedMessage {...messages.and} />{" "}
                   </PlayerName>
 
-                  <PlayerName isDesktopOrLaptop={isDesktopOrLaptop} isBold>
+                  <PlayerName isBold>
                     <FormattedMessage
                       {...messages.others}
                       values={{ num: team.length / 2 }}

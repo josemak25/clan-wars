@@ -1,24 +1,18 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
+import { View } from "react-native";
+import Modal from "react-native-modal";
 import { shallowEqual } from "react-redux";
-import { useTheme } from "styled-components/native";
 import { NavigationContainer } from "@react-navigation/native";
-import {
-  BottomSheetView,
-  BottomSheetModal,
-  BottomSheetBackdropProps,
-} from "@gorhom/bottom-sheet";
 
 import { TabNavigator } from "./tabs";
-import { useDispatch, useSelector } from "../hooks";
+import { makeUseStyles } from "../helpers";
 import { settingsActions } from "../providers/store/reducers";
-import { BottomSheetBackdrop } from "../components/modal-backdrop";
-
-const snapPoints = ["85%"];
+import { useDispatch, useResponsiveScreen, useSelector } from "../hooks";
 
 export const WebTabs = () => {
   const dispatch = useDispatch();
-  const { palette, layout, breakpoints } = useTheme();
-  const bottomSheetRef = useRef<BottomSheetModal>(null);
+  const { styles, colors } = useStyles();
+  const { isDesktopOrLaptop } = useResponsiveScreen();
 
   const { isDetailModalVisible } = useSelector(
     ({ settings }) => settings,
@@ -27,38 +21,34 @@ export const WebTabs = () => {
 
   const onClose = () => dispatch(settingsActions.toggleDetailModalVisibility());
 
-  const BackdropComponent = (props: BottomSheetBackdropProps) => (
-    <BottomSheetBackdrop {...props} closeModal={onClose} />
-  );
-
-  useEffect(() => {
-    if (isDetailModalVisible) {
-      bottomSheetRef.current?.present();
-    } else {
-      bottomSheetRef.current?.close();
-    }
-  }, [isDetailModalVisible]);
-
   return (
-    <BottomSheetModal
-      ref={bottomSheetRef}
-      snapPoints={snapPoints}
-      handleComponent={() => null}
-      enablePanDownToClose={false}
-      backdropComponent={BackdropComponent}
-      backgroundStyle={{ backgroundColor: palette.background }}
-      style={{
-        margin: "auto",
-        overflow: "hidden",
-        borderRadius: layout.radius,
-        maxWidth: breakpoints.tablet_viewport - 63,
-      }}
+    <Modal
+      onBackdropPress={onClose}
+      isVisible={isDetailModalVisible}
+      backdropColor={colors.light.text}
+      style={[styles.modal, { marginTop: isDesktopOrLaptop ? "10%" : "25%" }]}
     >
-      <BottomSheetView style={{ flex: 1 }}>
+      <View style={styles.container}>
         <NavigationContainer independent>
           <TabNavigator />
         </NavigationContainer>
-      </BottomSheetView>
-    </BottomSheetModal>
+      </View>
+    </Modal>
   );
 };
+
+const useStyles = makeUseStyles(({ layout, breakpoints }) => ({
+  container: {
+    flex: 1,
+    width: "100%",
+    margin: "auto",
+    overflow: "hidden",
+    borderTopLeftRadius: layout.radius,
+    borderTopRightRadius: layout.radius,
+    maxWidth: breakpoints.tablet_viewport - 63,
+  },
+  modal: {
+    marginBottom: 0,
+    marginHorizontal: 0,
+  },
+}));

@@ -3,6 +3,7 @@ import { Image } from "react-native-expo-image-cache";
 import styled, { css } from "styled-components/native";
 import { LinearGradient as __LinearGradient } from "expo-linear-gradient";
 
+import { Icon } from "../icon";
 import { NextStepButton } from "../../screens/signup/signup.styles";
 
 export const Container = styled.TouchableOpacity<{ width: number }>`
@@ -50,6 +51,12 @@ export const TimerContentWrapper = styled.View`
 `;
 
 export const TitleWrapper = styled.View``;
+
+export const DefaultHostLogo = styled(Icon)`
+  left: 0;
+  width: 50px;
+  height: 50px;
+`;
 
 export const Timer = styled.Text`
   margin-bottom: 10px;
@@ -117,6 +124,7 @@ export const PriceSubtitle = styled(Title)`
 
 export const BottomContents = styled.View`
   flex-direction: row;
+  align-items: center;
   border-top-width: 1px;
   padding: ${(p) => p.theme.layout.gutter}px;
   border-top-color: ${(p) => p.theme.hexToRGB(p.theme.palette.text, 0.05)};
@@ -175,16 +183,16 @@ export const EventDetailsButton = styled(NextStepButton).attrs<{
     ? p.theme.palette.text
     : p.theme.colors.dark.text,
   contentStyle: {
-    paddingVertical: 4,
+    height: 45,
     flexDirection: "row-reverse",
-    paddingHorizontal: p.theme.layout.gutter / 2,
+    paddingHorizontal: p.theme.layout.gutter / 3,
   },
   labelStyle: {
     textTransform: "capitalize",
-    fontSize: p.theme.fonts.scale.value(15),
+    fontSize: p.theme.fonts.scale.value(12),
     fontFamily: p.theme.fonts.variants.roboto_bold,
   },
 }))<{ isEventStarted: boolean; isEventFinished: boolean }>`
+  height: 45px;
   margin-left: ${(p) => p.theme.layout.gutter}px;
-  border-radius: ${(p) => p.theme.layout.radius / 2}px;
 `;

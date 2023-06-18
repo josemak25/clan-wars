@@ -1,4 +1,5 @@
-import React, { Fragment, useEffect, useRef, useState } from "react";
+import React, { Fragment, useRef, useState } from "react";
+import Modal from "react-native-modal";
 import { ScrollView } from "react-native";
 import { shallowEqual } from "react-redux";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -10,17 +11,12 @@ import Animated, {
   useAnimatedStyle,
   useAnimatedKeyboard,
 } from "react-native-reanimated";
-import {
-  BottomSheetModal,
-  BottomSheetBackdropProps,
-} from "@gorhom/bottom-sheet";
 
+import { APP_NAME } from "../../constants";
 import { generateId } from "../../helpers";
-import { Providers } from "../../providers";
 import { FormStepOne } from "./form-step-one";
 import { FormStepTwo } from "./form-step-two";
 import { IAddPlayerFormStep } from "../../../types";
-import { BottomSheetBackdrop } from "../modal-backdrop";
 import { settingsActions } from "../../providers/store/reducers";
 import { useDispatch, useSelector, useResponsiveScreen } from "../../hooks";
 import { ITournamentTeam } from "../../providers/store/reducers/participants/interfaces";
@@ -42,8 +38,6 @@ import {
   InputContainer,
 } from "./add-player-modal.styles";
 
-const snapPoints = ["100%"];
-
 const forms = [FormStepOne, FormStepTwo];
 
 const defaultFormSteps: IAddPlayerFormStep[] = [
@@ -62,6 +56,7 @@ const defaultFormSteps: IAddPlayerFormStep[] = [
 ];
 
 type AddPlayerModalProps = {
+  clanName?: string;
   player?: ITournamentTeam;
   default_player_id: string;
   onSavePlayer: (player: ITournamentTeam) => void;
@@ -69,15 +64,15 @@ type AddPlayerModalProps = {
 
 export const AddPlayerModal: React.FC<AddPlayerModalProps> = ({
   player,
+  clanName,
   onSavePlayer,
   default_player_id,
 }) => {
   const dispatch = useDispatch();
   const keyboard = useAnimatedKeyboard();
   const scrollRef = useRef<ScrollView>(null);
-  const { palette, breakpoints } = useTheme();
+  const { palette, colors, breakpoints } = useTheme();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const bottomSheetRef = useRef<BottomSheetModal>(null);
   const [formSteps, setFormSteps] = useState(defaultFormSteps);
   const { isMinScreenSize, isDesktopOrLaptop } = useResponsiveScreen();
 
@@ -159,122 +154,99 @@ export const AddPlayerModal: React.FC<AddPlayerModalProps> = ({
     dispatch(settingsActions.toggleAddPlayerModalVisibility());
   };
 
-  const BackdropComponent = (props: BottomSheetBackdropProps) => (
-    <BottomSheetBackdrop {...props} closeModal={closeModal} />
-  );
-
-  useEffect(() => {
-    if (isAddPlayerModalVisible) {
-      bottomSheetRef.current?.present();
-    } else {
-      bottomSheetRef.current?.close();
-    }
-  }, [isAddPlayerModalVisible]);
-
   return (
-    <BottomSheetModal
+    <Modal
       onDismiss={onClose}
-      ref={bottomSheetRef}
-      snapPoints={snapPoints}
-      enablePanDownToClose={false}
-      handleComponent={() => null}
-      backdropComponent={BackdropComponent}
-      backgroundStyle={{ backgroundColor: palette.transparent }}
+      style={{ margin: 0 }}
+      backdropColor={colors.light.text}
+      isVisible={isAddPlayerModalVisible}
     >
-      <Providers>
-        <Container style={translateStyle}>
-          <MaxWidthWrapper>
-            <Contents isScreenLessThanMaxWidth={isScreenLessThanMaxWidth}>
-              <StepContainer
+      <Container style={translateStyle}>
+        <MaxWidthWrapper>
+          <Contents isScreenLessThanMaxWidth={isScreenLessThanMaxWidth}>
+            <StepContainer isScreenLessThanMaxWidth={isScreenLessThanMaxWidth}>
+              <Title wrap>{clanName || APP_NAME.toLowerCase()}</Title>
+              <Spacer size={15} />
+              <SubTitle>Register your player</SubTitle>
+              <Spacer size={30} />
+
+              <StepScrollView
+                ref={scrollRef}
                 isScreenLessThanMaxWidth={isScreenLessThanMaxWidth}
               >
-                <Title wrap>Anonymous eSport</Title>
-                <Spacer size={15} />
-                <SubTitle>Register your player</SubTitle>
-                <Spacer size={30} />
-
-                <StepScrollView
-                  ref={scrollRef}
-                  isScreenLessThanMaxWidth={isScreenLessThanMaxWidth}
-                >
-                  {formSteps.map(({ id, isViewable, title }, index) => (
-                    <Fragment key={id}>
-                      <Step
-                        isActive={currentIndex === index}
-                        onPress={() => onRoutePress(index)}
-                        disabled={!isViewable || currentIndex === index}
-                      >
-                        <StepNumber isActive={currentIndex === index}>
-                          <StepIndex isActive={currentIndex === index}>
-                            {index + 1}
-                          </StepIndex>
-                        </StepNumber>
-                        <SubTitle isActive={currentIndex === index}>
-                          {title}
-                        </SubTitle>
-                      </Step>
-
-                      {index === 0 && (
-                        <StepDivider
-                          isScreenLessThanMaxWidth={isScreenLessThanMaxWidth}
-                        />
-                      )}
-                    </Fragment>
-                  ))}
-                </StepScrollView>
-              </StepContainer>
-
-              <InputContainer
-                isScreenLessThanMaxWidth={isScreenLessThanMaxWidth}
-              >
-                {forms.map((Form, index) =>
-                  currentIndex === index ? (
-                    <Animated.View
-                      key={`${index}_form_step`}
-                      entering={index === 0 ? FadeInRight : FadeInLeft}
+                {formSteps.map(({ id, isViewable, title }, index) => (
+                  <Fragment key={id}>
+                    <Step
+                      isActive={currentIndex === index}
+                      onPress={() => onRoutePress(index)}
+                      disabled={!isViewable || currentIndex === index}
                     >
-                      <Form
-                        watch={watch}
-                        errors={errors}
-                        player={player}
-                        control={control}
-                        setValue={setValue}
-                        clearErrors={clearErrors}
-                        default_player_id={default_player_id}
-                        isScreenLessThanMaxWidth={isScreenLessThanMaxWidth}
-                        onButtonPress={
-                          isLastPageOfFormActive
-                            ? handleSubmit(onSubmit)
-                            : goNext
-                        }
-                      />
-                    </Animated.View>
-                  ) : null
-                )}
-              </InputContainer>
+                      <StepNumber isActive={currentIndex === index}>
+                        <StepIndex isActive={currentIndex === index}>
+                          {index + 1}
+                        </StepIndex>
+                      </StepNumber>
+                      <SubTitle isActive={currentIndex === index}>
+                        {title}
+                      </SubTitle>
+                    </Step>
 
-              <CloseButton
-                size={25}
-                onPress={closeModal}
-                icon={() => (
-                  <Ionicons
-                    name="close"
-                    color={palette.text}
-                    size={isDesktopOrLaptop ? 24 : 20}
-                  />
-                )}
-                style={{
-                  elevation: 5,
-                  shadowRadius: 3.84,
-                  shadowOpacity: 0.25,
-                  shadowColor: "#000",
-                  shadowOffset: { width: 0, height: 2 },
-                }}
-              />
-            </Contents>
-          </MaxWidthWrapper>
-        </Container>
-      </Providers>
-    </BottomSheetModal>
+                    {index === 0 && (
+                      <StepDivider
+                        isScreenLessThanMaxWidth={isScreenLessThanMaxWidth}
+                      />
+                    )}
+                  </Fragment>
+                ))}
+              </StepScrollView>
+            </StepContainer>
+
+            <InputContainer isScreenLessThanMaxWidth={isScreenLessThanMaxWidth}>
+              {forms.map((Form, index) =>
+                currentIndex === index ? (
+                  <Animated.View
+                    key={`${index}_form_step`}
+                    entering={index === 0 ? FadeInRight : FadeInLeft}
+                  >
+                    <Form
+                      watch={watch}
+                      errors={errors}
+                      player={player}
+                      control={control}
+                      setValue={setValue}
+                      clearErrors={clearErrors}
+                      default_player_id={default_player_id}
+                      isScreenLessThanMaxWidth={isScreenLessThanMaxWidth}
+                      onButtonPress={
+                        isLastPageOfFormActive ? handleSubmit(onSubmit) : goNext
+                      }
+                    />
+                  </Animated.View>
+                ) : null
+              )}
+            </InputContainer>
+
+            <CloseButton
+              size={25}
+              onPress={closeModal}
+              icon={() => (
+                <Ionicons
+                  name="close"
+                  color={palette.text}
+                  size={isDesktopOrLaptop ? 24 : 20}
+                />
+              )}
+              style={{
+                elevation: 5,
+                shadowRadius: 3.84,
+                shadowOpacity: 0.25,
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 2 },
+              }}
+            />
+          </Contents>
+        </MaxWidthWrapper>
+      </Container>
+    </Modal>
   );
 };

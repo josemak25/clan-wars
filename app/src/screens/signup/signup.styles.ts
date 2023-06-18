@@ -14,7 +14,10 @@ export const Container = styled.ScrollView.attrs((p) => ({
   contentContainerStyle: {
     flexGrow: 1,
     alignItems: "center",
-    paddingTop: p.theme.layout.gutter * 2.5,
+    paddingTop: Platform.select({
+      default: p.theme.layout.gutter,
+      web: p.theme.screen.isDesktopOrLaptop ? p.theme.layout.gutter : 0,
+    }),
   },
 }))`
   flex: 1;
@@ -58,13 +61,16 @@ export const FormStepScrollViewWrapper = styled.View`
 `;
 
 export const Title = styled(Text)<{
-  error?: boolean;
   size?: number;
+  error?: boolean;
   zIndex?: number;
 }>`
   font-family: ${(p) => p.theme.fonts.variants.roboto_bold};
-  font-size: ${(p) => p.theme.fonts.scale.value(p.size || 35)}px;
   color: ${(p) => (p.error ? p.theme.palette.error : p.theme.palette.text)};
+  font-size: ${(p) =>
+    p.theme.fonts.scale.value(
+      p.size || (p.theme.screen.isDesktopOrLaptop ? 35 : 30)
+    )}px;
 
   ${(p) =>
     p.zIndex &&
@@ -77,7 +83,10 @@ export const SubTitle = styled(Title)<{ opacity?: number }>`
   margin-top: 10px;
   opacity: ${({ opacity }) => opacity || 0.6};
   font-family: ${(p) => p.theme.fonts.variants.roboto_regular};
-  font-size: ${(p) => p.theme.fonts.scale.value(p.size || 20)}px;
+  font-size: ${(p) =>
+    p.theme.fonts.scale.value(
+      p.size || (p.theme.screen.isDesktopOrLaptop ? 20 : 17)
+    )}px;
 `;
 
 export const Spacer = styled.View<{ size?: number }>`
@@ -95,7 +104,7 @@ export const ButtonContainer = styled.View`
   flex-direction: row;
   justify-content: flex-end;
   margin: 50px ${(p) => p.theme.layout.gutter}px;
-  padding-bottom: ${(p) => p.theme.insets.bottom + p.theme.layout.gutter * 2};
+  padding-bottom: ${(p) => p.theme.insets.bottom + p.theme.layout.gutter * 2}px;
 `;
 
 export const StepTitle = styled(Title)`

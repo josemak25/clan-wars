@@ -1,11 +1,6 @@
 import React, { useCallback } from "react";
-import {
-  Text,
-  View,
-  Modal,
-  SafeAreaView,
-  TouchableOpacity,
-} from "react-native";
+import { Text, View, SafeAreaView, TouchableOpacity } from "react-native";
+import Modal from "react-native-modal";
 
 import { Icon } from "../icon";
 import messages from "./messages";
@@ -65,7 +60,7 @@ export const FallbackScreen: React.FC<FallbackScreenProps> = ({
   );
 
   return isModal ? (
-    <Modal animationType="slide" visible={isVisible}>
+    <Modal style={styles.modal} isVisible={isVisible}>
       {renderContent()}
     </Modal>
   ) : (
@@ -75,6 +70,9 @@ export const FallbackScreen: React.FC<FallbackScreenProps> = ({
 
 const useStyles = makeUseStyles(
   ({ fonts, palette, layout, hexToRGB, breakpoints }) => ({
+    modal: {
+      margin: 0,
+    },
     safeView: {
       flex: 1,
       alignItems: "center",

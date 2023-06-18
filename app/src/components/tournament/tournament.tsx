@@ -1,6 +1,6 @@
 import React from "react";
 import dayjs from "dayjs";
-import { Platform, View } from "react-native";
+import { View } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useTheme } from "styled-components/native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
@@ -33,14 +33,15 @@ import {
   BottomContents,
   PriceContainer,
   ButtonContainer,
+  DefaultHostLogo,
   ContentContainer,
   EventDetailsButton,
   TimerContentWrapper,
 } from "./tournament.styles";
 
 type TournamentProps = {
-  onEventPress: (id: ITournament["id"]) => void;
-  joinTournament: (id: ITournament["id"]) => void;
+  onEventPress: VoidFunction;
+  joinTournament: VoidFunction;
 } & ITournament;
 
 export const TOURNAMENT_MIN_WIDTH = 380;
@@ -51,7 +52,6 @@ export const Tournament: React.FC<TournamentProps> = (props) => {
   const { isDesktopOrLaptop } = useResponsiveScreen();
 
   const {
-    id,
     title,
     tags = [],
     team_size,
@@ -73,17 +73,17 @@ export const Tournament: React.FC<TournamentProps> = (props) => {
   const handleButtonPress = () => {
     if (!isEventStarted && !isEventFinished) {
       // join the tournament
-      return joinTournament(id);
+      return joinTournament();
     }
 
     // see the tournament details
-    onEventPress(id);
+    onEventPress();
   };
 
   return (
     <Container
       activeOpacity={0.5}
-      onPress={() => onEventPress(id)}
+      onPress={() => onEventPress()}
       width={isDesktopOrLaptop ? TOURNAMENT_MAX_WIDTH : TOURNAMENT_MIN_WIDTH}
     >
       <TopContents>
@@ -165,10 +165,15 @@ export const Tournament: React.FC<TournamentProps> = (props) => {
 
       <BottomContents>
         <Profile>
-          <HostLogo
-            uri={tournament_host.avatar}
-            preview={{ uri: tournament_host.avatar }}
-          />
+          {tournament_host.avatar ? (
+            <HostLogo
+              uri={tournament_host.avatar}
+              preview={{ uri: tournament_host.avatar }}
+            />
+          ) : (
+            <DefaultHostLogo name="logo" />
+          )}
+
           <HostDetail>
             <Description>Organized by</Description>
             <Organizer numberOfLines={1}>
@@ -187,7 +192,6 @@ export const Tournament: React.FC<TournamentProps> = (props) => {
                 size={20}
                 color={colors.dark.text}
                 name="md-arrow-forward-circle-outline"
-                style={{ marginTop: Platform.select({ web: 4, default: 0 }) }}
               />
             ) : null
           }
@@ -197,7 +201,6 @@ export const Tournament: React.FC<TournamentProps> = (props) => {
             : isEventStarted
             ? "Event started"
             : "Join event"}
-          <Ionicons size={24} color="white" />
         </EventDetailsButton>
       </BottomContents>
     </Container>

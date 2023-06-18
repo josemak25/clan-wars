@@ -54,10 +54,7 @@ export const StatisticsScreen: React.FC<
   const trophies = getWinnersTrophies(winners);
 
   return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      isDesktopOrLaptop={isDesktopOrLaptop}
-    >
+    <ScrollView showsVerticalScrollIndicator={false}>
       <WinnerContainer>
         {topWinners.map(({ data, position }) => (
           <ClanImageContainer
@@ -88,7 +85,6 @@ export const StatisticsScreen: React.FC<
               />
             )}
             <ClanImageWrapper
-              isDesktopOrLaptop={isDesktopOrLaptop}
               size={position !== 1 ? (isDesktopOrLaptop ? 130 : 95) : undefined}
               style={[
                 position === 1 && {
@@ -104,7 +100,6 @@ export const StatisticsScreen: React.FC<
             >
               {selectedTournament?.winner_participant_id && data?.clan_logo ? (
                 <ClanImage
-                  isDesktopOrLaptop={isDesktopOrLaptop}
                   size={
                     position !== 1 ? (isDesktopOrLaptop ? 130 : 95) : undefined
                   }
@@ -113,7 +108,6 @@ export const StatisticsScreen: React.FC<
                 />
               ) : (
                 <DefaultClanImage
-                  isDesktopOrLaptop={isDesktopOrLaptop}
                   size={
                     position !== 1 ? (isDesktopOrLaptop ? 130 : 95) : undefined
                   }
@@ -147,15 +141,6 @@ export const StatisticsScreen: React.FC<
             " ddd DD MMM YYYY hh : mm A"
           )}
         </Timer>
-
-        <Timer>
-          <Timer>
-            Ends at •
-            {dayjs(selectedTournament?.updated_at).format(
-              " ddd DD MMM YYYY hh : mm A"
-            )}
-          </Timer>
-        </Timer>
       </TimerContainer>
 
       <Title wrap numberOfLines={1}>
@@ -172,7 +157,7 @@ export const StatisticsScreen: React.FC<
 
       <ClanScoresContainer isLoading={isLoading}>
         {isLoading ? (
-          <ActivityIndicator isDesktopOrLaptop={isDesktopOrLaptop} />
+          <ActivityIndicator />
         ) : (
           winners.map((clan) => (
             <Participant

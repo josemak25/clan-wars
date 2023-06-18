@@ -12,16 +12,15 @@ export {
 export { Spacer } from "../signup/signup.styles";
 export { ActivityIndicator } from "../home/home.styles";
 
-export const ScrollView = styled.ScrollView.attrs<{
-  isDesktopOrLaptop: boolean;
-}>((p) => ({
+export const ScrollView = styled.ScrollView.attrs((p) => ({
   contentContainerStyle: {
     flexGrow: 1,
     paddingBottom: p.theme.insets.bottom + p.theme.layout.gutter,
     paddingTop: Platform.select({ web: p.theme.layout.gutter * 1.5 }),
-    paddingHorizontal: p.theme.layout.gutter * (p.isDesktopOrLaptop ? 3 : 1),
+    paddingHorizontal:
+      p.theme.layout.gutter * (p.theme.screen.isDesktopOrLaptop ? 3 : 1),
   },
-}))<{ isDesktopOrLaptop: boolean }>`
+}))`
   background-color: ${(p) => p.theme.palette.background};
 `;
 
@@ -58,38 +57,31 @@ export const Info = styled(Timer)`
   font-family: ${(p) => p.theme.fonts.variants.roboto_bold};
 `;
 
-export const ClanImage = styled(Image)<{
-  size?: number;
-  isDesktopOrLaptop: boolean;
-}>`
+export const ClanImage = styled(Image)<{ size?: number }>`
   width: 100%;
   height: 100%;
   overflow: hidden;
   border-radius: ${(p) =>
-    p.size ? p.size : p.isDesktopOrLaptop ? 180 : 140}px;
+    p.size ? p.size : p.theme.screen.isDesktopOrLaptop ? 180 : 140}px;
 `;
 
-export const DefaultClanImage = styled.Image<{
-  size?: number;
-  isDesktopOrLaptop: boolean;
-}>`
+export const DefaultClanImage = styled.Image<{ size?: number }>`
   width: 100%;
   height: 100%;
   overflow: hidden;
   border-radius: ${(p) =>
-    p.size ? p.size : p.isDesktopOrLaptop ? 180 : 140}px;
+    p.size ? p.size : p.theme.screen.isDesktopOrLaptop ? 180 : 140}px;
 `;
 
-export const ClanImageWrapper = styled.View<{
-  size?: number;
-  isDesktopOrLaptop: boolean;
-}>`
+export const ClanImageWrapper = styled.View<{ size?: number }>`
   margin-top: 5px;
   border: 2px ${(p) => p.theme.palette.primary} solid;
-  width: ${(p) => (p.size ? p.size : p.isDesktopOrLaptop ? 180 : 140)}px;
-  height: ${(p) => (p.size ? p.size : p.isDesktopOrLaptop ? 180 : 140)}px;
+  width: ${(p) =>
+    p.size ? p.size : p.theme.screen.isDesktopOrLaptop ? 180 : 140}px;
+  height: ${(p) =>
+    p.size ? p.size : p.theme.screen.isDesktopOrLaptop ? 180 : 140}px;
   border-radius: ${(p) =>
-    (p.size ? p.size : p.isDesktopOrLaptop ? 180 : 140) / 2}px;
+    (p.size ? p.size : p.theme.screen.isDesktopOrLaptop ? 180 : 140) / 2}px;
 `;
 
 export const ClanName = styled(Info)<{ size?: number }>`

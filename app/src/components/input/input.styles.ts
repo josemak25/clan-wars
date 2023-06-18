@@ -31,7 +31,7 @@ export const TextInput = styled.TextInput<{ error?: boolean }>`
 `;
 
 export const Label = styled.Text<{ error?: boolean }>`
-  font-size: ${(p) => p.theme.fonts.scale.value(16)}px;
+  font-size: ${(p) => p.theme.fonts.scale.value(15)}px;
   font-family: ${(p) => p.theme.fonts.variants.roboto_regular};
   color: ${(p) => (p.error ? p.theme.palette.error : p.theme.palette.text)};
 `;

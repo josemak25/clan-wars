@@ -4,6 +4,7 @@ import React, {
   useCallback,
   PropsWithChildren,
 } from "react";
+import _ from "lodash";
 import {
   DefaultTheme,
   ThemeProvider as StyledThemeProvider,
@@ -27,6 +28,7 @@ import {
   useDispatch,
   useSelector,
   useColorScheme,
+  useResponsiveScreen,
   useResponsiveFontSize,
 } from "../../hooks";
 
@@ -34,6 +36,7 @@ export const ThemeProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const dispatch = useDispatch();
   const insets = useSafeAreaInsets();
   const systemTheme = useColorScheme();
+  const screen = useResponsiveScreen();
   const scale = useResponsiveFontSize();
   const dimension = useWindowDimensions();
   const { colorMode } = useSelector(({ settings }) => settings, shallowEqual);
@@ -60,6 +63,11 @@ export const ThemeProvider: React.FC<PropsWithChildren> = ({ children }) => {
       layout: { radius: 10, gutter: 16, screen: dimension },
       palette: isDarkMode ? DARK_MODE_COLORS : LIGHT_MODE_COLORS,
       colors: { light: LIGHT_MODE_COLORS, dark: DARK_MODE_COLORS },
+      screen: _.pick(screen, [
+        "isSmallMobile",
+        "isMobileOrTablet",
+        "isDesktopOrLaptop",
+      ]),
     }),
     [isDarkMode, toggleTheme]
   );

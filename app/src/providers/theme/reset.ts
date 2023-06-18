@@ -112,9 +112,10 @@ const GlobalStyle = createGlobalStyle`${reset}
     input:-webkit-autofill,
     input:-webkit-autofill:hover, 
     input:-webkit-autofill:focus {
-      transition: background-color 5000s ease-in-out 0s;
       box-shadow: 0 0 0px 1000px transparent inset;
+      transition: background-color 5000s ease-in-out 0s;
       -webkit-box-shadow: 0 0 0px 1000px transparent inset;
+      -webkit-text-fill-color: ${(p: any) => p.theme.palette.text};
     }
   }
 `;

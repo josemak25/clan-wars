@@ -63,6 +63,11 @@ declare module "styled-components/native" {
         value: (number: number) => number;
       };
     };
+    screen: {
+      isSmallMobile: boolean;
+      isMobileOrTablet: boolean;
+      isDesktopOrLaptop: boolean;
+    };
     // App dark mode condition
     isDarkMode: boolean;
     // App break points

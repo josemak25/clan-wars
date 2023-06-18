@@ -234,8 +234,8 @@ export const SignUpScreen: React.FC<RootStackScreenProps<"SignUpScreen">> = ({
         reference={paymentReference}
         selectedTournament={selectedTournament}
         channels={[
-          "bank_transfer",
           "card",
+          "bank_transfer",
           "mobile_money",
           "bank",
           "ussd",

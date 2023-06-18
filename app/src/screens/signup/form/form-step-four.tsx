@@ -52,7 +52,7 @@ export const FormStepFour: React.FC<FormStepProps> = ({
   const [playerIndex, setPlayerIndex] = useState(0);
   const { clanNameValidation } = useFormValidation();
 
-  const team = watch("team") || [];
+  const [team = [], clan_name] = watch(["team", "clan_name"]);
 
   const { selectedTournament } = useSelector(
     ({ tournament }) => tournament,
@@ -147,6 +147,7 @@ export const FormStepFour: React.FC<FormStepProps> = ({
       </TeamScrollView>
 
       <AddPlayerModal
+        clanName={clan_name}
         player={team[playerIndex]}
         onSavePlayer={onSavePlayer}
         default_player_id={teamButtons[playerIndex]}

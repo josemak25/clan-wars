@@ -8,10 +8,11 @@ export { ErrorMessage, ErrorMessageContainer } from "../input/input.styles";
 
 import { Label } from "../input/input.styles";
 
-export const Container = styled.View<{ isDesktopOrLaptop: boolean }>`
+export const Container = styled.View`
   flex: 1;
   padding: 5px
-    ${(p) => p.theme.layout.gutter * (p.isDesktopOrLaptop ? 1.5 : 1)}px;
+    ${(p) =>
+      p.theme.layout.gutter * (p.theme.screen.isDesktopOrLaptop ? 1.5 : 1)}px;
   padding-bottom: ${(p) =>
     Math.min(p.theme.insets.bottom, p.theme.layout.gutter) +
     Platform.select({
@@ -25,12 +26,9 @@ export const Title = styled(Label)<{ size?: number }>`
   font-size: ${(p) => p.theme.fonts.scale.value(p.size || 20)}px;
 `;
 
-export const PlayerName = styled(Title)<{
-  isDesktopOrLaptop: boolean;
-  isBold?: boolean;
-}>`
+export const PlayerName = styled(Title)<{ isBold?: boolean }>`
   font-size: ${(p) =>
-    p.theme.fonts.scale.value(p.isDesktopOrLaptop ? 18 : 15)}px;
+    p.theme.fonts.scale.value(p.theme.screen.isDesktopOrLaptop ? 18 : 15)}px;
 
   ${(p) =>
     p.isBold &&
@@ -59,7 +57,7 @@ export const RefNumber = styled(SubTitle)`
 `;
 
 export const PlayersContainer = styled.View`
-  min-height: 50px;
+  height: 50px;
   flex-direction: row;
   align-items: center;
 `;

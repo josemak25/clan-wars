@@ -26,7 +26,6 @@ export const EmptyCell = styled.View<{ width: number }>`
 
 export const FlatList = styled(__FlatList).attrs<{
   isMultipleRows: boolean;
-  isDesktopOrLaptop: boolean;
 }>((p) => ({
   contentContainerStyle: {
     gap: 30,
@@ -39,22 +38,19 @@ export const FlatList = styled(__FlatList).attrs<{
       alignItems: "center",
       justifyContent: "center",
       paddingHorizontal: p.theme.layout.gutter * 2,
-      gap: p.isDesktopOrLaptop
+      gap: p.theme.screen.isDesktopOrLaptop
         ? p.theme.layout.gutter * 2
         : p.theme.layout.gutter / 2,
     },
   }),
 }))<{
   isMultipleRows: boolean;
-  isDesktopOrLaptop: boolean;
 }>`` as unknown as typeof __FlatList<ITournament>;
 
-export const ActivityIndicator = styled(__ActivityIndicator).attrs<{
-  isDesktopOrLaptop: boolean;
-}>((p) => ({
+export const ActivityIndicator = styled(__ActivityIndicator).attrs<{}>((p) => ({
   color: p.theme.palette.text,
-  size: p.isDesktopOrLaptop ? 40 : 30,
-}))<{ isDesktopOrLaptop: boolean }>``;
+  size: p.theme.screen.isDesktopOrLaptop ? 40 : 30,
+}))``;
 
 export const ListEmptyContainer = styled.View`
   flex: 1;
