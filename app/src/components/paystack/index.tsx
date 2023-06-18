@@ -43,6 +43,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
       refNumber={reference}
       paystackKey={PAY_STACK_PUBLIC_KEY}
       billingEmail={clan?.email_address!}
+      activityIndicatorColor="transparent"
       amount={selectedTournament?.registration_fee!}
     />
   );

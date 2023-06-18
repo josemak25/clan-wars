@@ -32,7 +32,8 @@ export const HomeScreen: React.FC<RootStackScreenProps<"HomeScreen">> = ({
   const { layout } = useTheme();
   const dispatch = useDispatch();
   const { isDesktopOrLaptop } = useResponsiveScreen();
-  const { data, isLoading, isEmpty, error, onRetry } = useTournaments();
+  const { data, isLoading, isEmpty, error, onRetry, onRefresh, isRefreshing } =
+    useTournaments();
 
   const onEventPress = (tournament: ITournament) => {
     dispatch(tournamentActions.setSelectedTournament(tournament));
@@ -115,9 +116,11 @@ export const HomeScreen: React.FC<RootStackScreenProps<"HomeScreen">> = ({
     <Container>
       <FlatList
         data={data}
+        onRefresh={onRefresh}
         numColumns={numColumns}
         renderItem={renderItem}
         stickyHeaderIndices={[0]}
+        refreshing={isRefreshing}
         stickyHeaderHiddenOnScroll
         //@ts-ignore
         isMultipleRows={numColumns > 1}

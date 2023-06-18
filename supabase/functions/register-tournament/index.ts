@@ -23,8 +23,8 @@ serve(async (req) => {
 
   try {
     // grab user payload
-    const { tournament_id, payment_reference, team, ...rest } = await req
-      .json() as ITournamentClan & { payment_reference: string };
+    const { tournament_id, payment_reference, team, ...rest } =
+      (await req.json()) as ITournamentClan & { payment_reference: string };
 
     // check if tournament is valid and exists
     const { data: tournament, error: tournament_error } = await supabaseAdmin
@@ -91,13 +91,11 @@ serve(async (req) => {
       .from<"tournament_payment_receipts", ITournamentPaymentReceipt>(
         "tournament_payment_receipts",
       )
-      .insert(
-        {
-          tournament_id,
-          payment_reference,
-          tournament_participant: participant![0].id,
-        } as never,
-      );
+      .insert({
+        tournament_id,
+        payment_reference,
+        tournament_participant: participant![0].id,
+      } as never);
 
     // throw error if tournament payment error occurred
     if (tournament_payment) {
@@ -107,9 +105,9 @@ serve(async (req) => {
     // increment tournament participants count
     const { error: tournaments_error } = await supabaseAdmin
       .from<"tournaments", ITournament>("tournaments")
-      .update(
-        { participates: Number(tournament![0].participates) + 1 } as never,
-      )
+      .update({
+        participates: Number(tournament![0].participates) + 1,
+      } as never)
       .eq("id", tournament_id);
 
     // throw error if tournament participants update error occurred

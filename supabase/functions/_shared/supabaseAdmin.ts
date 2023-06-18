@@ -13,5 +13,5 @@ export const supabaseAdmin = createClient(
       persistSession: false,
       autoRefreshToken: false,
     },
-  },
+  }
 );

@@ -109,7 +109,7 @@ export const registerForTournament = async (
   payload: ITournamentClan & { payment_reference: string }
 ) => {
   const { error } = await supabase.functions.invoke("register-tournament", {
-    body: payload,
+    body: { ...payload, email_address: payload.email_address.toLowerCase() },
   });
 
   if (error) throw error;

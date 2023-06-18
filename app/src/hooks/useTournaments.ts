@@ -7,6 +7,7 @@ import { fetchAllTournament } from "../providers/store/reducers";
 
 export function useTournaments() {
   const dispatch = useDispatch();
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
 
   const state = useSelector(
@@ -20,12 +21,17 @@ export function useTournaments() {
   const hasMore = state.data.length > state.data.length;
 
   const fetchMore = () => {
-    if (isFetchingMore) return;
-
     if (!hasMore || isFetchingMore) return;
 
     setIsFetchingMore(true);
     dispatch(fetchAllTournament()).finally(() => setIsFetchingMore(false));
+  };
+
+  const onRefresh = () => {
+    if (isRefreshing) return;
+
+    setIsRefreshing(true);
+    dispatch(fetchAllTournament()).finally(() => setIsRefreshing(false));
   };
 
   useEffect(() => {
@@ -36,7 +42,9 @@ export function useTournaments() {
     ...state,
     hasMore,
     onRetry,
+    onRefresh,
     fetchMore,
+    isRefreshing,
     isFetchingMore,
   };
 }

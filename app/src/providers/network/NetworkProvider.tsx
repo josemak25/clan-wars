@@ -1,21 +1,39 @@
 import React, { useState, Fragment, useEffect, PropsWithChildren } from "react";
-import NetInfo from "@react-native-community/netinfo";
+import NetInfo, { NetInfoStateType } from "@react-native-community/netinfo";
+import DEFAULT_CONFIGURATION from "@react-native-community/netinfo/src/internal/defaultConfiguration";
 
+import { useIsMounted } from "../../hooks";
 import { FallbackScreen } from "../../components/fallback";
 
+NetInfo.configure({
+  ...DEFAULT_CONFIGURATION,
+  reachabilityUrl: "https://httpbin.org/ip",
+  reachabilityTest: (response: Response): Promise<boolean> =>
+    Promise.resolve(response.ok && response.status === 200),
+});
+
 export const NetworkProvider: React.FC<PropsWithChildren> = ({ children }) => {
+  const isMounted = useIsMounted();
   const [isVisible, setIsVisible] = useState(false);
   const [isOffline, setOfflineStatus] = useState(false);
 
   const onRetry = async () => {
     const netInfo = await NetInfo.refresh();
-    const offline = !(netInfo.isConnected && netInfo.isInternetReachable);
+    const offline =
+      !netInfo.isConnected &&
+      !netInfo.isInternetReachable &&
+      netInfo.type !== NetInfoStateType.none;
+
     setOfflineStatus(offline);
   };
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((netInfo) => {
-      const offline = !(netInfo.isConnected && netInfo.isInternetReachable);
+      const offline =
+        !netInfo.isConnected &&
+        !netInfo.isInternetReachable &&
+        netInfo.type !== NetInfoStateType.none;
+
       setOfflineStatus(offline);
     });
 
@@ -26,15 +44,15 @@ export const NetworkProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      if (isVisible !== isOffline) {
+      if (isVisible !== isOffline && isMounted()) {
         setIsVisible(isOffline);
       }
-    }, 1000);
+    }, 3000);
 
     return () => {
       clearTimeout(timeout);
     };
-  }, [isOffline]);
+  }, [isOffline, isMounted]);
 
   return (
     <Fragment>

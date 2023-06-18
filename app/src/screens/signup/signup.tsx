@@ -7,9 +7,9 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import Animated, { FadeInLeft, FadeInRight } from "react-native-reanimated";
 
 import messages from "./messages";
-import { useSelector } from "../../hooks";
 import { IFormStep } from "../../../types";
 import { PaymentModal } from "../../components/paystack";
+import { useSelector, useTournaments } from "../../hooks";
 import { registerForTournament } from "../../config/network";
 import { SuccessModal } from "../../components/success-modal";
 import { RootStackScreenProps } from "../../../types/navigation";
@@ -31,6 +31,7 @@ export const SignUpScreen: React.FC<RootStackScreenProps<"SignUpScreen">> = ({
   navigation,
 }) => {
   const { formatMessage } = useIntl();
+  const { onRefresh } = useTournaments();
   const [isNext, setIsNext] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -148,7 +149,7 @@ export const SignUpScreen: React.FC<RootStackScreenProps<"SignUpScreen">> = ({
 
         await registerForTournament({
           ...clan,
-          payment_reference: paymentReference,
+          payment_reference: reference,
         });
         confirmPaymentSheetRef.current?.dismiss();
         successSheetRef.current?.present();
@@ -224,6 +225,7 @@ export const SignUpScreen: React.FC<RootStackScreenProps<"SignUpScreen">> = ({
         bottomSheetRef={successSheetRef}
         onClose={() => {
           resetForm();
+          onRefresh();
           navigation.replace("HomeScreen");
         }}
       />

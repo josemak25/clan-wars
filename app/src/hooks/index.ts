@@ -3,6 +3,7 @@ export * from "./useClock";
 export * from "./useInterval";
 export * from "./useKeyboard";
 export * from "./useOnLayout";
+export * from "./useIsMounted";
 export * from "./usePrepareApp";
 export * from "./useLogoUpload";
 export * from "./useTournaments";
