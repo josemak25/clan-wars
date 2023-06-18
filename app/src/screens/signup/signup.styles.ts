@@ -14,10 +14,7 @@ export const Container = styled.ScrollView.attrs((p) => ({
   contentContainerStyle: {
     flexGrow: 1,
     alignItems: "center",
-    paddingTop: Platform.select({
-      default: p.theme.layout.gutter,
-      web: p.theme.screen.isDesktopOrLaptop ? p.theme.layout.gutter : 0,
-    }),
+    paddingTop: p.theme.layout.gutter * 2.5,
   },
 }))`
   flex: 1;
