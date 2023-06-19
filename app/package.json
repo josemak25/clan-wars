@@ -16,14 +16,6 @@
     "instagram",
     "twitter"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/josemak25/clan-wars.git"
-  },
-  "homepage": "https://github.com/josemak25/clan-wars#readme",
-  "bugs": {
-    "url": "https://github.com/josemak25/clan-wars/issues"
-  },
   "license": "ISC",
   "author": "Amakiri Joseph Lucky",
   "dependencies": {
